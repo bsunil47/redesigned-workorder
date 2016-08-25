@@ -1,0 +1,225 @@
+<!-- Page wrapper start -->
+<div class="page-wrapper">
+    <!-- Page wrapper header start -->
+    <header class="page-wrapper-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"></a></div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="site-title clearfix">Maintenance Work Order Application</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn" ng-click="Logout()">logout</a></span>
+    <!-- Page wrapper header end -->
+    <!-- Page wrapper container start -->
+    <div class="page-wrapper-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Main container start -->
+                    <div class="main-container clearfix">
+                        <h1>{{workOrderTitle}}</h1>
+                        <!-- Edit work order form start -->
+                        <form class="form-horizontal clearfix">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Work Order: #</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" readonly="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Requestor Name:</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" readonly="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Work Order Date:</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" readonly="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Facility:</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" ng-disabled="disableFacility">
+                                                        <option>--Select Facility--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Category:</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" ng-disabled="disableCategory">
+                                                        <option>--Select Category--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Equipment:</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" ng-disabled="disableEquipment" >
+                                                        <option>--Select Equipment--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Priority:</label>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" ng-disabled="disablePriority">
+                                                        <option>--Select Priority--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" ng-hide="showTechnician">
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <div class="checkbox" >
+                                                        <label ng-show="showClerk">
+                                                            <input type="checkbox" ng-show="showClerk"> Goods Receipt
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Equipment Cost:</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" ng-disabled="disableEquipmentCost">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Time Spent:</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" ng-disabled="disableTimeSpent">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-6 control-label">Date Completed:</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" ng-disabled="disableDateCompleted">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4" ng-hide="showTechnician">
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Skill:</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" disabled="">
+                                                <option>--Select Skill--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Technician:</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" disabled="">
+                                                <option>--Select Technician--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Status:</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control">
+                                                <option>--Select Status--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Class:</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" disabled="">
+                                                <option>--Select Class--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">PM Task: #</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" readonly="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Next PM Date:</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" readonly="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Frequency:</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" readonly="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Description of Issue:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-hide="showTechnician">
+                                <label class="col-sm-2 control-label">Supervisor Comments:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" readonly="">
+                                </div>
+                            </div>
+                            <div class="form-group" ng-hide="showTechnician">
+                                <label class="col-sm-2 control-label">Action Taken:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="text-center clearfix">
+                                <p>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-primary">Print</button>
+                                </p>
+                            </div>
+                        </form>
+                        <!-- Edit work order form end -->
+                    </div>
+                    <!-- Main container end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page wrapper container end -->
+    <!-- Page wrapper footer start -->
+    <footer class="page-wrapper-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="site-copy-rights clearfix">&copy; <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All Rights Reserved.</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Page wrapper footer end -->
+</div>
+<!-- Page wrapper end -->

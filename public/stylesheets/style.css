@@ -1,0 +1,211 @@
+/* Main styles */
+* {
+  outline: none !important; }
+
+body {
+  background-color: #FFFFFF;
+  font-family: "Open Sans Regular", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: normal;
+  font-style: normal;
+  color: #565656; }
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans Light"; }
+  h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong,
+  .h1 strong, .h2 strong, .h3 strong, .h4 strong, .h5 strong, .h6 strong {
+    font-family: "Open Sans Semibold";
+    font-weight: normal; }
+  h1 em, h2 em, h3 em, h4 em, h5 em, h6 em,
+  .h1 em, .h2 em, .h3 em, .h4 em, .h5 em, .h6 em {
+    font-family: "Open Sans Light Italic";
+    font-style: normal; }
+  h1 strong em, h1 em strong, h2 strong em, h2 em strong, h3 strong em, h3 em strong, h4 strong em, h4 em strong, h5 strong em, h5 em strong, h6 strong em, h6 em strong,
+  .h1 strong em,
+  .h1 em strong, .h2 strong em, .h2 em strong, .h3 strong em, .h3 em strong, .h4 strong em, .h4 em strong, .h5 strong em, .h5 em strong, .h6 strong em, .h6 em strong {
+    font-family: "Open Sans Semibold Italic";
+    font-weight: normal;
+    font-style: normal; }
+
+h1, .h1 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  line-height: 36px; }
+
+h2, .h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  line-height: 30px; }
+
+label {
+  font-weight: normal;
+  text-align: left !important; }
+
+label.text-right {
+  text-align: right !important; }
+
+textarea {
+  resize: vertical; }
+
+strong {
+  font-family: "Open Sans Bold";
+  font-weight: normal; }
+
+em {
+  font-family: "Open Sans Italic";
+  font-style: normal; }
+
+strong em, em strong {
+  font-family: "Open Sans Bold Italic";
+  font-weight: normal;
+  font-style: normal; }
+
+table tr th {
+  font-family: "Open Sans Semibold";
+  font-weight: normal; }
+
+/* Page styles */
+.page-wrapper {
+  position: relative;
+  min-height: 650px; }
+
+.page-wrapper-header {
+  background: url(../images/pattern1.png) repeat scroll center center;
+  position: relative;
+  -webkit-box-shadow: 0 0 10px 0 #C3C3C3;
+  -moz-box-shadow: 0 0 10px 0 #C3C3C3;
+  -ms-box-shadow: 0 0 10px 0 #C3C3C3;
+  -o-box-shadow: 0 0 10px 0 #C3C3C3;
+  box-shadow: 0 0 10px 0 #C3C3C3; }
+  .page-wrapper-header .site-logo {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-align: left; }
+  .page-wrapper-header .site-title {
+    text-align: right;
+    padding-top: 17px;
+    padding-bottom: 17px; }
+
+.page-wrapper-footer {
+  background-color: #3C3C3C;
+  color: #D4D4D4;
+  position: relative; }
+
+.page-wrapper-container {
+  position: relative; }
+
+.main-container {
+  padding-top: 30px;
+  padding-bottom: 20px;
+  position: relative; }
+  .main-container h1, .main-container .h1 {
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #4D4D4D;
+    color: #000000; }
+  .main-container h2, .main-container .h2 {
+    color: #000000; }
+
+/* Login page styles */
+.login-page {
+  padding-top: 50px;
+  padding-bottom: 35px;
+  position: relative; }
+  .login-page .site-logo {
+    text-align: center; }
+  .login-page .site-title {
+    text-align: center; }
+
+.login-form {
+  max-width: 300px;
+  background-color: #F6F6F6;
+  padding: 20px 30px 15px 30px;
+  margin: 30px auto;
+  border: 1px solid #E5E5E5;
+  position: relative; }
+  .login-form h2, .login-form .h2 {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed #E5E5E5; }
+  .login-form .btn {
+    min-width: 100%; }
+
+/* Inner page styles */
+.parts-list-table tr > td {
+  vertical-align: middle !important; }
+
+/* Menus styles */
+/* Demo menu styles */
+.demo-menu-nav {
+  position: relative; }
+  .demo-menu-nav .demo-menu-header {
+    display: none;
+    position: relative; }
+  .demo-menu-nav .demo-menu-container {
+    position: relative; }
+  .demo-menu-nav .demo-menu {
+    /*margin: 0;
+    padding: 0;*/
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none outside none;
+    position: relative; }
+    .demo-menu-nav .demo-menu > li {
+      margin-bottom: 15px;
+      position: relative; }
+      .demo-menu-nav .demo-menu > li > a {
+        min-width: 100%;
+        padding: 15px 15px;
+        position: relative; }
+
+/* Common styles  */
+.site-logo {
+  position: relative; }
+  .site-logo a {
+    display: inline-block; }
+    .site-logo a img {
+      display: block; }
+
+.site-title {
+  font-family: "Open Sans Light";
+  font-size: 24px;
+  line-height: 32px;
+  color: #000000;
+  position: relative; }
+
+.site-copy-rights {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  position: relative; }
+
+.clear {
+  width: 0;
+  height: 0;
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden; }
+
+/* Bootstrap reset styles */
+.btn {
+  padding: 6px 30px; }
+
+.form-horizontal .checkbox, .form-horizontal .checkbox-inline,
+.form-horizontal .radio, .form-horizontal .radio-inline {
+  padding-top: 8px; }
+.form-horizontal .checkbox, .form-horizontal .radio {
+  min-height: 34px; }
+
+footer {
+  position: absolute !important;
+  bottom: -60px;
+  width: 100%; }
+
+input.ng-invalid {
+  border: 1px solid pink; }
+
+/*# sourceMappingURL=style.css.map */

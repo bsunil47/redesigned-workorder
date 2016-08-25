@@ -1,0 +1,218 @@
+<!-- Page wrapper start -->
+<div class="page-wrapper">
+    <!-- Page wrapper header start -->
+    <header class="page-wrapper-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"></a></div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="site-title clearfix">Maintenance Work Order Application</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn" ng-click="Logout()">logout</a></span>
+    <!-- Page wrapper header end -->
+    <!-- Page wrapper container start -->
+    <div class="page-wrapper-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Main container start -->
+                    <div class="main-container clearfix">
+                        <h1>Parts List / Parts Request</h1>
+                        <!-- Parts list search form start -->
+                        <form class="form-inline clearfix text-right">
+                            <div class="form-group">
+                                <label>Equipment:</label>
+                                <select class="form-control">
+                                    <option>--Select Equipment--</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="button" class="btn btn-primary">Create PR</button>
+                        </form>
+                        <!-- Parts list search  form end -->
+                        <hr>
+                        <!-- Parts list table start -->
+                        <div class="clearfix">
+                            <table class="table table-bordered table-striped parts-list-table">
+                                <thead>
+                                <tr>
+                                    <th>Part #</th>
+                                    <th>Description</th>
+                                    <th>Vendor Name</th>
+                                    <th>Min</th>
+                                    <th>Mix</th>
+                                    <th style="width: 200px;">Purchase Requisition</th>
+                                    <th style="width: 100px;">Qty</th>
+                                    <th style="width: 100px;">Work Order</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>001</td>
+                                    <td>Nunc vitae massa venenatis, mollis libero id, suscipit ante.</td>
+                                    <td>Vestibulum</td>
+                                    <td>20</td>
+                                    <td>50</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>002</td>
+                                    <td>Fusce tempus arcu non neque blandit, non eleifend tortor cursus.</td>
+                                    <td>Aenean</td>
+                                    <td>24</td>
+                                    <td>68</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>003</td>
+                                    <td>Vestibulum faucibus ex ac libero ultricies, in dignissim nisl mollis.</td>
+                                    <td>Aliquam</td>
+                                    <td>32</td>
+                                    <td>95</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>004</td>
+                                    <td>Integer a sem id ante dictum placerat.</td>
+                                    <td>Vestibulum</td>
+                                    <td>42</td>
+                                    <td>78</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>005</td>
+                                    <td>Nulla nec leo nec orci consectetur iaculis sit amet in erat.</td>
+                                    <td>Pretium Quam</td>
+                                    <td>63</td>
+                                    <td>82</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>006</td>
+                                    <td>Donec congue felis et dolor efficitur, nec tristique quam ultricies.</td>
+                                    <td>Fermentum</td>
+                                    <td>12</td>
+                                    <td>74</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>007</td>
+                                    <td>Ut at turpis nec dolor sodales mollis.</td>
+                                    <td>Vulputate</td>
+                                    <td>36</td>
+                                    <td>78</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>008</td>
+                                    <td>Sed vulputate ipsum ut mauris volutpat porta.</td>
+                                    <td>Consequat</td>
+                                    <td>26</td>
+                                    <td>96</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>009</td>
+                                    <td>Sed ac ante nec magna tempus varius.</td>
+                                    <td>Bibendum</td>
+                                    <td>06</td>
+                                    <td>82</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                <tr>
+                                    <td>010</td>
+                                    <td>Proin vel lectus vel diam condimentum ultricies nec et ante.</td>
+                                    <td>Sodales</td>
+                                    <td>24</td>
+                                    <td>69</td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox">&nbsp;
+                                        </label>
+                                    </td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                    <td><input type="text" class="form-control" readonly=""></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Parts list table end -->
+                    </div>
+                    <!-- Main container end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page wrapper container end -->
+    <!-- Page wrapper footer start -->
+    <footer class="page-wrapper-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="site-copy-rights clearfix">&copy; <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All Rights Reserved.</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Page wrapper footer end -->
+</div>
+<!-- Page wrapper end -->

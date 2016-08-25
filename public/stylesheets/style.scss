@@ -1,0 +1,293 @@
+//@import "compass/css3";
+
+// Variables
+$defaultBgColor: #FFFFFF;
+$defaultFontFamily: 'Open Sans Regular', Arial, Helvetica, sans-serif;
+$defaultFontSize: 14px;
+$defaultLineHeight: 22px;
+$defaultTextColor: #565656;
+
+$bgColor1: #F6F6F6;
+$borderColor1: #E5E5E5;
+$textColor1: #565656;
+$bgColor2: #3C3C3C;
+$borderColor2: #4D4D4D;
+$textColor2: #D4D4D4;
+
+$regularFont: 'Open Sans Regular';
+$italicFont: 'Open Sans Italic';
+$lightFont: 'Open Sans Light';
+$lightItalicFont: 'Open Sans Light Italic';
+$semiboldFont: 'Open Sans Semibold';
+$semiboldItalicFont: 'Open Sans Semibold Italic';
+$boldFont: 'Open Sans Bold';
+$boldItalicFont: 'Open Sans Bold Italic';
+
+$blackTextColor: #000000;
+
+$headingColor1: #000000;
+
+$h1MarginBottom: 20px;
+$h1FontSize: 28px;
+$h1LineHeight: 36px;
+
+$h2MarginBottom: 15px;
+$h2FontSize: 22px;
+$h2LineHeight: 30px;
+
+// Mixins
+@mixin border-radius($topLeft, $topRight, $bottomRight, $bottomLeft) {
+  -webkit-border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+  -moz-border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+  -ms-border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+  -o-border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+  border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+}
+@mixin box-shadow($horizontal, $vertical, $blur, $spread, $color) {
+  -webkit-box-shadow: $horizontal $vertical $blur $spread $color;
+  -moz-box-shadow: $horizontal $vertical $blur $spread $color;
+  -ms-box-shadow: $horizontal $vertical $blur $spread $color;
+  -o-box-shadow: $horizontal $vertical $blur $spread $color;
+  box-shadow: $horizontal $vertical $blur $spread $color;
+}
+@mixin text-shadow($horizontal, $vertical, $blur, $color) {
+  -webkit-text-shadow: $horizontal $vertical $blur $color;
+  -moz-text-shadow: $horizontal $vertical $blur $color;
+  -ms-text-shadow: $horizontal $vertical $blur $color;
+  -o-text-shadow: $horizontal $vertical $blur $color;
+  text-shadow: $horizontal $vertical $blur $color;
+}
+
+/* Main styles */
+* {
+  outline: none !important;
+}
+body {
+  background-color: $defaultBgColor;
+  font-family: $defaultFontFamily;
+  font-size: $defaultFontSize;
+  line-height: $defaultLineHeight;
+  font-weight: normal;
+  font-style: normal;
+  color: $defaultTextColor;
+}
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  margin: 0;
+  padding: 0;
+  font-family: $lightFont;
+  strong {
+    font-family: $semiboldFont;
+    font-weight: normal;
+  }
+  em {
+    font-family: $lightItalicFont;
+    font-style: normal;
+  }
+  strong em, em strong {
+    font-family: $semiboldItalicFont;
+    font-weight: normal;
+    font-style: normal;
+  }
+}
+h1, .h1 {
+  margin-bottom: $h1MarginBottom;
+  font-size: $h1FontSize;
+  line-height: $h1LineHeight;
+}
+h2, .h2 {
+  margin-bottom: $h2MarginBottom;
+  font-size: $h2FontSize;
+  line-height: $h2LineHeight;
+}
+label {
+  font-weight: normal;
+  text-align: left !important;
+}
+label.text-right {
+  text-align: right !important;
+}
+textarea {
+  resize: vertical;
+}
+strong {
+  font-family: $boldFont;
+  font-weight: normal;
+}
+em {
+  font-family: $italicFont;
+  font-style: normal;
+}
+strong em, em strong {
+  font-family: $boldItalicFont;
+  font-weight: normal;
+  font-style: normal;
+}
+table tr th {
+  font-family: $semiboldFont;
+  font-weight: normal;
+}
+
+/* Page styles */
+.page-wrapper {
+  position: relative;
+  min-height: 650px;
+}
+.page-wrapper-header {
+  background: url(../images/pattern1.png) repeat scroll center center;
+  position: relative;
+  @include box-shadow(0, 0, 10px, 0, #C3C3C3);
+  .site-logo {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-align: left;
+  }
+  .site-title {
+    text-align: right;
+    padding-top: 17px;
+    padding-bottom: 17px;
+  }
+}
+.page-wrapper-footer {
+  background-color: $bgColor2;
+  color: $textColor2;
+  position: relative;
+}
+.page-wrapper-container {
+  position: relative;
+}
+.main-container {
+  padding-top: 30px;
+  padding-bottom: 20px;
+  position: relative;
+  h1, .h1 {
+    padding-bottom: 15px;
+    border-bottom: 1px dashed $borderColor2;
+    color: $headingColor1;
+  }
+  h2, .h2 {
+    color: $headingColor1;
+  }
+}
+/* Login page styles */
+.login-page {
+  padding-top: 50px;
+  padding-bottom: 35px;
+  position: relative;
+  .site-logo {
+    text-align: center;
+  }
+  .site-title {
+    text-align: center;
+  }
+}
+.login-form {
+  max-width: 300px;
+  background-color: $bgColor1;
+  padding: 20px 30px 15px 30px;
+  margin: 30px auto;
+  border: 1px solid $borderColor1;
+  position: relative;
+  h2, .h2 {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed $borderColor1;
+  }
+  .btn {
+    min-width: 100%;
+  }
+}
+/* Inner page styles */
+.parts-list-table {
+  tr > td {
+    vertical-align: middle !important;
+  }
+}
+
+/* Menus styles */
+/* Demo menu styles */
+.demo-menu-nav {
+  position: relative;
+  .demo-menu-header {
+    display: none;
+    position: relative;
+  }
+  .demo-menu-container {
+    position: relative;
+  }
+  .demo-menu {
+    /*margin: 0;
+    padding: 0;*/
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none outside none;
+    position: relative;
+    > li {
+      margin-bottom: 15px;
+      position: relative;
+      > a {
+        min-width: 100%;
+        padding: 15px 15px;
+        position: relative;
+      }
+    }
+  }
+}
+
+/* Common styles  */
+.site-logo {
+  position: relative;
+  a {
+    display: inline-block;
+    img {
+      display: block;
+    }
+  }
+}
+.site-title {
+  font-family: $lightFont;
+  font-size: 24px;
+  line-height: 32px;
+  color: $blackTextColor;
+  position: relative;
+}
+.site-copy-rights {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  position: relative;
+}
+.clear {
+  width: 0;
+  height: 0;
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+/* Bootstrap reset styles */
+.btn {
+  padding: 6px 30px;
+}
+.form-horizontal {
+  .checkbox, .checkbox-inline,
+  .radio, .radio-inline {
+    padding-top: 8px;
+  }
+  .checkbox, .radio {
+    min-height: 34px;
+  }
+}
+footer{
+  position:absolute !important;
+  //position: fixed !important;
+  bottom: -60px;
+  width: 100%;
+}
+input.ng-invalid {
+  border:1px solid pink;
+}
+input.ng-valid {
+  //border:1px solid lightgreen;
+}

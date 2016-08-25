@@ -1,0 +1,28 @@
+<div class="page-wrapper login-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"></a></div>
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+                <!-- Login form start -->
+                <form name="loginForm" class="login-form clearfix">
+                    <h2>Login Form</h2>
+                    <div class="form-group">
+                        <label>User ID:</label>
+                        <input type="text" class="form-control" name="username" ng-model="user.username" required="required">
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" class="form-control" name="password" ng-model="user.password" required="required">
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 15px" ng-click="Login()" ng-disabled="loginForm.username.$dirty && loginForm.username.$invalid ||
+  loginForm.password.$dirty && loginForm.password.$invalid" >Login</button>
+                    </div>
+                </form>
+                <!-- Login form end -->
+                <!--<p class="text-center"><em><strong>Note:</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy...</em></p>-->
+            </div>
+        </div>
+    </div>
+</div>
