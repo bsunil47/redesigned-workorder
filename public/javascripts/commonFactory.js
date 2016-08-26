@@ -66,6 +66,21 @@ PGapp
                 }
 
         }),
+        CreateWorkOrder: $resource(url + 'api/create_workorder', {}, {
+            save: {
+                method: 'POST',
+                isArray: false,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': '*/*'},
+                transformRequest: function (data, headersGetter) {
+                    var str = [];
+                    //  str.push(encodeURIComponent(data));
+                    for (var d in data)
+                        str.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+                    return str.join("&");
+                }
+            }
+
+        }),
 
     };
 
