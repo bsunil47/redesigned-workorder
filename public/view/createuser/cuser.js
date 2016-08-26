@@ -47,4 +47,8 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
       });
     }
   }
+
+  $scope.redirectLoc = function (reloc) {
+    $location.path(reloc);
+  }
 }]);

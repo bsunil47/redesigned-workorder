@@ -16,30 +16,29 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
   }
   userdetail = $cookies.getObject('userDetails');
   $scope.user = {
-    id:userdetail._id,
+    id:userdetail.user._id,
     p_password:'',
     password:'',
     c_password:''
   };
-
-
-
-
-
   $scope.Logout = function () {
     $cookies.remove('userDetails')
     $location.path("/");
   }
   function ChangePassword(){
-    $scope.user_id = API.ChangePassword($scope.user,function(res){
+    $scope.user_id = API.ChangePassword.save($scope.user,function(res){
       if(res.Code == 200){
         $location.path("/users");
       }else {
-        $scope.CreateUserForm.email.error = true;
+        $scope.ChangePasswordForm.password.error = true;
       }
     },function (error) {
-      alert(error);
+      console.log(error)
     });
+  }
+
+  $scope.redirectLoc = function (reloc) {
+    $location.path(reloc);
   }
 }]);
 
@@ -90,15 +89,11 @@ PGapp.directive('equalPassword', [function () {
         }*/
 
         if (viewValue == userdetail.user.password) {
-          Users.query({email:viewValue}, function (users) {
-            if (users.length === 0) {
               ctrl.$setValidity('equalPassword', true);
-            } else {
-              ctrl.$setValidity('equalPassword', false);
-            }
-          });
-          return viewValue;
-        }
+        }else {
+            ctrl.$setValidity('equalPassword', false);
+      }
+        return viewValue;
       });
     }
   };
