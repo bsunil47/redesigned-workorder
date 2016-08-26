@@ -20,4 +20,7 @@ angular.module('PGapp.systemsettings', ['ngRoute','ngAnimate', 'ngCookies'])
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
   }
+  $scope.redirectLoc = function (reloc) {
+    $location.path(reloc);
+  }
 }]);

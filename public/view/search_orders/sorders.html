@@ -5,7 +5,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-                    <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"></a></div>
+                    <div class="site-logo clearfix"><a ng-click="redirectLoc('dashboard')"><img
+                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
                 </div>
                 <div class="col-sm-8">
                     <div class="site-title clearfix">Maintenance Work Order Application</div>
@@ -22,6 +23,8 @@
                 <div class="col-sm-12">
                     <!-- Main container start -->
                     <div class="main-container clearfix">
+                        <div class="col-sm-12 text-right"><a ng-click="redirectLoc('dashboard')"
+                                                             class="btn btn-primary">Back</a></div>
                         <h1>Search Work Order</h1>
                         <!-- Search work order form start -->
                         <form class="form-horizontal clearfix">

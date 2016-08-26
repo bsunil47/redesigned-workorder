@@ -20,4 +20,7 @@ angular.module('PGapp.sorders', ['ngRoute','ngAnimate', 'ngCookies'])
     $cookies.remove('userDetails')
     $location.path("/");
   }
+  $scope.redirectLoc = function (reloc) {
+    $location.path(reloc);
+  }
 }]);

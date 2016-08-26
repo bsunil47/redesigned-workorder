@@ -21,11 +21,6 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
     password:'',
     c_password:''
   };
-
-
-
-
-
   $scope.Logout = function () {
     $cookies.remove('userDetails')
     $location.path("/");
@@ -40,6 +35,10 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
     },function (error) {
       console.log(error)
     });
+  }
+
+  $scope.redirectLoc = function (reloc) {
+    $location.path(reloc);
   }
 }]);
 
