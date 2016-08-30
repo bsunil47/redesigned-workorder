@@ -3,7 +3,13 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Users = mongoose.model('Collection_Users');
 var Roles = mongoose.model('Collection_Roles');
-
+var WorkOrder = mongoose.model('Collection_Workorders');
+var Category = mongoose.model('Collection_Category');
+var Class = mongoose.model('Collection_Class');
+var Equipment = mongoose.model('Collection_Equipment');
+var Facility = mongoose.model('Collection_Facility');
+var Priority = mongoose.model('Collection_Priority');
+var Skills = mongoose.model('Collection_Skills');
 
 router.post('/', function(req, res, next) {
   Users.findOne({email: req.body.username,password: req.body.password},function(err, users) {
@@ -94,9 +100,40 @@ router.post('/changepassword', function(req, res, next) {
 
   });
 
-  //User.save();
+
+    //User.save();
   //res.json({Code:200,Info:"sucessfull"});
   //res.json('respond with asa resource');
+});
+
+router.post('/create_workorder', function (req, res, next) {
+    var count;
+    WorkOrder.count({workorder_creator: req.body.creator}, function (err, c) {
+        count = c;
+        console.log('Count is ' + c);
+    });
+    Users.findOne({_id: req.body.creator}, function (err, user) {
+        if (err) {
+            return next(err);
+        }
+        var workOrder = new WorkOrder({
+            workorder_number: req.body.workorder_number + "-" + count,
+            workorder_creator: user._id,
+            workorder_description: req.body.workorder_description,
+            status: 1
+        });
+        workOrder.save(function (err, resp) {
+            if (err) {
+                console.log(err);
+                res.json({
+                    Code: 499,
+                    message: err,
+                });
+            } else {
+                res.json({Code: 200, Info: 'sucessfull'});
+            }
+        });
+    })
 });
 
 
