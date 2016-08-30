@@ -30,7 +30,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "/public/bower-components",
+    "public/bower-components",
     "test",
     "tests"
   ]
