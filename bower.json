@@ -1,9 +1,9 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
+  "name": "Omulus",
+  "description": "WorkOrder",
   "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
-  "license": "MIT",
+  "homepage": "index",
+  "license": "Omulus",
   "private": true,
   "dependencies": {
     "angular": "~1.5.0",
@@ -15,9 +15,23 @@
     "angular-cookies": "~1.5.0",
     "angular-touch": "~1.5.0",
     "angular-resource": "~1.5.0",
-    "angular-material": "~1.5.0",
+    "angular-material": "^1.0.9",
     "angularjs-datepicker": "^2.1.6",
     "html5-boilerplate": "^5.3.0"
-
-  }
+  },
+  "authors": [
+    "Kesav"
+  ],
+  "main": "yes",
+  "keywords": [
+    "Angular"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "/public/bower-components",
+    "test",
+    "tests"
+  ]
 }
