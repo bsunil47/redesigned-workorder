@@ -4,7 +4,12 @@ var mongoose = require('mongoose');
 var Users = mongoose.model('Collection_Users');
 var Roles = mongoose.model('Collection_Roles');
 var WorkOrder = mongoose.model('Collection_Workorders');
-
+var Category = mongoose.model('Collection_Category');
+var Class = mongoose.model('Collection_Class');
+var Equipment = mongoose.model('Collection_Equipment');
+var Facility = mongoose.model('Collection_Facility');
+var Priority = mongoose.model('Collection_Priority');
+var Skills = mongoose.model('Collection_Skills');
 
 router.post('/', function(req, res, next) {
   Users.findOne({email: req.body.username,password: req.body.password},function(err, users) {
