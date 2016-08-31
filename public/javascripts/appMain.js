@@ -12,8 +12,14 @@ var PGapp = angular.module('PGapp', [
   'PGapp.partslist',
   'PGapp.systemsettings',
   'PGapp.changepassword',
-    'PGapp.users',
-  'PGapp.createuser'
+  'PGapp.users',
+  'PGapp.createuser',
+  'PGapp.createcategory',
+  'PGapp.createclass',
+  'PGapp.createequipment',
+  'PGapp.createfacility',
+  'PGapp.createpriority',
+  'PGapp.createskills'
 ]);
 PGapp.
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
