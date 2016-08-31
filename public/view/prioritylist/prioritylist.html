@@ -36,19 +36,16 @@
                                 <!--<caption>Responsive Table Layout</caption>-->
                                 <thead>
                                 <tr>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
+                                    <th>Priority Name</th>
+                                    <th>Facility</th>
+                                    <th>Status</th>
                                 </tr>
                                 </thead>
-
                                 <tbody>
-                                <tr ng-repeat="user in user_list.users">
-                                    <td>{{user.firstname}}</td>
-                                    <td>{{user.lastname}}</td>
-                                    <td>{{user.email}}</td>
-                                    <td>{{showRole(user.userrole)}}</td>
+                                <tr ng-repeat="priority in priorities">
+                                    <td>{{priority.name}}</td>
+                                    <td>{{showFacility(priority.facility)}}</td>
+                                    <td>{{priority.status}}</td>
                                 </tr>
                                 </tbody>
 

@@ -29,47 +29,21 @@
                         </div>
                         <h1>Create Priority</h1>
                         <!-- Change password form start -->
-                        <form name="CreateUserForm" class="form-horizontal clearfix">
+                        <form name="CreatePriorityForm" class="form-horizontal clearfix">
                             <div class="row">
                                 <div class="col-sm-4 col-sm-offset-4">
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">First Name:</label>
+                                        <label class="col-sm-6 control-label">Priority Name:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="user.firstname" type="text" class="form-control"
-                                                   name="firstname" required>
+                                            <input ng-model="priority.priority_name" type="text" class="form-control"
+                                                   name="priority_name" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Last Name:</label>
+                                        <label class="col-sm-6 control-label">Facility Number:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="user.lastname" type="text" class="form-control"
-                                                   name="lastname" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-6 control-label">Email :</label>
-                                        <div class="col-sm-6">
-                                            <input ng-model="user.email" type="email" class="form-control" name="email"
-                                                   required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-6 control-label">Password:</label>
-                                        <div class="col-sm-6">
-                                            <input ng-model="user.password" type="password" class="form-control"
-                                                   name="password" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-6 control-label">Role:</label>
-                                        <div class="col-sm-6">
-                                            <select required class="form-control" ng-model="user.userrole"
-                                                    name="userrole">
-                                                <option value="operator">Operator</option>
-                                                <option value="manager">Manager</option>
-                                                <option value="clerk">Clerk</option>
-                                                <option value="technician">Technician</option>
-                                            </select>
+                                            <input ng-model="priority.facility_number" type="text" class="form-control"
+                                                   name="facility_number" required>
                                         </div>
                                     </div>
 
@@ -77,8 +51,9 @@
                             </div>
                             <div class="text-center clearfix">
                                 <p>
-                                    <button type="submit" ng-click="CreateUser()" class="btn btn-primary" ng-disabled="CreateUserForm.firstname.$dirty && CreateUserForm.username.$invalid ||
-  CreateUserForm.password.$dirty && CreateUserForm.password.$invalid">Save
+                                    <button type="submit" ng-click="CreatePriority()" class="btn btn-primary"
+                                            ng-disabled="CreatePriorityForm.priority_name.$dirty && CreatePriorityForm.priority_name.$invalid ||
+  CreatePriorityForm.facility_number.$dirty && CreatePriorityForm.facility_number.$invalid">Save
                                     </button>
                                     <button type="reset" class="btn btn-primary">Clear</button>
                                 </p>

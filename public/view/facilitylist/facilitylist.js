@@ -4,7 +4,7 @@ angular.module('PGapp.facilitylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/facilities', {
-            templateUrl: 'view/facilitiylist/facilitylist.html',
+            templateUrl: 'view/facilitylist/facilitylist.html',
             controller: 'FacilityListCtrl'
         });
     }])
