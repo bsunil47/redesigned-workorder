@@ -8,11 +8,11 @@ var concat = require('gulp-concat');
 
 gulp.task('compress', function () {
     gulp.src('public/view/**/*.js')
-        .pipe(concat('all.js'))
+        .pipe(concat('allCtrls.js'))
         .pipe(minify({
             ext: {
-                src: '-debug.js',
-                min: '.js'
+                src: '.js',
+                min: '-min.js'
             },
             exclude: ['tasks'],
             ignoreFiles: []
