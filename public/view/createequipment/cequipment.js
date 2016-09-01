@@ -23,4 +23,24 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         }
+        $scope.CreateEquipment = CreateEquipment;
+        $scope.equipment = {
+            facility_number: "",
+            equipment_name: "",
+            equipment_number: "",
+            equipment_vendor_name: ""
+        };
+        function CreateEquipment() {
+            if ($scope.CreateEquipmentForm.equipment_name.$valid && $scope.CreateEquipmentForm.facility_number.$valid) {
+                $scope.equipment_id = API.CreateEquipment.Equipment($scope.equipment, function (res) {
+                    if (res.Code == 200) {
+                        $location.path("/equipments");
+                    } else {
+                        //$scope.CreateUserForm.email.error = true;
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+            }
+        }
     }]);
