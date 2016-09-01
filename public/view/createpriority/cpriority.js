@@ -23,4 +23,22 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         }
+        $scope.CreatePriority = CreatePriority;
+        $scope.priority = {
+            facility_number: "",
+            priority_name: ""
+        };
+        function CreatePriority() {
+            if ($scope.CreatePriorityForm.priority_name.$valid && $scope.CreatePriorityForm.facility_number.$valid) {
+                $scope.priority_id = API.CreatePriority.Priority($scope.priority, function (res) {
+                    if (res.Code == 200) {
+                        $location.path("/priorities");
+                    } else {
+                        //$scope.CreateUserForm.email.error = true;
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+            }
+        }
     }]);

@@ -14,7 +14,18 @@ angular.module('PGapp.prioritylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        API.Priorities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
 
+                $scope.priorities = res.Info.priorities;
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
 
         $scope.Logout = function () {
             $cookies.remove('userDetails')
@@ -22,6 +33,12 @@ angular.module('PGapp.prioritylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
+        }
+        var facilities = $cookies.getObject('facilities');
+        var facilities = $cookies.getObject('facilities');
+        $scope.showFacility = function (facility_number) {
+            var found = $filter('getByFacilityNumber')('facility_number', facility_number, facilities);
+            return found.facility_name
         }
     }]);
 

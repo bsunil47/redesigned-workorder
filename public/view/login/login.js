@@ -25,6 +25,8 @@ angular.module('PGapp.login', ['ngRoute','ngAnimate', 'ngCookies'])
                     var expireDate = new Date();
                     expireDate.setDate(expireDate.getDate() + 1);
                     $cookies.putObject('userDetails',res.Info,{'expires': expireDate});
+                    $cookies.putObject('facilities', res.Info.facilities);
+
                     $location.path('dashboard')
 
 

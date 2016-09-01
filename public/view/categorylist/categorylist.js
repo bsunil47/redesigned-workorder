@@ -14,6 +14,20 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        var facilities = $cookies.getObject('facilities');
+
+        API.Categories.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.categories = res.Info.categories;
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
 
 
         $scope.Logout = function () {
@@ -22,6 +36,10 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
+        }
+        $scope.showFacility = function (facility_number) {
+            var found = $filter('getByFacilityNumber')('facility_number', facility_number, facilities);
+            return found.facility_name
         }
     }]);
 

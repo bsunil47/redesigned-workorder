@@ -10,6 +10,11 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
     }])
 
     .controller('CreateCategoryCtrl', ["$scope", "$cookies", "$location", 'API', function ($scope, $cookies, $location, API) {
+        $scope.CreateCategory = CreateCategory;
+        $scope.category = {
+            category_name: "",
+            facility_number: ""
+        }
 
         if (!$cookies.get('userDetails')) {
             $location.path('login');
@@ -24,4 +29,19 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         }
+
+        function CreateCategory() {
+            if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {
+                $scope.category_id = API.CreateCategory.Category($scope.category, function (res) {
+                    if (res.Code == 200) {
+                        $location.path("/categories");
+                    } else {
+                        //$scope.CreateUserForm.email.error = true;
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+            }
+        }
+
     }]);

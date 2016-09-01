@@ -23,4 +23,22 @@ angular.module('PGapp.createfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         }
+        $scope.CreateFacility = CreateFacility;
+        $scope.facility = {
+            facility_number: "",
+            facility_name: ""
+        };
+        function CreateFacility() {
+            if ($scope.CreateFacilityForm.facility_name.$valid && $scope.CreateFacilityForm.facility_number.$valid) {
+                $scope.facility_id = API.CreateFacility.Facility($scope.facility, function (res) {
+                    if (res.Code == 200) {
+                        $location.path("/facilities");
+                    } else {
+                        //$scope.CreateUserForm.email.error = true;
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+            }
+        }
     }]);

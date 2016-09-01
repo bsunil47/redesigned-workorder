@@ -25,6 +25,7 @@
     "express-session": "^1.14.0",
     "fs": "0.0.2",
     "gulp": "^3.9.1",
+    "gulp-install": "^0.6.0",
     "migrate": "^0.2.3",
     "moment": "^2.14.1",
     "mongodb": "^2.2.5",
@@ -42,6 +43,9 @@
     "gulp": "^3.9.1",
     "gulp-bower": "0.0.13",
     "gulp-concat": "^2.6.0",
+    "gulp-express": "^0.3.5",
+    "gulp-install": "^0.6.0",
+    "gulp-live-server": "0.0.30",
     "gulp-minify": "0.0.14"
   },
   "description": "Workorder",
