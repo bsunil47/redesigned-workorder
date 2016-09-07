@@ -4,8 +4,10 @@ let minify = require('gulp-minify');
 let concat = require('gulp-concat');
 let gls = require('gulp-live-server');
 let install = require('gulp-install');
+let bower = require('gulp-bower');
 
 gulp.task('npm_compress_serve', function () {
+
     gulp.src(['./bower.json', './package.json'])
         .pipe(install({production: true}));
     gulp.src('public/view/**/*.js')
