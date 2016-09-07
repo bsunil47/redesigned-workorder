@@ -7,7 +7,7 @@ let install = require('gulp-install');
 
 gulp.task('npm_compress_serve', function () {
     gulp.src(['./bower.json', './package.json'])
-        .pipe(install());
+        .pipe(install({production: true}));
     gulp.src('public/view/**/*.js')
         .pipe(concat('allCtrls.js'))
         .pipe(minify({
