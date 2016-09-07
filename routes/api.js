@@ -23,9 +23,9 @@ router.post('/', function(req, res, next) {
                   return next(err);
               }
               res.json({Code: 200, Info: {user: users, role: role.role_name, facilities: facilities}});
-          })
+          });
 
-      })
+      });
 
 
     }else {
@@ -124,7 +124,7 @@ router.post('/create_workorder', function (req, res, next) {
         }
         var workOrder = new WorkOrder({
             workorder_number: req.body.workorder_number + "-" + count,
-            workorder_creator: user._id,
+            workorder_creator: req.body.creator,
             workorder_description: req.body.workorder_description,
             status: 1
         });
