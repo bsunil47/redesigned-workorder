@@ -28,9 +28,9 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
 
 
   $scope.Logout = function () {
-    $cookies.remove('userDetails')
+      $cookies.remove('userDetails');
     $location.path("/");
-  }
+  };
 
   function CreateUser(){
     $scope.user.username = $scope.user.firstname + ' '+$scope.user.lastname;

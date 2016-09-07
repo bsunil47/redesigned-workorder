@@ -31,12 +31,12 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
 
         $scope.Logout = function () {
-            $cookies.remove('userDetails')
+            $cookies.remove('userDetails');
             $location.path("/");
-        }
+        };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
         $scope.showFacility = function (facility_number) {
             var found = $filter('getByFacilityNumber')('facility_number', facility_number, facilities);
             return found.facility_name

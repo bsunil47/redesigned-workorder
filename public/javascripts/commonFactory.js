@@ -18,7 +18,7 @@ var post_set = {
     }
 };
 PGapp.factory('API', ['$resource', function ($resource, $scope) {
-    var url = "/"
+    var url = "/";
     var Service = {
         Login: $resource(url + 'api', {id: '@id'}, {
             login: post_set

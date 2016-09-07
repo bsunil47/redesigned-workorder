@@ -14,7 +14,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.category = {
             category_name: "",
             facility_number: ""
-        }
+        };
 
         if (!$cookies.get('userDetails')) {
             $location.path('login');
@@ -22,13 +22,13 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
 
         $scope.Logout = function () {
-            $cookies.remove('userDetails')
+            $cookies.remove('userDetails');
             $location.path("/");
-        }
+        };
 
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
 
         function CreateCategory() {
             if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {

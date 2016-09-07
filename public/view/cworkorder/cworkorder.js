@@ -30,7 +30,7 @@ angular.module('PGapp.cworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
     workorder_leadcomments: "",
     workorder_actiontaken: "",
     status: 1
-  }
+  };
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
@@ -66,12 +66,12 @@ angular.module('PGapp.cworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
 
 
   $scope.Logout = function () {
-    $cookies.remove('userDetails')
+      $cookies.remove('userDetails');
     $location.path("/");
-  }
+  };
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
-  }
+  };
 
   function CreateWorkOrder() {
     if ($scope.CreateWorkOrderForm.workorder_description.$valid) {

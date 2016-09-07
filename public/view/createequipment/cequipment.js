@@ -16,13 +16,13 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
 
         $scope.Logout = function () {
-            $cookies.remove('userDetails')
+            $cookies.remove('userDetails');
             $location.path("/");
-        }
+        };
 
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
         $scope.CreateEquipment = CreateEquipment;
         $scope.equipment = {
             facility_number: "",

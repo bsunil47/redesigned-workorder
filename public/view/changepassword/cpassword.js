@@ -22,9 +22,9 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
     c_password:''
   };
   $scope.Logout = function () {
-    $cookies.remove('userDetails')
+      $cookies.remove('userDetails');
     $location.path("/");
-  }
+  };
   function ChangePassword(){
     $scope.user_id = API.ChangePassword.save($scope.user,function(res){
       if(res.Code == 200){
@@ -97,4 +97,4 @@ PGapp.directive('equalPassword', [function () {
       });
     }
   };
-}])
+}]);

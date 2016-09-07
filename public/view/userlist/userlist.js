@@ -17,7 +17,7 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
   $scope.showRole = function(role_id){
     var found = $filter('getById')('_id', role_id, $scope.user_list.roles);
     return found.role_name
-  }
+  };
 
   API.Users.Recent(userdetail,function(res){
     if(res.Code == 200){
@@ -33,9 +33,9 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
   });
 
   $scope.Logout = function () {
-    $cookies.remove('userDetails')
+      $cookies.remove('userDetails');
     $location.path("/");
-  }
+  };
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
   }

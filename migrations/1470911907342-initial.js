@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 require('../config/db');
 var express = require('express');
 var mongoose = require('mongoose');

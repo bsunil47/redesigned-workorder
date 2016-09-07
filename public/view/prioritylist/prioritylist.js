@@ -28,12 +28,12 @@ angular.module('PGapp.prioritylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
 
         $scope.Logout = function () {
-            $cookies.remove('userDetails')
+            $cookies.remove('userDetails');
             $location.path("/");
-        }
+        };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
         var facilities = $cookies.getObject('facilities');
         var facilities = $cookies.getObject('facilities');
         $scope.showFacility = function (facility_number) {

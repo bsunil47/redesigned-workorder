@@ -41,9 +41,8 @@ router.post('/userlist', function(req, res, next) {
     if (err) {
       return next(err)
 
-    };
-
-    if (users != null) {
+    }
+      if (users != null) {
       Roles.find({},function(err,role) {
         if (err) { return next(err); }
         res.json({Code: 200,Info: {users: users, roles: role}});
@@ -81,7 +80,7 @@ router.post('/createuser', function(req, res, next) {
       }
     });
     //Res.json({Code:200,Info:{user:users,role:role.role_name}});
-  })
+  });
 
   //User.save();
   //res.json({Code:200,Info:"sucessfull"});
@@ -170,7 +169,6 @@ router.post('/categories', function (req, res, next) {
         if (err) {
             return next(err)
         }
-        ;
         if (categories != null) {
             res.json({Code: 200, Info: {categories: categories}});
         } else {
@@ -208,7 +206,6 @@ router.post('/classes', function (req, res, next) {
         if (err) {
             return next(err)
         }
-        ;
         if (classes != null) {
             res.json({Code: 200, Info: {classes: classes}});
         } else {
@@ -247,7 +244,6 @@ router.post('/equipments', function (req, res, next) {
         if (err) {
             return next(err)
         }
-        ;
         if (equipments != null) {
             res.json({Code: 200, Info: {equipments: equipments}});
         } else {
@@ -280,7 +276,6 @@ router.post('/facilities', function (req, res, next) {
         if (err) {
             return next(err)
         }
-        ;
         if (facilities != null) {
             res.json({Code: 200, Info: {facilities: facilities}});
         } else {
@@ -318,7 +313,6 @@ router.post('/priorities', function (req, res, next) {
         if (err) {
             return next(err)
         }
-        ;
         if (priorities != null) {
             res.json({Code: 200, Info: {priorities: priorities}});
         } else {
@@ -356,7 +350,6 @@ router.post('/skills', function (req, res, next) {
         if (err) {
             return next(err)
         }
-        ;
         if (skills != null) {
             res.json({Code: 200, Info: {skills: skills}});
         } else {

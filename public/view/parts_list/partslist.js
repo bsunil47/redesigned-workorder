@@ -14,9 +14,9 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
     $location.path('login');
   }
   $scope.Logout = function () {
-    $cookies.remove('userDetails')
+      $cookies.remove('userDetails');
     $location.path("/");
-  }
+  };
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
   }

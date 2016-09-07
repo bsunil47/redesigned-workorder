@@ -29,9 +29,9 @@ angular.module('PGapp.facilitylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
 
         $scope.Logout = function () {
-            $cookies.remove('userDetails')
+            $cookies.remove('userDetails');
             $location.path("/");
-        }
+        };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         }
