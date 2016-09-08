@@ -18,7 +18,6 @@ exports.up = function (next) {
         facilities: {facility_number: 'US51'},
         status_number: 2,
         status_name: 'Closed',
-        status: 1,
     });
     status.save();
 
@@ -26,7 +25,6 @@ exports.up = function (next) {
         facilities: {facility_number: 'US51'},
         status_number: 3,
         status_name: 'Hold',
-        status: 1,
     });
     status.save();
     next();
