@@ -10,6 +10,7 @@ var Equipment = mongoose.model('Collection_Equipment');
 var Facility = mongoose.model('Collection_Facility');
 var Priority = mongoose.model('Collection_Priority');
 var Skill = mongoose.model('Collection_Skills');
+var Status = mongoose.model('Collection_Status');
 
 router.post('/', function(req, res, next) {
   Users.findOne({email: req.body.username,password: req.body.password},function(err, users) {
