@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "postinstall": "bower install --allow-root",
-    "prestart": "npm install"
+    "prestart": "npm install",
+    "migrate": "migrate"
   },
   "dependencies": {
     "angular": "^1.5.8",
