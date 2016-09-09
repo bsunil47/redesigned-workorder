@@ -440,6 +440,18 @@ router.post('/skills', function (req, res, next) {
         }
     });
 });
+router.post('/status_list', function (req, res, next) {
+    Status.find({}, function (err, status) {
+        if (err) {
+            return next(err)
+        }
+        if (status != null) {
+            res.json({Code: 200, Info: {status_list: status}});
+        } else {
+            res.json({Code: 406, Info: 'no status'});
+        }
+    });
+});
 
 
 module.exports = router;

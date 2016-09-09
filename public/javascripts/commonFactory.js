@@ -72,6 +72,9 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         CreateSkill: $resource(url + 'api/create_skill', {}, {
             Skill: post_set
         }),
+        Status: $resource(url + 'api/status_list', {}, {
+            Recent: post_set
+        }),
 
     };
 
