@@ -16,6 +16,7 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         var facilities = $cookies.getObject('facilities');
 
+
         API.Categories.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
 
@@ -28,7 +29,19 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }, function (error) {
             alert(error);
         });
+        var status_list;
+        API.Status.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
 
+                status_list = res.Info.status_list;
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
 
         $scope.Logout = function () {
             $cookies.remove('userDetails');
@@ -49,6 +62,10 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 }
             }
             return facilities_numbers;
+        }
+        $scope.showStatus = function (status_number) {
+            var found = $filter('getByFacilityNumber')('status_number', status_number, status_list);
+            return found.status_name;
         }
     }]);
 
