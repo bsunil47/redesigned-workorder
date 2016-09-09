@@ -28,6 +28,17 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
             facility_number: "",
             skill_name: ""
         };
+        API.Facilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.facilities = res.Info.facilities;
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
         function CreateSkill() {
             if ($scope.CreateSkillForm.skill_name.$valid && $scope.CreateSkillForm.facility_number.$valid) {
                 $scope.skill_id = API.CreateSkill.Skill($scope.skill, function (res) {

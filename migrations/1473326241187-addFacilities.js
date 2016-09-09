@@ -15,13 +15,13 @@ exports.up = function (next) {
         for (var role in roles) {
             role_array.push({'userrole': roles[role]._id});
         }
-        Users.find({$or: role_array}, function (err, users) {
+        Users.find({'email': {$ne: 'Eshwar.arasu@mytecsoft.com'}, $or: role_array}, function (err, users) {
             if (err) {
                 next(err);
             }
             var manager_user_ids = [];
             for (var user in users) {
-                manager_user_ids.push({'user_id': users[user]._id})
+                manager_user_ids.push({'user_id': users[user]._id, 'email': users[user].email})
             }
             var facility = new Facility({
                 facility_number: 'US51',

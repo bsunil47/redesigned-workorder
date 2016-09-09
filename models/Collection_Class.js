@@ -4,7 +4,7 @@
 
 var mongoose = require('mongoose');
 var Collection_ClassSchema = new mongoose.Schema({
-    facility_number: {type: String, required: true},
+    facilities: [],
     class_name: {type: String, unique: true, required: true},
     status: {type: Number, default: 1},
     created_on: Date,

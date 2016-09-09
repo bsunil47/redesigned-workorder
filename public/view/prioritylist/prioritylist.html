@@ -37,14 +37,14 @@
                                 <thead>
                                 <tr>
                                     <th>Priority Name</th>
-                                    <th>Facility</th>
+                                    <th>Facilities</th>
                                     <th>Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="priority in priorities">
                                     <td>{{priority.priority_name}}</td>
-                                    <td>{{showFacility(priority.facility_number)}}</td>
+                                    <td>{{showFacility(priority.facilities)}}</td>
                                     <td>{{priority.status}}</td>
                                 </tr>
                                 </tbody>

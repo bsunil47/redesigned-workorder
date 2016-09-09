@@ -38,7 +38,7 @@
                                 <tr>
                                     <th>Equipment Number</th>
                                     <th>Equipment Name</th>
-                                    <th>Facility</th>
+                                    <th>Facilities</th>
                                     <th>Equipment Vendor</th>
                                     <th>Status</th>
                                 </tr>
@@ -47,7 +47,7 @@
                                 <tr ng-repeat="equipment in equipments">
                                     <td>{{equipment.equiment_number}}</td>
                                     <td>{{equipment.equiment_name}}</td>
-                                    <td>{{showFacility(equipment.facility_number)}}</td>
+                                    <td>{{showFacility(equipment.facilities)}}</td>
                                     <td>{{equipment.equipment_vendorname}}</td>
                                     <td>{{equipment.status}}</td>
                                 </tr>

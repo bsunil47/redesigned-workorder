@@ -28,6 +28,17 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
             facility_number: "",
             priority_name: ""
         };
+        API.Facilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.facilities = res.Info.facilities;
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
         function CreatePriority() {
             if ($scope.CreatePriorityForm.priority_name.$valid && $scope.CreatePriorityForm.facility_number.$valid) {
                 $scope.priority_id = API.CreatePriority.Priority($scope.priority, function (res) {

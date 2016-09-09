@@ -28,6 +28,17 @@ angular.module('PGapp.createclass', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         };
+        API.Facilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.facilities = res.Info.facilities;
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
         function CreateClass() {
             if ($scope.CreateClassForm.class_name.$valid && $scope.CreateClassForm.facility_number.$valid) {
                 $scope.class_id = API.CreateClass.Class($scope.class, function (res) {
