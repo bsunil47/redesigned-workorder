@@ -37,8 +37,17 @@ angular.module('PGapp.classlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         };
         var facilities = $cookies.getObject('facilities');
         $scope.showFacility = function (facility_number) {
-            var found = $filter('getByFacilityNumber')('facility_number', facility_number, facilities);
-            return found.facility_name
+            var facilities_numbers = "";
+            var facility_length = facility_number.length;
+            for (var faci in facility_number) {
+                var found = $filter('getByFacilityNumber')('facility_number', facility_number[faci].facility_number, facilities);
+                if (facility_length - 1 < faci) {
+                    facilities_numbers = facilities_numbers + found.facility_name;
+                } else {
+                    facilities_numbers = facilities_numbers + found.facility_name + ", ";
+                }
+            }
+            return facilities_numbers;
         }
     }]);
 

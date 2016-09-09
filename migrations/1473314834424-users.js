@@ -47,6 +47,27 @@ exports.up = function (next) {
             "userrole": role._id,
         });
         user.save();
+        var user = new Users({
+            "username": "Mccarthy Joseph",
+            "firstname": "Mccarthy",
+            "lastname": "Joseph",
+            "email": "Arun.gatram@mytecsoft.com",
+            "password": "manager123",
+            "status": 1,
+            "userrole": role._id,
+        });
+        user.save();
+        var user = new Users({
+            "username": "Doran Joseph",
+            "firstname": "Doran",
+            "lastname": "Joseph",
+            "email": "Eshwar.arasu@mytecsoft.com",
+            "password": "manager123",
+            "status": 1,
+            "userrole": role._id,
+        });
+        user.save();
+
         /*user = new Users({
          "username": "Pereira Virginio",
          "firstname": "Pereira",

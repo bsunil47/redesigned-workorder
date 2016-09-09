@@ -20,6 +20,18 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path("/");
         };
 
+        API.Facilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.facilities = res.Info.facilities;
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
+
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         };

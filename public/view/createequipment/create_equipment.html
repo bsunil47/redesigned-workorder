@@ -47,10 +47,14 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Facility Number:</label>
+                                        <label class="col-sm-6 control-label">Facility:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="equipment.facility_number" type="text" class="form-control"
-                                                   name="facility_number" required>
+                                            <select required class="form-control" ng-model="equiment.facility_number"
+                                                    name="facility_number">
+                                                <option ng-repeat="facilit in facilities"
+                                                        value="{{facilit.facility_number}}">{{facilit.facility_name}}
+                                                </option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">

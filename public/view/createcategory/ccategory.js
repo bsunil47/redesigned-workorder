@@ -29,6 +29,17 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         };
+        API.Facilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.facilities = res.Info.facilities;
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
 
         function CreateCategory() {
             if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {

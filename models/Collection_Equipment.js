@@ -5,9 +5,9 @@
 var mongoose = require('mongoose');
 var Collection_EquipmentSchema = new mongoose.Schema({
     equipment_number: {type: String, unique: true, required: true},
-    facility_number: {type: String, required: true},
+    facilities: [],
     equipment_name: {type: String, required: true},
-    equipment_vendorname: {type: String},
+    equipments: [],
     status: {type: Number, default: 1},
     created_on: Date,
     update_on: Date

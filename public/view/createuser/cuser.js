@@ -20,11 +20,22 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
     status: 1,
     password:''
   };
+
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
   var userdetail = $cookies.getObject('userDetails');
+    API.Facilities.Recent(userdetail.user, function (res) {
+        if (res.Code == 200) {
 
+            $scope.facilities = res.Info.facilities;
+        } else {
+
+        }
+
+    }, function (error) {
+        alert(error);
+    });
 
 
   $scope.Logout = function () {

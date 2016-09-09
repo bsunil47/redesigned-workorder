@@ -71,12 +71,27 @@ router.post('/createuser', function(req, res, next) {
     });
     user.save(function(err,resp) {
       if (err) {
+
         console.log(err);
         res.json({
           Code: 499,
           message: 'Already used',
         });
       } else {
+
+          var query = {facility_number: req.body.facility};
+          if (req.body.userrole == 'manager' || req.body.userrole == 'admin') {
+              Facility.update(query, {$push: {"facility_managers": {user_id: resp._id}}},
+                  {safe: true, upsert: true},
+                  function (err, model) {
+                      console.log(err);
+                  });
+          }
+          Facility.update(query, {$push: {"facility_users": {user_id: resp._id}}},
+              {safe: true, upsert: true},
+              function (err, model) {
+                  console.log(err);
+              });
         res.json({Code: 200,Info: 'sucessfull'});
       }
     });
@@ -147,7 +162,24 @@ router.post('/create_category', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var category = new Category({
+        var query = {
+            category_name: req.body.category_name
+        };
+        Category.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+            {safe: true, upsert: false},
+            function (err, model) {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        Code: 499,
+                        message: err,
+                    });
+                } else {
+                    res.json({Code: 200, Info: 'sucessfull'});
+                }
+            });
+
+        /* var category = new Category({
             facility_number: req.body.facility_number,
             category_name: req.body.category_name,
             status: 1
@@ -162,7 +194,7 @@ router.post('/create_category', function (req, res, next) {
             } else {
                 res.json({Code: 200, Info: 'sucessfull'});
             }
-        });
+         });*/
     })
 });
 router.post('/categories', function (req, res, next) {
@@ -184,7 +216,23 @@ router.post('/create_class', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var clas = new Class({
+        var query = {
+            class_name: req.body.class_name
+        };
+        Category.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+            {safe: true, upsert: false},
+            function (err, model) {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        Code: 499,
+                        message: err,
+                    });
+                } else {
+                    res.json({Code: 200, Info: 'sucessfull'});
+                }
+            });
+        /*var clas = new Class({
             facility_number: req.body.facility_number,
             class_name: req.body.class_name,
             status: 1
@@ -199,7 +247,7 @@ router.post('/create_class', function (req, res, next) {
             } else {
                 res.json({Code: 200, Info: 'sucessfull'});
             }
-        });
+         });*/
     })
 });
 router.post('/classes', function (req, res, next) {
@@ -291,7 +339,24 @@ router.post('/create_priority', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var priority = new Priority({
+        var query = {
+            priority_name: req.body.priority_name
+        };
+        Priority.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+            {safe: true, upsert: false},
+            function (err, model) {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        Code: 499,
+                        message: err,
+                    });
+                } else {
+                    res.json({Code: 200, Info: 'sucessfull'});
+                }
+            });
+
+        /*var priority = new Priority({
             facility_number: req.body.facility_number,
             priority_name: req.body.priority_name,
             status: 1
@@ -306,7 +371,7 @@ router.post('/create_priority', function (req, res, next) {
             } else {
                 res.json({Code: 200, Info: 'sucessfull'});
             }
-        });
+         });*/
     })
 });
 router.post('/priorities', function (req, res, next) {
@@ -328,6 +393,23 @@ router.post('/create_skill', function (req, res, next) {
         if (err) {
             return next(err);
         }
+        var query = {
+            skill_name: req.body.skill_name,
+        };
+        Skill.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+            {safe: true, upsert: false},
+            function (err, model) {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        Code: 499,
+                        message: err,
+                    });
+                } else {
+                    res.json({Code: 200, Info: 'sucessfull'});
+                }
+            });
+        /*
         var skill = new Skill({
             facility_number: req.body.facility_number,
             skill_name: req.body.skill_name,
@@ -343,7 +425,7 @@ router.post('/create_skill', function (req, res, next) {
             } else {
                 res.json({Code: 200, Info: 'sucessfull'});
             }
-        });
+         });*/
     })
 });
 router.post('/skills', function (req, res, next) {
