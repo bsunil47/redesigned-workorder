@@ -52,7 +52,7 @@ angular.module('PGapp.classlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 }
             }
             return facilities_numbers;
-        }
+        };
         var status_list;
         API.Status.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {

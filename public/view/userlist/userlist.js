@@ -38,7 +38,7 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
   };
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
-  }
+  };
     $scope.showFacility = function (facility_number) {
         var facilities_numbers = "";
         var facility_length = facility_number.length;
@@ -51,7 +51,7 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
             }
         }
         return facilities_numbers;
-    }
+    };
     var status_list;
     API.Status.Recent(userdetail.user, function (res) {
         if (res.Code == 200) {

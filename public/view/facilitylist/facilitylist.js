@@ -34,7 +34,7 @@ angular.module('PGapp.facilitylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
         var status_list;
         API.Status.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {

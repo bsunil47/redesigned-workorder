@@ -2,9 +2,6 @@
 require('../config/db');
 var express = require('express');
 var mongoose = require('mongoose');
-var Users = mongoose.model('Collection_Users');
-var Roles = mongoose.model('Collection_Roles');
-var Facility = mongoose.model('Collection_Facility');
 var Equipment = mongoose.model('Collection_Equipment');
 
 exports.up = function (next) {
