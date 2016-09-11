@@ -35,7 +35,6 @@ angular.module('PGapp.prioritylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path(reloc);
         };
         var facilities = $cookies.getObject('facilities');
-        var facilities = $cookies.getObject('facilities');
         $scope.showFacility = function (facility_number) {
             var facilities_numbers = "";
             var facility_length = facility_number.length;
