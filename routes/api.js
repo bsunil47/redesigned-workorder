@@ -454,5 +454,39 @@ router.post('/status_list', function (req, res, next) {
     });
 });
 
+router.post('/search_facilities', function (req, res, next) {
+    Facility.find(
+        {
+            /* facility_users:{ $elemMatch : { user_id : req.body._id}
+             }*/
+        }, {facility_users: 0, facility_managers: 0}, function (err, facilities) {
+            if (err) {
+                return next(err)
+            }
+            if (facilities != null) {
+                res.json({Code: 200, Info: {facilities: facilities}});
+            } else {
+                res.json({Code: 406, Info: 'no facilities'});
+            }
+        });
+});
+
+router.post('/search_category', function (req, res, next) {
+    Category.find(
+        {
+            facilities: {
+                $elemMatch: {facility_number: req.body.facility_number}
+            }
+        }, function (err, categories) {
+            if (err) {
+                return next(err)
+            }
+            if (categories != null) {
+                res.json({Code: 200, Info: {categories: categories}});
+            } else {
+                res.json({Code: 406, Info: 'no facilities'});
+            }
+        });
+});
 
 module.exports = router;

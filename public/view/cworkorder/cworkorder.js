@@ -72,6 +72,32 @@ angular.module('PGapp.cworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
   };
+  API.SFacilities.Recent(userdetail.user, function (res) {
+    if (res.Code == 200) {
+
+      $scope.facilities = res.Info.facilities;
+      $scope.selected_facility = res.Info.facilities[0].facility_number;
+      API.SCategory.Recent({facility_number: res.Info.facilities[0].facility_number}, function (res) {
+        if (res.Code == 200) {
+
+          $scope.categories = res.Info.categories;
+          //$cookies.put('userDetails',res)
+        } else {
+
+        }
+
+      }, function (error) {
+        alert(error);
+      });
+      //$cookies.put('userDetails',res)
+    } else {
+
+    }
+
+  }, function (error) {
+    alert(error);
+  });
+
 
   function CreateWorkOrder() {
     if ($scope.CreateWorkOrderForm.workorder_description.$valid) {
