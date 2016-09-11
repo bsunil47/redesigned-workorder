@@ -8,8 +8,8 @@ let bower = require('gulp-bower');
 
 gulp.task('npm_compress_serve', function () {
 
-    gulp.src(['./bower.json', './package.json'])
-        .pipe(install({production: true}));
+    /*gulp.src(['./bower.json', './package.json'])
+     .pipe(install({production: true}));*/
     gulp.src('public/view/**/*.js')
         .pipe(concat('allCtrls.js'))
         .pipe(minify({
