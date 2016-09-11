@@ -87,12 +87,20 @@ PGapp.filter('getById', function() {
 PGapp.filter('getByFacilityNumber', function () {
   //console.log(input);
   return function (propertyName, propertyValue, collection) {
-    var i = 0, len = collection.length;
-    for (i; i < len; i++) {
-      if (collection[i][propertyName] == propertyValue) {
-        return collection[i];
+      try {
+          if (collection != 'undefined') {
+              var i = 0,
+                  len = collection.length;
+              for (i; i < len; i++) {
+                  if (collection[i][propertyName] == propertyValue) {
+                      return collection[i];
+                  }
+              }
+          }
+      } catch (err) {
+          return null;
       }
-    }
-    return null;
+
+
   }
 });

@@ -43,12 +43,12 @@
                                     <th>Status</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr ng-repeat="equipment in equipments">
-                                    <td>{{equipment.equiment_number}}</td>
-                                    <td>{{equipment.equiment_name}}</td>
+                                <tbody ng-repeat="equipment in equipments">
+                                <tr ng-repeat="vendor in equipment.equipments">
+                                    <td>{{equipment.equipment_number}}</td>
+                                    <td>{{equipment.equipment_name}}</td>
                                     <td>{{showFacility(equipment.facilities)}}</td>
-                                    <td>{{equipment.equipment_vendorname}}</td>
+                                    <td>{{vendor.vendor_name}}</td>
                                     <td>{{showStatus(equipment.status)}}</td>
                                 </tr>
                                 </tbody>

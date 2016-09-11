@@ -50,6 +50,9 @@ angular.module('PGapp.facilitylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
         $scope.showStatus = function (status_number) {
             var found = $filter('getByFacilityNumber')('status_number', status_number, status_list);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
             return found.status_name;
         }
 
