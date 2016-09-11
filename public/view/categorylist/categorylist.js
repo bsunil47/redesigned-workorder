@@ -14,7 +14,23 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
-        var facilities = $cookies.getObject('facilities');
+
+        var facilities;
+        API.Facilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.facilities = res.Info.facilities;
+                //$cookies.putObject('facilities', res.Info.facilities);
+                facilities = $cookies.getObject('facilities');
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
+
 
 
         API.Categories.Recent(userdetail.user, function (res) {

@@ -19,12 +19,13 @@ router.post('/', function(req, res, next) {
     if (users != null) {
       Roles.findOne({_id: users.userrole},function(err,role) {
         if (err) { return next(err); }
-          Facility.find({}, function (err, facilities) {
+          /*Facility.find({}, function (err, facilities) {
               if (err) {
                   return next(err);
               }
               res.json({Code: 200, Info: {user: users, role: role.role_name, facilities: facilities}});
-          });
+           });*/
+          res.json({Code: 200, Info: {user: users, role: role.role_name}});
 
       });
 
@@ -321,7 +322,7 @@ router.post('/create_facility', function (req, res, next) {
 
 });
 router.post('/facilities', function (req, res, next) {
-    Facility.find({}, function (err, facilities) {
+    Facility.find({}, {facility_users: 0, facility_managers: 0}, function (err, facilities) {
         if (err) {
             return next(err)
         }
