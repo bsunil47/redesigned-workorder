@@ -82,7 +82,7 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 }
             }
             return facilities_numbers;
-        }
+        };
         $scope.showStatus = function (status_number) {
             var found = $filter('getByFacilityNumber')('status_number', status_number, status_list);
             if (angular.isUndefined(found) || found === null) {
