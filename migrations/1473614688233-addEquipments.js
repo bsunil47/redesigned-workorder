@@ -39,6 +39,7 @@ exports.up = function (next) {
             }
         ]
     });
+    console.log('save');
     equipment.save(function (err) {
         if (err) console.log(err);
     });
