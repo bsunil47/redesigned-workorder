@@ -39,7 +39,9 @@ exports.up = function (next) {
             }
         ]
     });
-    equipment.save();
+    equipment.save(function (err) {
+        if (err) console.log(err);
+    });
     var equipment = Equipment({
         equipment_number: 'A74626',
         equipment_name: 'PX4',
