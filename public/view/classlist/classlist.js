@@ -41,10 +41,14 @@ angular.module('PGapp.classlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             var facility_length = facility_number.length;
             for (var faci in facility_number) {
                 var found = $filter('getByFacilityNumber')('facility_number', facility_number[faci].facility_number, facilities);
-                if (facility_length - 1 < faci) {
-                    facilities_numbers = facilities_numbers + found.facility_name;
+                if (angular.isUndefined(found) || found === null) {
+                    facilities_numbers = facilities_numbers
                 } else {
-                    facilities_numbers = facilities_numbers + found.facility_name + ", ";
+                    if (facility_length - 1 < faci) {
+                        facilities_numbers = facilities_numbers + found.facility_name;
+                    } else {
+                        facilities_numbers = facilities_numbers + found.facility_name + ", ";
+                    }
                 }
             }
             return facilities_numbers;
@@ -64,6 +68,9 @@ angular.module('PGapp.classlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
         $scope.showStatus = function (status_number) {
             var found = $filter('getByFacilityNumber')('status_number', status_number, status_list);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
             return found.status_name;
         }
     }]);
