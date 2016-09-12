@@ -18,7 +18,7 @@ exports.up = function (next) {
             "email": "mike.dollarhide@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('Mike	Dollarhide');
@@ -29,7 +29,7 @@ exports.up = function (next) {
             "email": "scott.theroux@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('Scott Theroux');
@@ -40,7 +40,7 @@ exports.up = function (next) {
             "email": "james.white@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('James White');
@@ -51,7 +51,7 @@ exports.up = function (next) {
             "email": "stephen.falk@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('Stephen Falk');
@@ -62,7 +62,7 @@ exports.up = function (next) {
             "email": "matthew.beaty@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('Matthew Beaty');
@@ -73,7 +73,7 @@ exports.up = function (next) {
             "email": "richard.rounds@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('Richard Rounds');
@@ -84,7 +84,7 @@ exports.up = function (next) {
             "email": "peter.medeiros@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('Peter Medeiros');
@@ -95,7 +95,7 @@ exports.up = function (next) {
             "email": "michael.silva@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('Michael Silva');
@@ -106,7 +106,7 @@ exports.up = function (next) {
             "email": "richard.dionne@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('Richard Dionne');
@@ -117,7 +117,7 @@ exports.up = function (next) {
             "email": "william.wilson@prysmiangroup.com",
             "password": "operator123",
             "status": 1,
-            "userrole": role._id,
+            "userrole": role._id
         });
         user.save();
         console.log('William Wilson');
