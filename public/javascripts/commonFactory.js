@@ -81,6 +81,14 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         SCategory: $resource(url + 'api/search_category', {}, {
             Recent: post_set
         }),
+        SEquipment: $resource(url + 'api/search_equipment', {}, {
+            Recent: post_set
+        }),
+        SPriority: $resource(url + 'api/search_priority', {}, {
+            Recent: post_set
+        }),
+
+
 
     };
 

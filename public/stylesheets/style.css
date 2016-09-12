@@ -205,11 +205,23 @@ footer {
   bottom: -60px;
   width: 100%; }
 
-input.ng-invalid {
-  border: 1px solid pink; }
-
 a.btn {
-    margin: 5px;
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 5px;
+    margin-botton: 5px;
+}
+
+.form-control .form-group {
+    font-size: 11px !important;
+}
+
+.form-control .form-group input {
+    border: 1px solid #000;
+}
+
+input.ng-invalid {
+    border: 1px solid #000;
 }
 
 /*# sourceMappingURL=style.css.map */

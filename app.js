@@ -3,7 +3,8 @@ require('./config/db');
 var express = require('express');
 var session = require('express-session');
 
-
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
