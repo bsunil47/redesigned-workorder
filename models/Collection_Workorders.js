@@ -22,7 +22,7 @@ var WorkorderSchema = new mongoose.Schema({
     workorder_actiontaken: String,
     workorder_PM: [],
     status: {type: Number, default: 1, required: true},
-    created_on: Date,
+    created_on: {type: Date, default: Date.now},
     update_on: Date
 });
 
