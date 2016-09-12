@@ -35,7 +35,9 @@
     "morgan": "~1.7.0",
     "node-compass": "^0.2.4",
     "serve-favicon": "~2.3.0",
-    "ui-router": "^1.0.0-alpha.3"
+    "ui-router": "^1.0.0-alpha.3",
+    "nodemailer": "^2.6.0",
+    "nodemailer-smtp-transport": "^2.7.2"
   },
   "devDependencies": {
     "eslint": "^3.3.1",

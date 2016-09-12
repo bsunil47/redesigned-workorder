@@ -285,9 +285,7 @@ footer{
   bottom: -60px;
   width: 100%;
 }
-input.ng-invalid {
-  border:1px solid pink;
-}
+
 input.ng-valid {
   //border:1px solid lightgreen;
 }
@@ -299,8 +297,16 @@ a.btn {
   margin-botton: 5px;
 }
 
-.form-control {
-  font-size: 12px !important;
+.form-control .form-group {
+  font-size: 11px !important;
+  input {
+    border: 1px solid #000;
+  }
+
+}
+
+input.ng-invalid {
+  border: 1px solid #000;
 }
 
 

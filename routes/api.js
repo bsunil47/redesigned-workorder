@@ -1,4 +1,23 @@
+"use strict";
 var express = require('express');
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+var transporter = nodemailer.createTransport(smtpTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'pgworkorder@gmail.com',
+        pass: 'PGw0rk0rder'
+    },
+    logger: true, // log to console
+    debug: true // include SMTP traffic in the logs
+}, {
+    // default message fields
+
+    // sender info
+    from: 'Prysmian WOA <pgworkorder@gmail.com>'
+}));
 var router = express.Router();
 var mongoose = require('mongoose');
 var Users = mongoose.model('Collection_Users');
@@ -13,6 +32,7 @@ var Skill = mongoose.model('Collection_Skills');
 var Status = mongoose.model('Collection_Status');
 
 router.post('/', function(req, res, next) {
+
   Users.findOne({email: req.body.username,password: req.body.password},function(err, users) {
     if (err) { return next(err); }
 
@@ -142,6 +162,10 @@ router.post('/create_workorder', function (req, res, next) {
             workorder_number: req.body.workorder_number + "-" + count,
             workorder_creator: req.body.creator,
             workorder_description: req.body.workorder_description,
+            workorder_facility: req.body.workorder_facility,
+            workorder_category: req.body.workorder_category,
+            workorder_equipment: req.body.workorder_equipment,
+            workorder_priority: req.body.workorder_priority,
             status: 1
         });
         workOrder.save(function (err, resp) {
@@ -152,6 +176,28 @@ router.post('/create_workorder', function (req, res, next) {
                     message: err,
                 });
             } else {
+                var mailData = {
+                    // Comma separated list of recipients
+                    to: '"sunil" <sunil.bachaval@gmail.com>',
+
+                    // Subject of the message
+                    subject: 'mail to mail', //
+
+                    // plaintext body
+                    text: 'Hello to sunil',
+
+                    // HTML body
+                    html: '<p><b>Hello</b> to sunny </p>' +
+                    '<p>Here\'s a test mail</p>'
+                };
+                transporter.sendMail(mailData, function (err, info) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log('Message sent successfully!');
+                    console.log(info);
+
+                });
                 res.json({Code: 200, Info: 'sucessfull'});
             }
         });
@@ -457,8 +503,9 @@ router.post('/status_list', function (req, res, next) {
 router.post('/search_facilities', function (req, res, next) {
     Facility.find(
         {
-            /* facility_users:{ $elemMatch : { user_id : req.body._id}
-             }*/
+            facility_users: {
+                $elemMatch: {user_id: req.body._id}
+            }
         }, {facility_users: 0, facility_managers: 0}, function (err, facilities) {
             if (err) {
                 return next(err)
@@ -485,6 +532,41 @@ router.post('/search_category', function (req, res, next) {
                 res.json({Code: 200, Info: {categories: categories}});
             } else {
                 res.json({Code: 406, Info: 'no facilities'});
+            }
+        });
+});
+
+router.post('/search_equipment', function (req, res, next) {
+    Equipment.find(
+        {
+            facilities: {
+                $elemMatch: {facility_number: req.body.facility_number}
+            }
+        }, function (err, equipments) {
+            if (err) {
+                return next(err)
+            }
+            if (equipments != null) {
+                res.json({Code: 200, Info: {equipments: equipments}});
+            } else {
+                res.json({Code: 406, Info: 'no equipments'});
+            }
+        });
+});
+router.post('/search_priority', function (req, res, next) {
+    Priority.find(
+        {
+            facilities: {
+                $elemMatch: {facility_number: req.body.facility_number}
+            }
+        }, function (err, priorities) {
+            if (err) {
+                return next(err)
+            }
+            if (priorities != null) {
+                res.json({Code: 200, Info: {priorities: priorities}});
+            } else {
+                res.json({Code: 406, Info: 'no equipments'});
             }
         });
 });

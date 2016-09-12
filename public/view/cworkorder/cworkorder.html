@@ -70,11 +70,10 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Facility:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" ng-disabled="disableFacility">
-                                                        <option ng-repeat="facility in facilities"
-                                                                value="{{facility.facility_number}}">
-                                                            {{facility.facility_name}}
-                                                        </option>
+                                                    <select class="form-control" ng-disabled="disableFacility"
+                                                            ng-model="workOrder.workorder_facility"
+                                                            name="workorder_facility"
+                                                            ng-options='facility.facility_number as facility.facility_name for facility in facilities'>
                                                     </select>
                                                 </div>
                                             </div>
@@ -85,26 +84,35 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Category:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" ng-disabled="disableCategory">
-                                                        <option ng-repeat="category in categories"
-                                                                value="{{category._id}}">{{category.category_name}}
-                                                        </option>
+                                                    <select class="form-control" ng-disabled="disableCategory"
+                                                            ng-model="workOrder.workorder_category"
+                                                            name="workorder_category"
+                                                            ng-options='category._id as category.category_name for category in categories'>
+
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Equipment:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" ng-disabled="disableEquipment" >
-                                                        <option>--Select Equipment--</option>
+                                                    <select class="form-control" ng-disabled="disableEquipment"
+                                                            ng-model="workOrder.workorder_equipment"
+                                                            name="workorder_equipment">
+                                                        <option ng-repeat="equipment in equipments"
+                                                                value="{{equipment._id}}">{{equipment.equipment_name}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Priority:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" ng-disabled="disablePriority">
-                                                        <option>--Select Priority--</option>
+                                                    <select class="form-control" ng-disabled="disablePriority"
+                                                            ng-model="workOrder.workorder_priority"
+                                                            name="workorder_priority">
+                                                        <option ng-repeat="priority in priorities"
+                                                                value="{{priority._id}}">{{priority.priority_name}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
