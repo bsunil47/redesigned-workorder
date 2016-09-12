@@ -197,7 +197,7 @@ router.post('/create_workorder', function (req, res, next) {
                                 }
                                 var mailData = {
                                     // Comma separated list of recipients
-
+                                    to: '"sunil" <sunilb@omulusinfotech.com>',
                                     // Subject of the message
                                     subject: 'New Maintanence Work Order number ' + req.body.workorder_number + "-" + count + 'has been submitte for your approval', //
 
