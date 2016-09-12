@@ -87,6 +87,9 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         SPriority: $resource(url + 'api/search_priority', {}, {
             Recent: post_set
         }),
+        ManageWorkorders: $resource(url + 'api/manager_workorder', {}, {
+            Recent: post_set
+        }),
 
 
 

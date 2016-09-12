@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var WorkorderSchema = new mongoose.Schema({
     workorder_number: {type: String, unique: true, required: true},
     workorder_creator: {type: mongoose.Schema.Types.ObjectId, ref: 'Collection_Users'},
-    workorder_faciity: String,
+    workorder_facility: String,
     workorder_category: String,
     workorder_equipment: String,
     workorder_priority: String,

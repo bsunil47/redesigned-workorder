@@ -617,5 +617,38 @@ router.post('/search_priority', function (req, res, next) {
             }
         });
 });
+router.post('/manager_workorder', function (req, res, next) {
+    Facility.find(
+        {
+            facility_users: {
+                $elemMatch: {user_id: req.body._id}
+            }
+        }, {facility_users: 0, facility_managers: 0}, function (err, facilities) {
+            if (err) {
+                return next(err)
+            }
+            if (facilities != null) {
+                var facilities_array = [];
+                for (var fa in facilities) {
+                    facilities_array.push(facilities[fa].facility_number);
+                }
+                WorkOrder.find({workorder_facility: {$in: facilities_array}}, function (err, workorders) {
+                    if (err) {
+                        return next(err)
+                    }
+                    if (workorders != null) {
+                        res.json({Code: 200, Info: {workorders: workorders}});
+                    } else {
+                        res.json({Code: 406, Info: 'no workorders'});
+                    }
+
+                });
+
+            } else {
+                res.json({Code: 406, Info: 'no facilities'});
+            }
+        });
+});
+
 
 module.exports = router;

@@ -119,11 +119,6 @@ angular.module('PGapp.cworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
     alert(error);
   });
 
-
-
-
-
-
   function CreateWorkOrder() {
     if ($scope.CreateWorkOrderForm.workorder_description.$valid) {
       $scope.user_id = API.CreateWorkOrder.save($scope.workOrder, function (res) {

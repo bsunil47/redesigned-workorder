@@ -212,45 +212,14 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>001</td>
-                                    <td>Nunc vitae massa venenatis, mollis libero id, suscipit ante.</td>
-                                    <td>Vestibulum</td>
+                                <tr ng-repeat="workorder in workOrders">
+                                    <td>{{workorder.workorder_number}}</td>
+                                    <td>{{workorder.workorder_description}}</td>
+                                    <td>{{workorder.workorder_equipment}}</td>
                                     <td><i class="fa fa-eye"></i></td>
                                     <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>002</td>
-                                    <td>Fusce tempus arcu non neque blandit, non eleifend tortor cursus.</td>
-                                    <td>Aenean</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>003</td>
-                                    <td>Vestibulum faucibus ex ac libero ultricies, in dignissim nisl mollis.</td>
-                                    <td>Aliquam</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>004</td>
-                                    <td>Integer a sem id ante dictum placerat.</td>
-                                    <td>Vestibulum</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>005</td>
-                                    <td>Nulla nec leo nec orci consectetur iaculis sit amet in erat.</td>
-                                    <td>Pretium Quam</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
+                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(workorder.workorder_number)"></i>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
