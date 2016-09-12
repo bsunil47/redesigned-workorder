@@ -195,9 +195,14 @@ router.post('/create_workorder', function (req, res, next) {
                                 if (err) {
                                     console.log(err);
                                 }
+                                if (req.body.workorder_facility == 'US51') {
+                                    var mail_to = '"Arun" <arun.gatram@mytecsoft.com>';
+                                } else {
+                                    var mail_to = '"Eshwar" <eshwar.arasu@mytecsoft.com>';
+                                }
                                 var mailData = {
                                     // Comma separated list of recipients
-                                    to: '"sunil" <sunilb@omulusinfotech.com>',
+                                    to: mail_to,
                                     // Subject of the message
                                     subject: 'New Maintenance Work Order number ' + req.body.workorder_number + "-" + count + ' has been submited for your approval', //
 
