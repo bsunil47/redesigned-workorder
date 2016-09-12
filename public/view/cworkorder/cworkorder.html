@@ -71,7 +71,10 @@
                                                 <label class="col-sm-6 control-label">Facility:</label>
                                                 <div class="col-sm-6">
                                                     <select class="form-control" ng-disabled="disableFacility">
-                                                        <option>--Select Facility--</option>
+                                                        <option ng-repeat="facility in facilities"
+                                                                value="{{facility.facility_number}}">
+                                                            {{facility.facility_name}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -83,7 +86,9 @@
                                                 <label class="col-sm-6 control-label">Category:</label>
                                                 <div class="col-sm-6">
                                                     <select class="form-control" ng-disabled="disableCategory">
-                                                        <option>--Select Category--</option>
+                                                        <option ng-repeat="category in categories"
+                                                                value="{{category._id}}">{{category.category_name}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>

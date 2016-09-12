@@ -75,6 +75,12 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         Status: $resource(url + 'api/status_list', {}, {
             Recent: post_set
         }),
+        SFacilities: $resource(url + 'api/search_facilities', {}, {
+            Recent: post_set
+        }),
+        SCategory: $resource(url + 'api/search_category', {}, {
+            Recent: post_set
+        }),
 
     };
 
