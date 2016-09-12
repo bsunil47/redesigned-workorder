@@ -199,29 +199,29 @@ router.post('/create_workorder', function (req, res, next) {
                                     // Comma separated list of recipients
                                     to: '"sunil" <sunilb@omulusinfotech.com>',
                                     // Subject of the message
-                                    subject: 'New Maintanence Work Order number ' + req.body.workorder_number + "-" + count + 'has been submitte for your approval', //
+                                    subject: 'New Maintenance Work Order number ' + req.body.workorder_number + "-" + count + ' has been submited for your approval', //
 
                                     // plaintext body
                                     //text: 'Hello to sunil',
 
                                     // HTML body
-                                    html: '<p>New Maintanence Work Order number ' + req.body.workorder_number + "-" + count + 'has been submitte for your approval</p>'
+                                    html: '<p>New Maintenace Work Order number <b>' + req.body.workorder_number + "-" + count + '</b> has been submited for your approval</p>'
                                     +
                                     '<p><b>Work Order Details</b></p>'
                                     +
-                                    '<p><b>Work Order Number</b>:' + req.body.workorder_number + "-" + count + '</p>'
+                                    '<p><b>Work Order Number</b>: ' + req.body.workorder_number + "-" + count + '</p>'
                                     +
-                                    '<p><b>Work Order Date</b>:' + date + '</p>'
+                                    '<p><b>Work Order Date</b>: ' + date + '</p>'
                                     +
-                                    '<p><b>Facility</b>:' + facility.facility_name + '</p>'
+                                    '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
                                     +
-                                    '<p><b>Category</b>:' + category.category_name + '</p>'
+                                    '<p><b>Category</b>: ' + category.category_name + '</p>'
                                     +
-                                    '<p><b>Equipment</b>:' + equipment.equipment_name + '</p>'
+                                    '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
                                     +
-                                    '<p><b>Priority</b>:' + priority.priority_name + '</p>'
+                                    '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
                                     +
-                                    '<p><b>Description</b>:' + req.body.workorder_description + '</p>'
+                                    '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
                                     +
                                     '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
 
