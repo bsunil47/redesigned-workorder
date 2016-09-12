@@ -13,6 +13,19 @@ angular.module('PGapp.sorders', ['ngRoute','ngAnimate', 'ngCookies'])
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
+  var userdetail = $cookies.getObject('userDetails');
+  API.ManageWorkorders.Recent(userdetail.user, function (res) {
+    if (res.Code == 200) {
+
+      $scope.workOrders = res.Info.workorders;
+      //$cookies.put('userDetails',res)
+    } else {
+
+    }
+
+  }, function (error) {
+    alert(error);
+  });
   $scope.editWorkOrder = function (workorder_id) {
     $location.path('edit_workorder/'+workorder_id);
   };
