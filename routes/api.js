@@ -102,13 +102,20 @@ router.post('/createuser', function(req, res, next) {
 
           var query = {facility_number: req.body.facility};
           if (req.body.userrole == 'manager' || req.body.userrole == 'admin') {
-              Facility.update(query, {$push: {"facility_managers": {user_id: resp._id}}},
+              Facility.update(query, {
+                      $push: {
+                          "facility_managers": {
+                              user_id: resp._id.toString(),
+                              email: req.body.email
+                          }
+                      }
+                  },
                   {safe: true, upsert: true},
                   function (err, model) {
                       console.log(err);
                   });
           }
-          Facility.update(query, {$push: {"facility_users": {user_id: resp._id}}},
+          Facility.update(query, {$push: {"facility_users": {user_id: resp._id.toString(), email: req.body.email}}},
               {safe: true, upsert: true},
               function (err, model) {
                   console.log(err);
