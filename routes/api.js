@@ -203,9 +203,9 @@ router.post('/create_workorder', function (req, res, next) {
                                     console.log(err);
                                 }
                                 if (req.body.workorder_facility == 'US51') {
-                                    var mail_to = '"Arun" <arun.gatram@mytecsoft.com>';
+                                    var mail_to = '"Arun" <pgmanager7@gmail.com>';
                                 } else {
-                                    var mail_to = '"Eshwar" <eshwar.arasu@mytecsoft.com>';
+                                    var mail_to = '"Eshwar" <pgmanager7@gmail.com>';
                                 }
                                 var mailData = {
                                     // Comma separated list of recipients
@@ -813,48 +813,66 @@ var SendMail = function (req) {
                     if (err) {
                         console.log(err);
                     }
-
-                    var mail_to = '"Technician" <pgtechnician@gmail.com>';
-
-                    var mailData = {
-                        // Comma separated list of recipients
-                        to: mail_to,
-                        // Subject of the message
-                        subject: 'New Maintenance Work Order number ' + req.body.workorder_number + ' has been assigned to you', //
-
-                        // plaintext body
-                        //text: 'Hello to sunil',
-
-                        // HTML body
-                        html: '<p>New Maintenace Work Order number <b>' + req.body.workorder_number + '</b> has been submited for your approval</p>'
-                        +
-                        '<p><b>Work Order Details</b></p>'
-                        +
-                        '<p><b>Work Order Number</b>: ' + req.body.workorder_number + '</p>'
-                        +
-                        '<p><b>Work Order Date</b>: ' + req.body.created_on + '</p>'
-                        +
-                        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
-                        +
-                        '<p><b>Category</b>: ' + category.category_name + '</p>'
-                        +
-                        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
-                        +
-                        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
-                        +
-                        '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
-                        +
-                        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
-
-                    };
-                    transporter.sendMail(mailData, function (err, info) {
+                    Users.findOne({_id: req.body.user_id}, function (err, user) {
                         if (err) {
                             console.log(err);
                         }
-                        console.log('Message sent successfully!');
-                        console.log(info);
+                        Roles.findOne({_id: user.userrole}, function (err, role) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            if (role.role_name == 'technician') {
+                                var mail_to = '"Arun" <pgmanager7@gmail.com>';
+                                var last_message = ' has been updated';
+                            } else {
+                                var mail_to = '"Technician" <pgtechnician@gmail.com>';
+                                var last_message = ' has been updated';
+                            }
+                            var mailData = {
+                                // Comma separated list of recipients
+                                to: mail_to,
+                                // Subject of the message
+                                subject: 'Maintenance Work Order number ' + req.body.workorder_number + last_message, //
 
-                    });
+                                // plaintext body
+                                //text: 'Hello to sunil',
+
+                                // HTML body
+                                html: '<p>Maintenace Work Order number <b>' + req.body.workorder_number + '</b>' + last_message + '</p>'
+                                +
+                                '<p><b>Work Order Details</b></p>'
+                                +
+                                '<p><b>Work Order Number</b>: ' + req.body.workorder_number + '</p>'
+                                +
+                                '<p><b>Work Order Date</b>: ' + req.body.created_on + '</p>'
+                                +
+                                '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+                                +
+                                '<p><b>Category</b>: ' + category.category_name + '</p>'
+                                +
+                                '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+                                +
+                                '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+                                +
+                                '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
+                                +
+                                '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+
+                            };
+                            transporter.sendMail(mailData, function (err, info) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                console.log('Message sent successfully!');
+                                console.log(info);
+
+                            });
+                        });
+                    })
+
+
+
+
 
                 });
             });
