@@ -825,7 +825,16 @@ var SendMail = function (req) {
                             }
                             if (role.role_name == 'technician') {
                                 var mail_to = '"Arun" <pgmanager7@gmail.com>';
-                                var last_message = ' has been updated';
+                                if (req.body.status == 1) {
+                                    var last_message = ' has been updated';
+                                } else {
+                                    if (req.body.status == 2) {
+                                        var last_message = ' has been close';
+                                    } else {
+                                        var last_message = ' has been on hold';
+                                    }
+                                }
+
                             } else {
                                 var mail_to = '"Technician" <pgtechnician@gmail.com>';
                                 var last_message = ' has been updated';
