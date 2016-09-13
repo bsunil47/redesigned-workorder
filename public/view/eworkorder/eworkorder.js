@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('PGapp.eworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
+angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTimepicker'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/edit_workorder/:id', {
@@ -204,5 +204,18 @@ angular.module('PGapp.eworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
         console.log($scope.workOrder.status);
 
         console.log($scope.workOrder);
+          API.UpdateWorkOrder.Recent($scope.workOrder, function (res) {
+              if (res.Code == 200) {
+
+                  //$scope.categories = res.Info.categories;
+                  //$scope.workOrder.workorder_category = $scope.categories[0]._id;
+                  //$cookies.put('userDetails',res)
+              } else {
+
+              }
+
+          }, function (error) {
+              alert(error);
+          });
   }
 }]);

@@ -45,7 +45,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Email :</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="user.email" type="email" class="form-control" name="email" required>
+                                            <input ng-model="user.email" type="email" class="form-control" name="email"
+                                                   ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -57,7 +58,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Role:</label>
                                         <div class="col-sm-6">
-                                            <select required class="form-control" ng-model="user.userrole" name="userrole">
+                                            <select required class="form-control" ng-model="user.userrole"
+                                                    name="userrole" required>
                                                 <option value="operator">Operator</option>
                                                 <option value="manager">Manager</option>
                                                 <option value="clerk">Clerk</option>
@@ -69,7 +71,7 @@
                                         <label class="col-sm-6 control-label">Facility:</label>
                                         <div class="col-sm-6">
                                             <select required class="form-control" ng-model="user.facility"
-                                                    name="facility">
+                                                    name="facility" required>
                                                 <option ng-repeat="facilit in facilities"
                                                         value="{{facilit.facility_number}}">{{facilit.facility_name}}
                                                 </option>
@@ -81,8 +83,13 @@
                             </div>
                             <div class="text-center clearfix">
                                 <p>
-                                    <button type="submit" ng-click="CreateUser()" class="btn btn-primary" ng-disabled="CreateUserForm.firstname.$dirty && CreateUserForm.username.$invalid ||
-  CreateUserForm.password.$dirty && CreateUserForm.password.$invalid" >Save</button>
+                                    <button type="submit" ng-click="CreateUser()" class="btn btn-primary" ng-disabled="CreateUserForm.firstname.$dirty && CreateUserForm.firstname.$invalid ||
+                                    CreateUserForm.lastname.$dirty && CreateUserForm.lastname.$invalid ||
+                                    CreateUserForm.email.$dirty && CreateUserForm.email.$invalid ||
+                                    CreateUserForm.password.$dirty && CreateUserForm.password.$invalid ||
+                                    CreateUserForm.userrole.$dirty && CreateUserForm.userrole.$invalid ||
+                                    CreateUserForm.facility.$dirty && CreateUserForm.facility.$invalid">Save
+                                    </button>
                                     <button type="reset" class="btn btn-primary">Clear</button>
                                 </p>
                             </div>
