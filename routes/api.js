@@ -656,6 +656,122 @@ router.post('/manager_workorder', function (req, res, next) {
             }
         });
 });
+router.post('/search_skill', function (req, res, next) {
+    Skill.find(
+        {
+            facilities: {
+                $elemMatch: {facility_number: req.body.facility_number}
+            }
+        }, function (err, skills) {
+            if (err) {
+                return next(err)
+            }
+            if (skills != null) {
+                res.json({Code: 200, Info: {skills: skills}});
+            } else {
+                res.json({Code: 406, Info: 'no skills'});
+            }
+        });
+});
+router.post('/search_class', function (req, res, next) {
+    Class.find(
+        {
+            facilities: {
+                $elemMatch: {facility_number: req.body.facility_number}
+            }
+        }, function (err, classes) {
+            if (err) {
+                return next(err)
+            }
+            if (classes != null) {
+                res.json({Code: 200, Info: {classes: classes}});
+            } else {
+                res.json({Code: 406, Info: 'no facilities'});
+            }
+        });
+});
+router.post('/search_status', function (req, res, next) {
+    Status.find(
+        {
+            facilities: {
+                $elemMatch: {facility_number: req.body.facility_number}
+            }
+        }, function (err, statuses) {
+            if (err) {
+                return next(err)
+            }
+            if (statuses != null) {
+                res.json({Code: 200, Info: {statuses: statuses}});
+            } else {
+                res.json({Code: 406, Info: 'no statuses'});
+            }
+        });
+});
+router.post('/get_users_type', function (req, res, next) {
+    Facility.findOne({
+        facility_number: req.body.facility_number
+
+    }, function (err, facility) {
+
+        if (err) {
+            return next(err)
+        }
+        if (facility != null) {
+            var fusers = facility.facility_users;
+            var user_ids = [];
+            for (var user_key in fusers) {
+                user_ids.push(fusers[user_key].user_id);
+            }
+            Roles.findOne({role_name: 'technician'}, function (err, role) {
+                if (err) {
+                    return next(err);
+                }
+                Users.find({_id: {$in: user_ids}, userrole: role._id}, function (err, users) {
+                    if (err) {
+                        return next(err)
+                    }
+                    if (users != null) {
+                        res.json({Code: 200, Info: {users: users}});
+                    } else {
+                        res.json({Code: 406, Info: 'no users'});
+                    }
+                });
+            });
+
+        }
+    });
+
+});
+router.post('/get_workorder', function (req, res, next) {
+    WorkOrder.findOne(
+        {
+            workorder_number: req.body.workorder_number
+        }, function (err, workorder) {
+            if (err) {
+                return next(err)
+            }
+            if (workorder != null) {
+                res.json({Code: 200, Info: {workorder: workorder}});
+            } else {
+                res.json({Code: 406, Info: 'provide details are wrong.'});
+            }
+        });
+});
+router.post('/get_user', function (req, res, next) {
+    Users.findOne(
+        {
+            _id: req.body.workorder_creator
+        }, function (err, user) {
+            if (err) {
+                return next(err)
+            }
+            if (user != null) {
+                res.json({Code: 200, Info: {user: user}});
+            } else {
+                res.json({Code: 406, Info: 'provide details are wrong.'});
+            }
+        });
+});
 
 
 module.exports = router;

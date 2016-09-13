@@ -35,7 +35,9 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Work Order: #</label>
                                                 <div class="col-sm-6">
-                                                    <input type="text" class="form-control" readonly="">
+                                                    <input type="text" class="form-control" readonly=""
+                                                           ng-model="workOrder.workorder_number"
+                                                           name="workorder_number">
                                                 </div>
                                             </div>
                                         </div>
@@ -45,7 +47,10 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Requestor Name:</label>
                                                 <div class="col-sm-6">
-                                                    <input type="text" class="form-control" readonly="">
+                                                    <input type="text" class="form-control" readonly=""
+                                                           value="{{requestor_name}}">
+                                                    <input type="hidden" class="form-control" readonly=""
+                                                           ng-model="workOrder.creator">
                                                 </div>
                                             </div>
                                         </div>
@@ -55,7 +60,9 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Work Order Date:</label>
                                                 <div class="col-sm-6">
-                                                    <input type="text" class="form-control" readonly="">
+                                                    <input type="text" class="form-control" readonly=""
+                                                           ng-model="workOrder.created_on"
+                                                           value="{{workOrder.created_on | date}}">
                                                 </div>
                                             </div>
                                         </div>
@@ -66,32 +73,45 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Facility:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" ng-disabled="disableFacility">
-                                                        <option>--Select Facility--</option>
+                                                    <select class="form-control" ng-disabled="disableFacility"
+                                                            ng-model="workOrder.workorder_facility"
+                                                            name="workorder_facility"
+                                                            ng-options='facility.facility_number as facility.facility_name for facility in facilities'>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Category:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" ng-disabled="disableCategory">
-                                                        <option>--Select Category--</option>
+                                                    <select class="form-control" ng-disabled="disableCategory"
+                                                            ng-model="workOrder.workorder_category"
+                                                            name="workorder_category"
+                                                            ng-options='category._id as category.category_name for category in categories'>
+
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Equipment:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" ng-disabled="disableEquipment" >
-                                                        <option>--Select Equipment--</option>
+                                                    <select class="form-control" ng-disabled="disableEquipment"
+                                                            ng-model="workOrder.workorder_equipment"
+                                                            name="workorder_equipment">
+                                                        <option ng-repeat="equipment in equipments"
+                                                                value="{{equipment._id}}">{{equipment.equipment_name}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Priority:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" ng-disabled="disablePriority">
-                                                        <option>--Select Priority--</option>
+                                                    <select class="form-control" ng-disabled="disablePriority"
+                                                            ng-model="workOrder.workorder_priority"
+                                                            name="workorder_priority">
+                                                        <option ng-repeat="priority in priorities"
+                                                                value="{{priority._id}}">{{priority.priority_name}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -131,51 +151,66 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Skill:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" disabled="">
-                                                <option>--Select Skill--</option>
+                                            <select class="form-control" ng-disabled="disableSkill"
+                                                    ng-model="workOrder.workorder_skill"
+                                                    name="workorder_skill"
+                                                    ng-options='skill._id as skill.skill_name for skill in skills'
+                                                    ng-change="selectAction()">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Technician:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" disabled="">
-                                                <option>--Select Technician--</option>
+                                            <select class="form-control" ng-disabled="disableTechnician"
+                                                    ng-model="workOrder.workorder_technician"
+                                                    name="workorder_technician"
+                                                    ng-options='technician._id as technician.username for technician in technicians'
+                                                    ng-change="selectAction()"
+                                            >
+
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Status:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control">
-                                                <option>--Select Status--</option>
+                                            <select class="form-control" ng-model="workOrder.status"
+                                                    name="status"
+                                                    ng-options='status.status_number as status.status_name for status in statuses'
+                                                    ng-change="selectAction()">
+
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Class:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" disabled="">
-                                                <option>--Select Class--</option>
+                                            <select class="form-control" ng-disabled="disableClass"
+                                                    ng-model="workOrder.workorder_class"
+                                                    name="workorder_class"
+                                                    ng-options='class._id as class.class_name for class in classes'
+                                                    ng-change="selectAction()">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">PM Task: #</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" readonly="">
+                                            <input type="text" class="form-control" readonly=""
+                                                   ng-readonly="readOnlyPMTask">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Next PM Date:</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" readonly="">
+                                            <input type="text" class="form-control" ng-readonly="readOnlyNextPMDate">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Frequency:</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" readonly="">
+                                            <input type="text" class="form-control" ng-readonly="readOnlyFrequency">
                                         </div>
                                     </div>
                                 </div>
@@ -183,13 +218,14 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Description of Issue:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" rows="5"></textarea>
+                                    <textarea class="form-control" rows="5" ng-model="workOrder.workorder_description"
+                                              name="workorder_description"></textarea>
                                 </div>
                             </div>
                             <div class="form-group" ng-hide="showTechnician">
                                 <label class="col-sm-2 control-label">Supervisor Comments:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" readonly="">
+                                    <input type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group" ng-hide="showTechnician">
@@ -200,7 +236,8 @@
                             </div>
                             <div class="text-center clearfix">
                                 <p>
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="submit" class="btn btn-primary" ng-click="updateWorkOrder()">Save
+                                    </button>
                                     <button type="button" class="btn btn-primary">Print</button>
                                 </p>
                             </div>
