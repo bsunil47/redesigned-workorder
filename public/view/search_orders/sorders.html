@@ -215,7 +215,7 @@
                                 <tr ng-repeat="workorder in workOrders">
                                     <td>{{workorder.workorder_number}}</td>
                                     <td>{{workorder.workorder_description}}</td>
-                                    <td>{{workorder.workorder_equipment}}</td>
+                                    <td>{{showEquipment(workorder.workorder_equipment)}}</td>
                                     <td><i class="fa fa-eye"></i></td>
                                     <td><i class="fa fa-print"></i></td>
                                     <td><i class="fa fa-edit" ng-click="editWorkOrder(workorder.workorder_number)"></i>

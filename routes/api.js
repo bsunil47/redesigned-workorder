@@ -394,6 +394,7 @@ router.post('/equipments', function (req, res, next) {
         if (err) {
             return next(err)
         }
+        console.log(equipments);
         if (equipments != null) {
             res.json({Code: 200, Info: {equipments: equipments}});
         } else {
