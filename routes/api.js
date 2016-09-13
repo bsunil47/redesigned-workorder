@@ -829,7 +829,7 @@ var SendMail = function (req) {
                                     var last_message = ' has been updated';
                                 } else {
                                     if (req.body.status == 2) {
-                                        var last_message = ' has been close';
+                                        var last_message = ' has been closed';
                                     } else {
                                         var last_message = ' has been on hold';
                                     }
