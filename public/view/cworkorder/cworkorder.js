@@ -51,7 +51,14 @@ angular.module('PGapp.cworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
     $scope.requestor_name = userdetail.user.firstname;
     $scope.workorder_number = "WO-" + new Date().valueOf() + "-XX";
     $scope.workOrder.workorder_number = "WO-" + new Date().valueOf();
-    $scope.today = new Date();
+    var currentDt = new Date();
+    var mm = currentDt.getMonth() + 1;
+    mm = (mm < 10) ? '0' + mm : mm;
+    var dd = currentDt.getDate();
+    var yyyy = currentDt.getFullYear();
+    var date = mm + '/' + dd + '/' + yyyy;
+    $scope.today = date;
+    //$scope.today = new Date();
 
   }
   $scope.workOrderTitle = "Create Work Order";
