@@ -179,7 +179,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.statuses = res.Info.statuses;
-            if ($scope.workOrder.status = "") {
+            if ($scope.workOrder.status == "") {
                 $scope.workOrder.status = $scope.statuses[0].status_number;
             }
 
