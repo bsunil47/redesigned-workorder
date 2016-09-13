@@ -639,17 +639,30 @@ router.post('/manager_workorder', function (req, res, next) {
                 for (var fa in facilities) {
                     facilities_array.push(facilities[fa].facility_number);
                 }
-                WorkOrder.find({workorder_facility: {$in: facilities_array}}, function (err, workorders) {
+
+                Roles.findOne({_id: req.body.userrole}, function (err, role) {
                     if (err) {
                         return next(err)
                     }
-                    if (workorders != null) {
-                        res.json({Code: 200, Info: {workorders: workorders}});
-                    } else {
-                        res.json({Code: 406, Info: 'no workorders'});
+                    console.log(role);
+                    var query = {workorder_facility: {$in: facilities_array}};
+                    if (role.role_name == 'technician') {
+                        query.workorder_technician = req.body._id;
                     }
+                    WorkOrder.find(query, function (err, workorders) {
+                        if (err) {
+                            return next(err)
+                        }
+                        if (workorders != null) {
+                            res.json({Code: 200, Info: {workorders: workorders}});
+                        } else {
+                            res.json({Code: 406, Info: 'no workorders'});
+                        }
+
+                    });
 
                 });
+
 
             } else {
                 res.json({Code: 406, Info: 'no facilities'});
@@ -771,6 +784,14 @@ router.post('/get_user', function (req, res, next) {
                 res.json({Code: 406, Info: 'provide details are wrong.'});
             }
         });
+});
+router.post('/update_workorder', function (req, res, next) {
+    var query = {'workorder_number': req.body.workorder_number};
+    WorkOrder.findOneAndUpdate(query, req.body, {upsert: false}, function (err, doc) {
+        if (err) return res.send(500, {error: err});
+        res.json({Code: 200, Info: "succesfully saved"});
+    });
+
 });
 
 

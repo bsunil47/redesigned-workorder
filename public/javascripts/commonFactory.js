@@ -108,6 +108,9 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         GetUser: $resource(url + 'api/get_user', {}, {
             Recent: post_set
         }),
+        UpdateWorkOrder: $resource(url + 'api/update_workorder', {}, {
+            Recent: post_set
+        }),
 
 
 
