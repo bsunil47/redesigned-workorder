@@ -204,12 +204,15 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         console.log($scope.workOrder.status);
 
         console.log($scope.workOrder);
-          API.UpdateWorkOrder.Recent($scope.workOrder, function (res) {
-              if (res.Code == 200) {
+          var data_post = $scope.workOrder;
+          data_post.user_id = userdetail.user._id;
 
+          API.UpdateWorkOrder.Recent(data_post, function (res) {
+              if (res.Code == 200) {
                   //$scope.categories = res.Info.categories;
                   //$scope.workOrder.workorder_category = $scope.categories[0]._id;
-                  //$cookies.put('userDetails',res)
+                  //$cookies.put('userDetails',res);
+                  $location.path("/search_workorder");
               } else {
 
               }

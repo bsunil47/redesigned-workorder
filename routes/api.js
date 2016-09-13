@@ -817,6 +817,7 @@ var SendMail = function (req) {
                         if (err) {
                             console.log(err);
                         }
+                        console.log(user);
                         Roles.findOne({_id: user.userrole}, function (err, role) {
                             if (err) {
                                 console.log(err);
