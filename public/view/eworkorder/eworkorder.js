@@ -105,7 +105,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.categories = res.Info.categories;
-          //$scope.workOrder.workorder_category = $scope.categories[0]._id;
+            if ($scope.workOrder.workorder_category == "") {
+                $scope.workOrder.workorder_category = $scope.categories[0]._id;
+            }
+
           //$cookies.put('userDetails',res)
         } else {
 
@@ -118,7 +121,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.equipments = res.Info.equipments;
-          $scope.workOrder.workorder_equipment = $scope.equipments[0]._id;
+            if ($scope.workOrder.workorder_equipment == "") {
+                $scope.workOrder.workorder_equipment = $scope.equipments[0]._id;
+            }
+
           //$cookies.put('userDetails',res)
         } else {
 
@@ -131,7 +137,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.priorities = res.Info.priorities;
-          $scope.workOrder.workorder_priority = $scope.priorities[0]._id;
+            if ($scope.workOrder.workorder_priority == "") {
+                $scope.workOrder.workorder_priority = $scope.priorities[0]._id;
+            }
+
           //$cookies.put('userDetails',res)
         } else {
         }
@@ -142,7 +151,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.skills = res.Info.skills;
-          $scope.workOrder.workorder_skill = $scope.skills[0]._id;
+            if ($scope.workOrder.workorder_skill == "") {
+                $scope.workOrder.workorder_skill = $scope.skills[0]._id;
+            }
+
           //$cookies.put('userDetails',res)
         } else {
         }
@@ -153,7 +165,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.classes = res.Info.classes;
-          $scope.workOrder.workorder_class = $scope.classes[0]._id;
+            if ($scope.workOrder.workorder_class == "") {
+                $scope.workOrder.workorder_class = $scope.classes[0]._id;
+            }
+
           //$cookies.put('userDetails',res)
         } else {
         }
@@ -164,7 +179,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.statuses = res.Info.statuses;
-          $scope.workOrder.status = $scope.statuses[0].status_number;
+            if ($scope.workOrder.status = "") {
+                $scope.workOrder.status = $scope.statuses[0].status_number;
+            }
+
           //$cookies.put('userDetails',res)
         } else {
         }
@@ -175,7 +193,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.technicians = res.Info.users;
-          $scope.workOrder.workorder_technician = $scope.technicians[0]._id;
+            if ($scope.workOrder.workorder_technician == "") {
+                $scope.workOrder.workorder_technician = $scope.technicians[0]._id;
+            }
+            //$scope.workOrder.workorder_technician = $scope.technicians[0]._id;
           //$cookies.put('userDetails',res)
         } else {
         }
