@@ -2,19 +2,27 @@
 <div class="page-wrapper">
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="site-logo clearfix"><a ng-click="redirectLoc('dashboard')"><img
-                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="site-title clearfix">Maintenance Work Order Application</div>
-                </div>
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
             </div>
         </div>
+        <!--</div>-->
     </header>
-    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn" ng-click="Logout()">logout</a></span>
     <!-- Page wrapper header end -->
     <!-- Page wrapper container start -->
     <div class="page-wrapper-container">
@@ -33,8 +41,8 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Work Order: #</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Work Order: #</label>
+                                                <div class="col-sm-7">
                                                     <input type="text" class="form-control" readonly=""
                                                            ng-model="workOrder.workorder_number"
                                                            name="workorder_number">
@@ -45,8 +53,8 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Requestor Name:</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Requestor Name:</label>
+                                                <div class="col-sm-7">
                                                     <input type="text" class="form-control" readonly=""
                                                            value="{{requestor_name}}">
                                                     <input type="hidden" class="form-control" readonly=""
@@ -58,8 +66,8 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Work Order Date:</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Work Order Date:</label>
+                                                <div class="col-sm-7">
                                                     <input type="text" class="form-control" readonly=""
                                                            ng-model="workOrder.created_on"
                                                            value="{{workOrder.created_on | date}}">
@@ -71,8 +79,8 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Facility:</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Facility:</label>
+                                                <div class="col-sm-7">
                                                     <select class="form-control" ng-disabled="disableFacility"
                                                             ng-model="workOrder.workorder_facility"
                                                             name="workorder_facility"
@@ -81,8 +89,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Category:</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Category:</label>
+                                                <div class="col-sm-7">
                                                     <select class="form-control" ng-disabled="disableCategory"
                                                             ng-model="workOrder.workorder_category"
                                                             name="workorder_category"
@@ -92,8 +100,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Equipment:</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Equipment:</label>
+                                                <div class="col-sm-7">
                                                     <select class="form-control" ng-disabled="disableEquipment"
                                                             ng-model="workOrder.workorder_equipment"
                                                             name="workorder_equipment">
@@ -104,8 +112,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Priority:</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Priority:</label>
+                                                <div class="col-sm-7">
                                                     <select class="form-control" ng-disabled="disablePriority"
                                                             ng-model="workOrder.workorder_priority"
                                                             name="workorder_priority">
@@ -129,8 +137,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Equipment Cost:</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Equipment Cost:</label>
+                                                <div class="col-sm-7">
                                                     <input type="text" class="form-control"
                                                            ng-disabled="disableEquipmentCost"
                                                            ng-model="workOrder.wo_equipmentcost"
@@ -138,8 +146,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Time Spent:</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-5 control-label">Time Spent:</label>
+                                                <div class="col-sm-7">
                                                     <input type="text" class="form-control"
                                                            ng-disabled="disableTimeSpent"
                                                            ng-model="workOrder.wo_timespent"
@@ -147,12 +155,26 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Date Completed:</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control"
+                                                <label class="col-sm-5 control-label">Date Completed:</label>
+                                                <div class="col-sm-7">
+                                                    <md-content layout-padding>
+                                                        <div layout-gt-xs="row">
+                                                            <div flex-gt-xs>
+                                                                <md-datepicker name="wo_datecomplete"
+                                                                               md-min-date="minDate"
+                                                                               md-max-date="maxDate"
+                                                                               ng-model="workOrder.wo_datecomplete"
+                                                                               md-placeholder="Enter date"
+                                                                               ng-disabled="disableDateCompleted"></md-datepicker>
+                                                            </div>
+
+                                                        </div>
+                                                    </md-content>
+
+                                                    <!--<input type="text" class="form-control"
                                                            ng-disabled="disableDateCompleted"
                                                            ng-model="workOrder.wo_datecomplete"
-                                                           name="wo_datecomplete">
+                                                           name="wo_datecomplete">-->
                                                 </div>
                                             </div>
                                         </div>
@@ -160,8 +182,8 @@
                                 </div>
                                 <div class="col-sm-4" ng-hide="showTechnician">
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Skill:</label>
-                                        <div class="col-sm-6">
+                                        <label class="col-sm-5 control-label">Skill:</label>
+                                        <div class="col-sm-7">
                                             <select class="form-control" ng-disabled="disableSkill"
                                                     ng-model="workOrder.workorder_skill"
                                                     name="workorder_skill"
@@ -171,8 +193,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Technician:</label>
-                                        <div class="col-sm-6">
+                                        <label class="col-sm-5 control-label">Technician:</label>
+                                        <div class="col-sm-7">
                                             <select class="form-control" ng-disabled="disableTechnician"
                                                     ng-model="workOrder.workorder_technician"
                                                     name="workorder_technician"
@@ -184,8 +206,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Status:</label>
-                                        <div class="col-sm-6">
+                                        <label class="col-sm-5 control-label">Status:</label>
+                                        <div class="col-sm-7">
                                             <select class="form-control" ng-model="workOrder.status"
                                                     name="status"
                                                     ng-options='status.status_number as status.status_name for status in statuses'
@@ -195,8 +217,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Class:</label>
-                                        <div class="col-sm-6">
+                                        <label class="col-sm-5 control-label">Class:</label>
+                                        <div class="col-sm-7">
                                             <select class="form-control" ng-disabled="disableClass"
                                                     ng-model="workOrder.workorder_class"
                                                     name="workorder_class"
@@ -206,22 +228,23 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">PM Task: #</label>
-                                        <div class="col-sm-6">
+                                        <label class="col-sm-5 control-label">PM Task: #</label>
+                                        <div class="col-sm-7">
                                             <input type="text" class="form-control" readonly=""
                                                    ng-readonly="readOnlyPMTask">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Next PM Date:</label>
-                                        <div class="col-sm-6">
+                                        <label class="col-sm-5 control-label">Next PM Date:</label>
+                                        <div class="col-sm-7">
                                             <input type="text" class="form-control" ng-readonly="readOnlyNextPMDate">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Frequency:</label>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control" ng-readonly="readOnlyFrequency">
+                                        <label class="col-sm-5 control-label">Frequency:</label>
+                                        <div class="col-sm-7">
+                                            <input id="intNumber" type="number" min="0" max="365" class="form-control"
+                                                   ng-readonly="readOnlyFrequency">
                                         </div>
                                     </div>
                                 </div>

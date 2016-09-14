@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTimepicker'])
+angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMaterial', 'dnTimepicker'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/edit_workorder/:id', {
@@ -79,6 +79,24 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
         if (res.Code == 200) {
 
           $scope.workOrder = res.Info.workorder;
+            var currentDt = new Date($scope.workOrder.created_on);
+            var mm = currentDt.getMonth() + 1;
+            mm = (mm < 10) ? '0' + mm : mm;
+            var dd = currentDt.getDate();
+            var yyyy = currentDt.getFullYear();
+            var date = mm + '/' + dd + '/' + yyyy;
+            $scope.workOrder.created_on = date;
+            $scope.workOrder.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete);
+
+            $scope.minDate = new Date(
+                currentDt.getFullYear(),
+                currentDt.getMonth(),
+                currentDt.getDate());
+
+            $scope.maxDate = new Date(
+                $scope.workOrder.wo_datecomplete.getFullYear(),
+                $scope.workOrder.wo_datecomplete.getMonth(),
+                $scope.workOrder.wo_datecomplete.getDate());
           API.GetUser.Recent($scope.workOrder, function (res) {
             if (res.Code == 200) {
               $scope.requestor_name = res.Info.user.username;
@@ -94,6 +112,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
       }, function (error) {
         alert(error);
       });
+        $scope.myDate = new Date();
 
       $scope.facilities = $cookies.getObject('facilities');
       //$scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
@@ -205,7 +224,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'dnTime
       });
 
 
-  $scope.Logout = function () {
+        $scope.Logout = function () {
       $cookies.remove('userDetails');
     $location.path("/");
   };

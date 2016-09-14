@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('PGapp.cworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
+angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMaterial'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/create_workorder', {
@@ -125,6 +125,7 @@ angular.module('PGapp.cworkorder', ['ngRoute','ngAnimate', 'ngCookies'])
   }, function (error) {
     alert(error);
   });
+
 
   function CreateWorkOrder() {
     if ($scope.CreateWorkOrderForm.workorder_description.$valid) {
