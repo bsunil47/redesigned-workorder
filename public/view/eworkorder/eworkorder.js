@@ -232,6 +232,26 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
     $location.path(reloc);
   }
 
+        $scope.pgWorkOrder = function () {
+            console.log($scope.workOrder.wo_pm_frequency);
+
+            if ($scope.workOrder.wo_pm_frequency > 0) {
+                var currentDt = new Date();
+                currentDt.setDate(currentDt.getDate() + parseInt($scope.workOrder.wo_pm_frequency));
+                var mm = currentDt.getMonth() + 1;
+                mm = (mm < 10) ? '0' + mm : mm;
+                var dd = currentDt.getDate();
+                var yyyy = currentDt.getFullYear();
+                var date = mm + '/' + dd + '/' + yyyy;
+                $scope.workOrder.wo_pm_date = date;
+                $scope.workOrder.wo_pm_number = 'PM-{date-string}' + "-XX"
+            } else {
+                $scope.workOrder.wo_pm_date = "";
+                $scope.workOrder.wo_pm_number = "";
+            }
+
+        }
+
       function updateWorkOrder() {
         console.log($scope.workOrder.workorder_technician);
         console.log($scope.workOrder.workorder_skill);

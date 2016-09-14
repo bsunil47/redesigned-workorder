@@ -231,20 +231,25 @@
                                         <label class="col-sm-5 control-label">PM Task: #</label>
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control" readonly=""
-                                                   ng-readonly="readOnlyPMTask">
+                                                   ng-readonly="readOnlyPMTask" ng-model="workOrder.wo_pm_number"
+                                                   name="wo_pm_number">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Next PM Date:</label>
                                         <div class="col-sm-7">
-                                            <input type="text" class="form-control" ng-readonly="readOnlyNextPMDate">
+                                            <input type="text" class="form-control" ng-model="workOrder.wo_pm_date"
+                                                   name="wo_pm_date"
+                                                   ng-readonly="readOnlyNextPMDate">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Frequency:</label>
                                         <div class="col-sm-7">
-                                            <input id="intNumber" type="number" min="0" max="365" class="form-control"
-                                                   ng-readonly="readOnlyFrequency">
+                                            <input id="Number" type="number" min="0" max="365" step="1"
+                                                   class="form-control" ng-model="workOrder.wo_pm_frequency"
+                                                   name="wo_pm_frequency"
+                                                   value="0" ng-readonly="readOnlyFrequency" ng-change="pgWorkOrder()">
                                         </div>
                                     </div>
                                 </div>
