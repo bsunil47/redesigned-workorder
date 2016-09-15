@@ -87,7 +87,31 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         SPriority: $resource(url + 'api/search_priority', {}, {
             Recent: post_set
         }),
+        SClass: $resource(url + 'api/search_class', {}, {
+            Recent: post_set
+        }),
+        SSkill: $resource(url + 'api/search_skill', {}, {
+            Recent: post_set
+        }),
+        SStatus: $resource(url + 'api/search_status', {}, {
+            Recent: post_set
+        }),
         ManageWorkorders: $resource(url + 'api/manager_workorder', {}, {
+            Recent: post_set
+        }),
+        GetUserByType: $resource(url + 'api/get_users_type', {}, {
+            Recent: post_set
+        }),
+        GetWorkOrder: $resource(url + 'api/get_workorder', {}, {
+            Recent: post_set
+        }),
+        GetUser: $resource(url + 'api/get_user', {}, {
+            Recent: post_set
+        }),
+        UpdateWorkOrder: $resource(url + 'api/update_workorder', {}, {
+            Recent: post_set
+        }),
+        GetPMTask: $resource(url + 'api/get_pm_task', {}, {
             Recent: post_set
         }),
 

@@ -2,19 +2,27 @@
 <div class="page-wrapper">
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="site-logo clearfix"><a ng-click="redirectLoc('dashboard')"><img
-                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="site-title clearfix">Maintenance Work Order Application</div>
-                </div>
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
             </div>
         </div>
+        <!--</div>-->
     </header>
-    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn" ng-click="Logout()">logout</a></span>
     <!-- Page wrapper header end -->
     <!-- Page wrapper container start -->
     <div class="page-wrapper-container">

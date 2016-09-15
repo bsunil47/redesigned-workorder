@@ -224,4 +224,22 @@ input.ng-invalid {
     border: 1px solid #000;
 }
 
+.layout-gt-xs-row, .layout-padding, md-datepicker {
+    padding: 0px;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Re-applies the controls on :hover and :focus */
+input[type="number"]:hover,
+input[type="number"]:focus {
+    -moz-appearance: number-input;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: number-input;
+}
+
 /*# sourceMappingURL=style.css.map */
