@@ -111,6 +111,9 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         UpdateWorkOrder: $resource(url + 'api/update_workorder', {}, {
             Recent: post_set
         }),
+        GetPMTask: $resource(url + 'api/get_pm_task', {}, {
+            Recent: post_set
+        }),
 
 
 

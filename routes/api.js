@@ -30,6 +30,7 @@ var Facility = mongoose.model('Collection_Facility');
 var Priority = mongoose.model('Collection_Priority');
 var Skill = mongoose.model('Collection_Skills');
 var Status = mongoose.model('Collection_Status');
+var PM = mongoose.model('Collection_PM_Task');
 
 router.post('/', function(req, res, next) {
 
@@ -787,14 +788,56 @@ router.post('/get_user', function (req, res, next) {
         });
 });
 router.post('/update_workorder', function (req, res, next) {
-    var query = {'workorder_number': req.body.workorder_number};
-    WorkOrder.findOneAndUpdate(query, req.body, {upsert: false}, function (err, doc) {
-        if (err) return res.send(500, {error: err});
-        SendMail(req);
-        res.json({Code: 200, Info: "succesfully saved"});
-    });
+    var requestedArray = req.body;
+    console.log(req.body);
+    if (req.body.wo_pm_frequency > 0) {
+        var pmNumber;
+        requestedArray.workorder_PM = pmNumber = 'PM-' + new Date().valueOf() + "-" + req.body.user_id;
+        if (req.body.pm_task == 1) {
+            requestedArray.workorder_PM = pmNumber = req.body.wo_pm_number;
+        }
+        if (req.body.wo_pm_previous_date === undefined) {
+            var previous_date = new Date()
+        } else {
+            var previous_date = req.body.wo_pm_previous_date;
+        }
+        var pm_task = {
+            pm_number: pmNumber,
+            pm_frequency: req.body.wo_pm_frequency,
+            pm_next_date: req.body.wo_pm_date,
+            pm_current_date: new Date(),
+            pm_previous_date: previous_date,
+            status: 1
+        };
+        var where = {pm_number: pm_task.pm_number};
+        PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
+            if (err) {
+                console.log(err)
+            }
+            ;
+            updateWorkOrder({'workorder_number': req.body.workorder_number}, requestedArray, req, res);
+        });
+    } else {
+        console.log('no pm');
+        updateWorkOrder({'workorder_number': req.body.workorder_number}, requestedArray, req, res);
+    }
+
 
 });
+router.post('/get_pm_task', function (req, res, next) {
+    PM.findOne(req.body, function (err, pm_task) {
+        if (err) {
+            return next(err)
+        }
+
+        if (pm_task != null) {
+            res.json({Code: 200, Info: {pm_task: pm_task}});
+        } else {
+            res.json({Code: 406, Info: 'Not able to find any task'});
+        }
+    });
+});
+
 
 
 var SendMail = function (req) {
@@ -888,6 +931,18 @@ var SendMail = function (req) {
                 });
             });
         });
+    });
+}
+var updateWorkOrder = function (query, requestedArray, req, res) {
+    //delete requestedArray['user_id'];
+    delete requestedArray['wo_pm_frequency'];
+    delete requestedArray['wo_pm_date'];
+    delete requestedArray['wo_pm_previous_date'];
+    delete requestedArray['__v'];
+    WorkOrder.findOneAndUpdate(query, requestedArray, {upsert: false}, function (err, doc) {
+        if (err) return res.json(500, {error: err});
+        SendMail(req);
+        res.json({Code: 200, Info: "succesfully saved"});
     });
 }
 

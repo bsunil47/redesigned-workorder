@@ -33,6 +33,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         workorder_description: "",
         workorder_leadcomments: "",
         workorder_actiontaken: "",
+          wo_pm_number: "",
+          pm_task: 0,
         status: 1
       };
   $scope.workOrderTitle = "Edit Work Order";
@@ -79,6 +81,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         if (res.Code == 200) {
 
           $scope.workOrder = res.Info.workorder;
+
             var currentDt = new Date($scope.workOrder.created_on);
             var mm = currentDt.getMonth() + 1;
             mm = (mm < 10) ? '0' + mm : mm;
@@ -104,6 +107,26 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
           }, function (error) {
             alert(error);
           });
+            if ($scope.workOrder.wo_pm_number != "") {
+                API.GetPMTask.Recent({pm_number: $scope.workOrder.workorder_PM}, function (res) {
+                    if (res.Code == 200) {
+                        var currentDt = new Date(res.Info.pm_task.pm_previous_date);
+                        var mm = currentDt.getMonth() + 1;
+                        mm = (mm < 10) ? '0' + mm : mm;
+                        var dd = currentDt.getDate();
+                        var yyyy = currentDt.getFullYear();
+                        var date = mm + '/' + dd + '/' + yyyy;
+                        $scope.workOrder.wo_pm_previous_date = date;
+                        $scope.workOrder.wo_pm_date = res.Info.pm_task.pm_next_date;
+                        $scope.workOrder.wo_pm_frequency = res.Info.pm_task.pm_frequency;
+                        $scope.workOrder.wo_pm_number = res.Info.pm_task.pm_number;
+                        $scope.workOrder.pm_task = 1;
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+            }
+
           //$cookies.put('userDetails',res)
         } else {
 
@@ -112,6 +135,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
       }, function (error) {
         alert(error);
       });
+
         $scope.myDate = new Date();
 
       $scope.facilities = $cookies.getObject('facilities');
@@ -247,7 +271,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 $scope.workOrder.wo_pm_number = 'PM-{date-string}' + "-XX"
             } else {
                 $scope.workOrder.wo_pm_date = "";
-                $scope.workOrder.wo_pm_number = "";
+                if ($scope.workOrder.pm_task == 0) {
+                    $scope.workOrder.wo_pm_number = "";
+                }
+
             }
 
         }

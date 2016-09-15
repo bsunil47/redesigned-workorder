@@ -4,6 +4,7 @@
 
 var mongoose = require('mongoose');
 var WorkorderSchema = new mongoose.Schema({
+    __v: {type: Number, select: false},
     workorder_number: {type: String, unique: true, required: true},
     workorder_creator: {type: mongoose.Schema.Types.ObjectId, ref: 'Collection_Users'},
     workorder_facility: String,
@@ -20,7 +21,7 @@ var WorkorderSchema = new mongoose.Schema({
     workorder_description: String,
     workorder_leadcomments: String,
     workorder_actiontaken: String,
-    workorder_PM: [],
+    workorder_PM: String,
     status: {type: Number, default: 1, required: true},
     created_on: String,
     update_on: Date
