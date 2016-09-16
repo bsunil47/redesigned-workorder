@@ -10,6 +10,10 @@ var phantomExpress = require("phantom-express");
 var pdf = require('html-pdf');
 //nunjucks templating
 var nunjucks = require('nunjucks');
+//var dateFilter = require('nunjucks-date-filter');
+
+
+
 //html file which you want to convert into pdf.
 //var html = fs.readFileSync('view/userlist/userlist.html', 'utf8');
 //Nunjucks is a product from Mozilla and we are using it as a template engine.
@@ -17,6 +21,7 @@ nunjucks.configure('public', {
     autoescape: true,
     express: app
 });
+//dateFilter.install();
 
 var Users = mongoose.model('Collection_Users');
 var Roles = mongoose.model('Collection_Roles');
@@ -34,21 +39,24 @@ router.get('/', function (req, res, next) {
     console.log('request made....print 1 ');
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
-    console.log(fullUrl);
-    var obj = {
-        url: fullUrl,
-        date: today,
-        data: {
-            ticketnum: 12121212,
-            dateissued: '2014-04-02',
-            officername: 'john doe',
-            notes: 'lorem epsum'
+    WorkOrder.find({wo_timespent: {$exists: true, $not: {$size: 0}}}, function (err, workorders) {
+        if (err) {
+            next()
         }
-    };
+        var obj = {
+            url: fullUrl,
+            date: today,
+            data: workorders
+        };
+        if (workorders.length > 0) {
+            var renderedHtml = nunjucks.render('./view/ReportHourBase/report_hour.html', obj);
+            pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
+                stream.pipe(res);
+            });
+        } else {
+            res.redirect(fullUrl + "/#!/search_report_hour");
+        }
 
-    var renderedHtml = nunjucks.render('./view/ReportClosedWorkOrder/report_closed.html', obj);
-    pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
-        stream.pipe(res);
     });
     // res.render('index', { title: 'Prysmian Group - Maintenance Work Order Application' });
 });
@@ -56,22 +64,27 @@ router.get('/report_category', function (req, res, next) {
     console.log('request made....print 1 ');
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
-    console.log(fullUrl);
-    var obj = {
-        url: fullUrl,
-        date: today,
-        data: {
-            ticketnum: 12121212,
-            dateissued: '2014-04-02',
-            officername: 'joahn doe',
-            notes: 'lorem epsum'
+    WorkOrder.find({status: 2}, function (err, workorders) {
+        if (err) {
+            next()
         }
-    };
+        var obj = {
+            url: fullUrl,
+            date: today,
+            data: workorders
+        };
+        if (workorders.length > 0) {
+            var renderedHtml = nunjucks.render('./view/ReportClosedWorkOrder/report_closed.html', obj);
+            pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
+                stream.pipe(res);
+            });
+        } else {
+            res.redirect(fullUrl + "/#!/search_closed_report");
+        }
 
-    var renderedHtml = nunjucks.render('./view/ReportHourBase/report_hour.html', obj);
-    pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
-        stream.pipe(res);
     });
+
+
     // res.render('index', { title: 'Prysmian Group - Maintenance Work Order Application' });
 });
 

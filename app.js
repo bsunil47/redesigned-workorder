@@ -36,7 +36,7 @@ app.use(require('node-compass')({mode: 'expanded'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/report?*', report);
+app.use('/report', report);
 app.use('/api', api);
 
 // catch 404 and forward to error handler
