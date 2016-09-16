@@ -25,7 +25,10 @@ var PGapp = angular.module('PGapp', [
   'PGapp.equipmentlist',
   'PGapp.facilitylist',
   'PGapp.prioritylist',
-  'PGapp.skilllist'
+    'PGapp.skilllist',
+    'PGapp.reportdashboard',
+    'PGapp.searchreporthour',
+    'PGapp.searchclosedreport',
 ]);
 PGapp.
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

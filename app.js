@@ -6,6 +6,8 @@ var session = require('express-session');
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var path = require('path');
+var phantom = require('phantom');
+var phantomExpress = require("phantom-express");
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -14,6 +16,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
+var report = require('./routes/report');
 
 var app = express();
 
@@ -33,6 +36,7 @@ app.use(require('node-compass')({mode: 'expanded'}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+app.use('/report?*', report);
 app.use('/api', api);
 
 // catch 404 and forward to error handler

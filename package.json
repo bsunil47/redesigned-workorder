@@ -27,6 +27,10 @@
     "fs": "0.0.2",
     "gulp": "^3.9.1",
     "gulp-install": "^0.6.0",
+    "html-pdf": "^2.1.0",
+    "jsreport": "^1.0.9",
+    "jsreport-client": "^0.4.1",
+    "jsreport-phantom-pdf": "^1.0.3",
     "migrate": "^0.2.3",
     "moment": "^2.14.1",
     "mongodb": "^2.2.5",
@@ -34,10 +38,13 @@
     "mongoose-migrate": "^0.2.4",
     "morgan": "~1.7.0",
     "node-compass": "^0.2.4",
-    "serve-favicon": "~2.3.0",
-    "ui-router": "^1.0.0-alpha.3",
     "nodemailer": "^2.6.0",
-    "nodemailer-smtp-transport": "^2.7.2"
+    "nodemailer-smtp-transport": "^2.7.2",
+    "nunjucks": "^2.5.2",
+    "phantom": "^2.1.21",
+    "phantom-express": "0.0.1",
+    "serve-favicon": "~2.3.0",
+    "ui-router": "^1.0.0-alpha.3"
   },
   "devDependencies": {
     "eslint": "^3.3.1",
