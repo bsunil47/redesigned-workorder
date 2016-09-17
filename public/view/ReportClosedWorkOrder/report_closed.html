@@ -31,7 +31,7 @@
         {% for item in data %}
         <tr style="background-color: #F6F6F6">
             <td style="border: 1px solid #D4D4D4; text-align: left;">{{item.workorder_number}}</td>
-            <td style="border: 1px solid #D4D4D4; text-align: left;">{{item.wo_datecomplete}}</td>
+            <td style="border: 1px solid #D4D4D4; text-align: left;">{{item.wo_datecomplete | date}}</td>
             <td style="border: 1px solid #D4D4D4; text-align: left;">{{item.workorder_equipment}}</td>
             <td style="border: 1px solid #D4D4D4; text-align: left;">{{item.workorder_description}}</td>
         </tr>

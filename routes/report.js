@@ -10,7 +10,7 @@ var phantomExpress = require("phantom-express");
 var pdf = require('html-pdf');
 //nunjucks templating
 var nunjucks = require('nunjucks');
-//var dateFilter = require('nunjucks-date-filter');
+var dateFilter = require('nunjucks-date-filter');
 
 
 
@@ -21,7 +21,7 @@ nunjucks.configure('public', {
     autoescape: true,
     express: app
 });
-//dateFilter.install();
+dateFilter.install();
 
 var Users = mongoose.model('Collection_Users');
 var Roles = mongoose.model('Collection_Roles');
