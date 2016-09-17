@@ -10,15 +10,8 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
     }])
 
     .controller('SreportHour', ["$scope", "$cookies", "$location", 'API', function ($scope, $cookies, $location, API) {
-        $scope.CreateUser = CreateUser;
-        $scope.user = {
-            username: '',
-            firstname: '',
-            lastname: '',
-            email: '',
-            userrole: '',
-            status: 1,
-            password: ''
+        $scope.workOrder = {
+            wo_datefrom: ""
         };
 
         if (!$cookies.get('userDetails')) {
@@ -37,29 +30,51 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
             alert(error);
         });
 
+        API.Equipments.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.equipments = res.Info.equipments;
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
+
 
         $scope.Logout = function () {
             $cookies.remove('userDetails');
             $location.path("/");
         };
 
-        function CreateUser() {
-            $scope.user.username = $scope.user.firstname + ' ' + $scope.user.lastname;
-            $scope.user._v = 0;
-            if ($scope.CreateUserForm.firstname.$valid && $scope.CreateUserForm.lastname.$valid) {
-                $scope.user_id = API.Create.User($scope.user, function (res) {
-                    if (res.Code == 200) {
-                        $location.path("/users");
-                    } else {
-                        $scope.CreateUserForm.email.error = true;
-                    }
-                }, function (error) {
-                    alert(error);
-                });
-            }
-        }
-
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         }
+        $scope.$watch("datefrom", function (newValue, oldValue) {
+            if (!angular.isUndefined($scope.datefrom)) {
+                var currentDt = new Date($scope.datefrom);
+                var mm = currentDt.getMonth() + 1;
+                mm = (mm < 10) ? '0' + mm : mm;
+                var dd = currentDt.getDate();
+                var yyyy = currentDt.getFullYear();
+                var date = mm + '/' + dd + '/' + yyyy;
+                $scope.workOrder.wo_datefrom = date;
+            }
+        });
+        $scope.$watch("dateto", function (newValue, oldValue) {
+
+            if (!angular.isUndefined($scope.dateto)) {
+                console.log($scope.dateto);
+                var currentDt = new Date($scope.dateto);
+                var mm = currentDt.getMonth() + 1;
+                mm = (mm < 10) ? '0' + mm : mm;
+                var dd = currentDt.getDate();
+                var yyyy = currentDt.getFullYear();
+                var date = mm + '/' + dd + '/' + yyyy;
+                $scope.workOrder.wo_dateto = date;
+            }
+
+        });
     }]);

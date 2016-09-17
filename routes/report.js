@@ -37,11 +37,30 @@ var Skill = mongoose.model('Collection_Skills');
 var Status = mongoose.model('Collection_Status');
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.post('/', function (req, res, next) {
     console.log('request made....print 1 ');
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
-    WorkOrder.find({wo_timespent: {$exists: true, $not: {$size: 0}}}, function (err, workorders) {
+    var query = {wo_timespent: {$exists: true, $not: {$size: 0}}};
+    if ((req.body.wo_datefrom != "" ) && (req.body.wo_dateto != "")) {
+        query.wo_datecomplete = {
+            '$gte': req.body.wo_datefrom,
+            '$lt': req.body.wo_dateto
+        }
+    }
+    if (req.body.facility != 0) {
+        query.workorder_facility = req.body.facility;
+    }
+    if (req.body.equipment != 0) {
+        query.workorder_equipment = req.body.equipment;
+    }
+    if (req.body.workorder_type == 2) {
+        query.workorder_PM = {$exists: true, $not: {$size: 0}};
+    }
+    if (req.body.workorder_type == 1) {
+        query.workorder_PM = {$exists: false};
+    }
+    WorkOrder.find(query, function (err, workorders) {
         if (err) {
             next()
         }
@@ -95,11 +114,19 @@ router.get('/', function (req, res, next) {
     });
     // res.render('index', { title: 'Prysmian Group - Maintenance Work Order Application' });
 });
-router.get('/report_category', function (req, res, next) {
+router.post('/report_category', function (req, res, next) {
     console.log('request made....print 1 ');
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
-    WorkOrder.find({status: 2}, function (err, workorders) {
+    var query = {status: 2};
+    /*if((req.body.wo_datefrom != "" || req.body.wo_datefrom != 'NaN/NaN/NaN') &&  (req.body.wo_dateto != "" || req.body.wo_dateto != 'NaN/NaN/NaN')){
+     query.wo_datecomplete = { '$gte': req.body.wo_datefrom,
+     '$lt': req.body.wo_dateto }
+     }*/
+    if (req.body.categories != 0) {
+        query.workorder_category = req.body.categories;
+    }
+    WorkOrder.find(query, function (err, workorders) {
         if (err) {
             next()
         }

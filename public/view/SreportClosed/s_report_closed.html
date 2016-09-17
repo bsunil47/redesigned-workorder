@@ -37,7 +37,7 @@
                         </div>
                         <h1>Get Report For Closed Work Orders By Category</h1>
                         <!-- Change password form start -->
-                        <form name="CreateUserForm" class="form-horizontal clearfix" method="get"
+                        <form name="CreateUserForm" class="form-horizontal clearfix" method="post"
                               action="/report/report_category">
                             <div class="row">
                                 <div class="col-sm-4 col-sm-offset-4">
@@ -47,12 +47,12 @@
                                             <md-content layout-padding>
                                                 <div layout-gt-xs="row">
                                                     <div flex-gt-xs>
-                                                        <md-datepicker name="wo_datefrom"
-                                                                       md-min-date="minDate"
-                                                                       md-max-date="maxDate"
-                                                                       ng-model="workOrder.wo_datefrom"
+                                                        <md-datepicker ng-model="datefrom"
                                                                        md-placeholder="Enter date"
                                                                        ng-disabled="disableDateCompleted"></md-datepicker>
+                                                        <input type="hidden" name="wo_datefrom"
+                                                               ng-model="workOrder.wo_datefrom"
+                                                               value="{{workOrder.wo_datefrom}}" required>
                                                     </div>
 
                                                 </div>
@@ -65,12 +65,14 @@
                                             <md-content layout-padding>
                                                 <div layout-gt-xs="row">
                                                     <div flex-gt-xs>
-                                                        <md-datepicker name="wo_dateto"
-                                                                       md-min-date="minDate"
+                                                        <md-datepicker md-min-date="minDate"
                                                                        md-max-date="maxDate"
-                                                                       ng-model="workOrder.wo_dateto"
+                                                                       ng-model="dateto"
                                                                        md-placeholder="Enter date"
                                                                        ng-disabled="disableDateCompleted"></md-datepicker>
+                                                        <input type="hidden" name="wo_dateto"
+                                                               ng-model="workOrder.wo_dateto"
+                                                               value="{{workOrder.wo_dateto}}" required>
                                                     </div>
 
                                                 </div>
@@ -83,10 +85,11 @@
                                         <div class="col-sm-7">
                                             <select required class="form-control" ng-model="user.categories"
                                                     name="categories" required>
-                                                <option value="operator">Operator</option>
-                                                <option value="manager">Manager</option>
-                                                <option value="clerk">Clerk</option>
-                                                <option value="technician">Technician</option>
+                                                <option value="0">All</option>
+                                                <option ng-repeat="category in categories" value="{{category._id}}">
+                                                    {{category.category_name}}
+                                                </option>
+
                                             </select>
                                         </div>
                                     </div>

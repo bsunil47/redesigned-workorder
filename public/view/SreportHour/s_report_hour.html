@@ -37,7 +37,7 @@
                         </div>
                         <h1>Get Report Ror Hour By Equipment</h1>
                         <!-- Change password form start -->
-                        <form name="CreateUserForm" class="form-horizontal clearfix" method="get" action="/report">
+                        <form name="CreateUserForm" class="form-horizontal clearfix" method="post" action="/report">
                             <div class="row">
                                 <div class="col-sm-4 col-sm-offset-4">
                                     <div class="form-group">
@@ -46,12 +46,12 @@
                                             <md-content layout-padding>
                                                 <div layout-gt-xs="row">
                                                     <div flex-gt-xs>
-                                                        <md-datepicker required name="wo_datefrom"
-                                                                       md-min-date="minDate"
-                                                                       md-max-date="maxDate"
-                                                                       ng-model="workOrder.wo_datefrom"
+                                                        <md-datepicker ng-model="datefrom"
                                                                        md-placeholder="Enter date"
                                                                        ng-disabled="disableDateCompleted"></md-datepicker>
+                                                        <input type="hidden" name="wo_datefrom"
+                                                               ng-model="workOrder.wo_datefrom"
+                                                               value="{{workOrder.wo_datefrom}}" required>
                                                     </div>
 
                                                 </div>
@@ -64,12 +64,14 @@
                                             <md-content layout-padding>
                                                 <div layout-gt-xs="row">
                                                     <div flex-gt-xs>
-                                                        <md-datepicker required name="wo_dateto"
-                                                                       md-min-date="minDate"
+                                                        <md-datepicker md-min-date="minDate"
                                                                        md-max-date="maxDate"
-                                                                       ng-model="workOrder.wo_dateto"
+                                                                       ng-model="dateto"
                                                                        md-placeholder="Enter date"
                                                                        ng-disabled="disableDateCompleted"></md-datepicker>
+                                                        <input type="hidden" name="wo_dateto"
+                                                               ng-model="workOrder.wo_dateto"
+                                                               value="{{workOrder.wo_dateto}}" required>
                                                     </div>
 
                                                 </div>
@@ -104,9 +106,9 @@
                                             <select class="form-control"
                                                     name="equipment" required>
                                                 <option value="0">All</option>
-                                                <option value="manager">Manager</option>
-                                                <option value="clerk">Clerk</option>
-                                                <option value="technician">Technician</option>
+                                                <option ng-repeat="equipment in equipments" value="{{equipment._id}}">
+                                                    {{equipment.equipment_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
