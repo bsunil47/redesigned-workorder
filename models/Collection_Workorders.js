@@ -3,6 +3,13 @@
  */
 
 var mongoose = require('mongoose');
+var autoIncrement = require("mongodb-autoincrement");
+/*mongoose.plugin(autoIncrement.mongoosePlugin, optionalOptions);
+ autoIncrement.setDefaults({
+ collection: 'Collection_Workorders',     // collection name for counters, default: counters
+ field: 'workorder_number',               // auto increment field name, default: _id
+ step: 1             // auto increment step
+ });*/
 var WorkorderSchema = new mongoose.Schema({
     __v: {type: Number, select: false},
     workorder_number: {type: String, unique: true, required: true},

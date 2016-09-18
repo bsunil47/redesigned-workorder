@@ -31,6 +31,7 @@ var Priority = mongoose.model('Collection_Priority');
 var Skill = mongoose.model('Collection_Skills');
 var Status = mongoose.model('Collection_Status');
 var PM = mongoose.model('Collection_PM_Task');
+var counters = mongoose.model('counter');
 
 router.post('/', function(req, res, next) {
 
@@ -166,96 +167,103 @@ router.post('/create_workorder', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var date = new Date();
-        var workOrder = new WorkOrder({
-            workorder_number: req.body.workorder_number + "-" + count,
-            workorder_creator: req.body.creator,
-            workorder_description: req.body.workorder_description,
-            workorder_facility: req.body.workorder_facility,
-            workorder_category: req.body.workorder_category,
-            workorder_equipment: req.body.workorder_equipment,
-            workorder_priority: req.body.workorder_priority,
-            created_on: new Date().valueOf(),
-            status: 1
-        });
-        workOrder.save(function (err, resp) {
+        counters.increment('workorder_number', function (err, result) {
             if (err) {
-                console.log(err);
-                res.json({
-                    Code: 499,
-                    message: err,
-                });
-            } else {
-                var facility, category, equipment, priority;
-                Facility.findOne({facility_number: req.body.workorder_facility}, function (err, facility) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    Category.findOne({_id: req.body.workorder_category}, function (err, category) {
+                console.error('Counter on photo save error: ' + err);
+                return;
+            }
+            var date = new Date();
+            var workOrder = new WorkOrder({
+                workorder_number: result.seq,
+                workorder_creator: req.body.creator,
+                workorder_description: req.body.workorder_description,
+                workorder_facility: req.body.workorder_facility,
+                workorder_category: req.body.workorder_category,
+                workorder_equipment: req.body.workorder_equipment,
+                workorder_priority: req.body.workorder_priority,
+                created_on: new Date().valueOf(),
+                status: 1
+            });
+            workOrder.save(function (err, resp) {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        Code: 499,
+                        message: err,
+                    });
+                } else {
+                    var facility, category, equipment, priority;
+                    Facility.findOne({facility_number: req.body.workorder_facility}, function (err, facility) {
                         if (err) {
                             console.log(err);
                         }
-                        Equipment.findOne({_id: req.body.workorder_equipment}, function (err, equipment) {
+                        Category.findOne({_id: req.body.workorder_category}, function (err, category) {
                             if (err) {
                                 console.log(err);
                             }
-                            Priority.findOne({_id: req.body.workorder_priority}, function (err, priority) {
+                            Equipment.findOne({_id: req.body.workorder_equipment}, function (err, equipment) {
                                 if (err) {
                                     console.log(err);
                                 }
-                                if (req.body.workorder_facility == 'US51') {
-                                    var mail_to = '"Arun" <pgmanager7@gmail.com>';
-                                } else {
-                                    var mail_to = '"Eshwar" <pgmanager7@gmail.com>';
-                                }
-                                var mailData = {
-                                    // Comma separated list of recipients
-                                    to: mail_to,
-                                    // Subject of the message
-                                    subject: 'New Maintenance Work Order number ' + req.body.workorder_number + "-" + count + ' has been submited for your approval', //
-
-                                    // plaintext body
-                                    //text: 'Hello to sunil',
-
-                                    // HTML body
-                                    html: '<p>New Maintenace Work Order number <b>' + req.body.workorder_number + "-" + count + '</b> has been submited for your approval</p>'
-                                    +
-                                    '<p><b>Work Order Details</b></p>'
-                                    +
-                                    '<p><b>Work Order Number</b>: ' + req.body.workorder_number + "-" + count + '</p>'
-                                    +
-                                    '<p><b>Work Order Date</b>: ' + date + '</p>'
-                                    +
-                                    '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
-                                    +
-                                    '<p><b>Category</b>: ' + category.category_name + '</p>'
-                                    +
-                                    '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
-                                    +
-                                    '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
-                                    +
-                                    '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
-                                    +
-                                    '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
-
-                                };
-                                transporter.sendMail(mailData, function (err, info) {
+                                Priority.findOne({_id: req.body.workorder_priority}, function (err, priority) {
                                     if (err) {
                                         console.log(err);
                                     }
-                                    console.log('Message sent successfully!');
-                                    console.log(info);
+                                    if (req.body.workorder_facility == 'US51') {
+                                        var mail_to = '"Arun" <pgmanager7@gmail.com>';
+                                    } else {
+                                        var mail_to = '"Eshwar" <pgmanager7@gmail.com>';
+                                    }
+                                    var mailData = {
+                                        // Comma separated list of recipients
+                                        to: mail_to,
+                                        // Subject of the message
+                                        subject: 'New Maintenance Work Order number ' + req.body.workorder_number + "-" + count + ' has been submited for your approval', //
+
+                                        // plaintext body
+                                        //text: 'Hello to sunil',
+
+                                        // HTML body
+                                        html: '<p>New Maintenace Work Order number <b>' + req.body.workorder_number + "-" + count + '</b> has been submited for your approval</p>'
+                                        +
+                                        '<p><b>Work Order Details</b></p>'
+                                        +
+                                        '<p><b>Work Order Number</b>: ' + req.body.workorder_number + "-" + count + '</p>'
+                                        +
+                                        '<p><b>Work Order Date</b>: ' + date + '</p>'
+                                        +
+                                        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+                                        +
+                                        '<p><b>Category</b>: ' + category.category_name + '</p>'
+                                        +
+                                        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+                                        +
+                                        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+                                        +
+                                        '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
+                                        +
+                                        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+
+                                    };
+                                    transporter.sendMail(mailData, function (err, info) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        console.log('Message sent successfully!');
+                                        console.log(info);
+
+                                    });
 
                                 });
-
                             });
                         });
                     });
-                });
 
-                res.json({Code: 200, Info: 'sucessfull'});
-            }
+                    res.json({Code: 200, Info: 'sucessfull'});
+                }
+            });
         });
+
     })
 });
 
@@ -946,5 +954,16 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
     });
 }
 
+function getNextSequence(name) {
+    counters.increment
+    var ret = counters.findAndModify(
+        {
+            query: {_id: name},
+            update: {$inc: {seq: 1}},
+            new: true
+        }
+    );
 
+    return ret.seq;
+}
 module.exports = router;
