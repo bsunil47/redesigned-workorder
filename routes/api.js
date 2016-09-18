@@ -175,7 +175,7 @@ router.post('/create_workorder', function (req, res, next) {
             workorder_category: req.body.workorder_category,
             workorder_equipment: req.body.workorder_equipment,
             workorder_priority: req.body.workorder_priority,
-            created_on: new Date(),
+            created_on: new Date().valueOf(),
             status: 1
         });
         workOrder.save(function (err, resp) {

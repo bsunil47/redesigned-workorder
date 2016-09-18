@@ -129,7 +129,9 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
   function CreateWorkOrder() {
     if ($scope.CreateWorkOrderForm.workorder_description.$valid) {
-      $scope.user_id = API.CreateWorkOrder.save($scope.workOrder, function (res) {
+      var data_post = $scope.workOrder;
+      data_post.created_on = new Date(data_post.created_on).valueOf();
+      $scope.user_id = API.CreateWorkOrder.save(data_post, function (res) {
         if (res.Code == 200) {
           $location.path("/dashboard");
         } else {

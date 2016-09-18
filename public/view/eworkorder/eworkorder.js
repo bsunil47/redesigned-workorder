@@ -82,25 +82,29 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
           $scope.workOrder = res.Info.workorder;
 
-            var currentDt = new Date($scope.workOrder.created_on);
+            var currentDt = new Date(parseInt($scope.workOrder.created_on));
             var mm = currentDt.getMonth() + 1;
             mm = (mm < 10) ? '0' + mm : mm;
             var dd = currentDt.getDate();
             var yyyy = currentDt.getFullYear();
             var date = mm + '/' + dd + '/' + yyyy;
             $scope.workOrder.created_on = date;
-            $scope.workOrder.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete);
+            if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
+                $scope.workOrder.wo_datecomplete = new Date(parseInt($scope.workOrder.wo_datecomplete));
 
+
+                $scope.maxDate = new Date(
+                    $scope.workOrder.wo_datecomplete.getFullYear(),
+                    $scope.workOrder.wo_datecomplete.getMonth(),
+                    $scope.workOrder.wo_datecomplete.getDate());
+            }
             $scope.minDate = new Date(
                 currentDt.getFullYear(),
                 currentDt.getMonth(),
                 currentDt.getDate());
 
-            $scope.maxDate = new Date(
-                $scope.workOrder.wo_datecomplete.getFullYear(),
-                $scope.workOrder.wo_datecomplete.getMonth(),
-                $scope.workOrder.wo_datecomplete.getDate());
-          API.GetUser.Recent($scope.workOrder, function (res) {
+
+            API.GetUser.Recent($scope.workOrder, function (res) {
             if (res.Code == 200) {
               $scope.requestor_name = res.Info.user.username;
             }
@@ -292,6 +296,9 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
         console.log($scope.workOrder);
           var data_post = $scope.workOrder;
+          if (angular.isUndefined(data_post.wo_datecomplete)) {
+              data_post.wo_datecomplete = new Date(data_post.wo_datecomplete).valueOf();
+          }
           data_post.user_id = userdetail.user._id;
 
           API.UpdateWorkOrder.Recent(data_post, function (res) {
