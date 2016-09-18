@@ -43,9 +43,12 @@ router.post('/', function (req, res, next) {
     var fullUrl = req.protocol + '://' + req.get('host');
     var query = {wo_timespent: {$exists: true, $not: {$size: 0}}};
     if ((req.body.wo_datefrom != "" ) && (req.body.wo_dateto != "")) {
-        query.wo_datecomplete = {
-            '$gte': req.body.wo_datefrom,
-            '$lt': req.body.wo_dateto
+        query = {
+            wo_timespent: {$exists: true, $not: {$size: 0}},
+            wo_datecomplete: {
+                '$gte': req.body.wo_datefrom,
+                '$lt': req.body.wo_dateto
+            }
         }
     }
     if (req.body.facility != 0) {
@@ -60,6 +63,7 @@ router.post('/', function (req, res, next) {
     if (req.body.workorder_type == 1) {
         query.workorder_PM = {$exists: false};
     }
+    console.log(query);
     WorkOrder.find(query, function (err, workorders) {
         if (err) {
             next()
@@ -119,27 +123,39 @@ router.post('/report_category', function (req, res, next) {
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
     var query = {status: 2};
-    /*if((req.body.wo_datefrom != "" || req.body.wo_datefrom != 'NaN/NaN/NaN') &&  (req.body.wo_dateto != "" || req.body.wo_dateto != 'NaN/NaN/NaN')){
-     query.wo_datecomplete = { '$gte': req.body.wo_datefrom,
-     '$lt': req.body.wo_dateto }
+
+    if ((req.body.wo_datefrom != "") && (req.body.wo_dateto != "")) {
+        /*query = {
+         status: 2,
+         wo_datecomplete: {
+         '$gte': parseInt(req.body.wo_datefrom),
+         '$lt': parseInt(req.body.wo_dateto)
+         }
      }*/
+        query = {
+            status: 2,
+            wo_datecomplete: {
+                '$gte': req.body.wo_datefrom,
+                '$lt': req.body.wo_dateto
+
+            }
+        }
+    }
+
     if (req.body.categories != 0) {
         query.workorder_category = req.body.categories;
     }
+    console.log(query);
     WorkOrder.find(query, function (err, workorders) {
         if (err) {
             next()
         }
-        var obj = {
-            url: fullUrl,
-            date: today,
-            data: workorders
-        };
         if (workorders.length > 0) {
             var calls = [];
             workorders.forEach(function (work) {
                 calls.push(function (callback) {
-                    work.wo_datecomplete = dateFormat(new Date(work.wo_datecomplete).toISOString(), 'isoDate');
+
+                    console.log(dateFormat(new Date(parseInt(work.wo_datecomplete)), 'isoDate'));
                     Category.findOne({_id: work.workorder_category}, function (e, r) {
                         if (e) {
                             return false;
@@ -150,6 +166,8 @@ router.post('/report_category', function (req, res, next) {
                         if (er) {
                             return false;
                         }
+                        var date = dateFormat(new Date(parseInt(work.wo_datecomplete)), 'isoDate');
+                        work.wo_datecomplete = date;
                         work.workorder_equipment = ra.equipment_name;
                         callback(null, work);
                     });

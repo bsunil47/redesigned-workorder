@@ -13,6 +13,11 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.workOrder = {
             wo_datefrom: ""
         };
+        var currentDt = new Date();
+        $scope.maxDate = new Date(
+            currentDt.getFullYear(),
+            currentDt.getMonth(),
+            currentDt.getDate());
 
         if (!$cookies.get('userDetails')) {
             $location.path('login');
@@ -22,6 +27,7 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
             if (res.Code == 200) {
 
                 $scope.facilities = res.Info.facilities;
+                $scope.workOrder.facilities = 0;
             } else {
 
             }
@@ -52,29 +58,17 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         }
+
         $scope.$watch("datefrom", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.datefrom)) {
-                var currentDt = new Date($scope.datefrom);
-                var mm = currentDt.getMonth() + 1;
-                mm = (mm < 10) ? '0' + mm : mm;
-                var dd = currentDt.getDate();
-                var yyyy = currentDt.getFullYear();
-                var date = mm + '/' + dd + '/' + yyyy;
-                $scope.workOrder.wo_datefrom = date;
+                console.log(new Date('2016-09-13T18:30:00.000Z').valueOf());
+                $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
+                console.log($scope.workOrder.wo_datefrom);
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {
-
             if (!angular.isUndefined($scope.dateto)) {
-                console.log($scope.dateto);
-                var currentDt = new Date($scope.dateto);
-                var mm = currentDt.getMonth() + 1;
-                mm = (mm < 10) ? '0' + mm : mm;
-                var dd = currentDt.getDate();
-                var yyyy = currentDt.getFullYear();
-                var date = mm + '/' + dd + '/' + yyyy;
-                $scope.workOrder.wo_dateto = date;
+                $scope.workOrder.wo_dateto = new Date($scope.dateto).valueOf();
             }
-
         });
     }]);
