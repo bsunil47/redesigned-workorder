@@ -42,4 +42,44 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
           $scope.parts = found.equipments;
         }
       });
+      $scope.p = [];
+
+      $scope.createPartRequest = function (part) {
+
+        if (!angular.isUndefined($scope.p.qty)) {
+          var set = {
+            equipment_number: $scope.equipment_number,
+            material_number: part,
+            qty: $scope.p.qty[part]
+          };
+
+          if (!angular.isUndefined($scope.p.workorder)) {
+            set.workorder_number = $scope.p.workorder[part];
+          }
+          API.CreatePartsRequest.Recent(set, function (res) {
+            if (res.Code == 200) {
+              swal({
+                title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                text: 'Sucessfully Created',
+                width: "450px",
+                confirmButtonText: 'Ok'
+              });
+              $location.path("/parts_list");
+            } else {
+              
+              //$scope.CreateUserForm.email.error = true;
+            }
+          }, function (error) {
+            alert(error);
+          });
+        } else {
+          swal({
+            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+            text: 'Need qty for selected part request',
+            width: "450px",
+            confirmButtonText: 'Ok'
+          });
+        }
+
+      }
 }]);

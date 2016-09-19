@@ -120,6 +120,9 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         CreateParts: $resource(url + 'api/createparts', {}, {
             Equipment: post_set
         }),
+        CreatePartsRequest: $resource(url + 'api/create_part_request', {}, {
+            Recent: post_set
+        }),
 
 
 

@@ -31,6 +31,7 @@ var Priority = mongoose.model('Collection_Priority');
 var Skill = mongoose.model('Collection_Skills');
 var Status = mongoose.model('Collection_Status');
 var PM = mongoose.model('Collection_PM_Task');
+var PartsRequest = mongoose.model('Collection_PartRequest');
 var counters = mongoose.model('counter');
 
 router.post('/', function(req, res, next) {
@@ -680,6 +681,20 @@ router.post('/createparts', function (req, res, next) {
             }
         });
     });
+});
+
+router.post('/create_part_request', function (req, res, next) {
+    var partRequest = new PartsRequest(req.body);
+    partRequest.save(function (er) {
+        if (er) {
+            res.json({
+                Code: 499,
+                message: 'issue with content',
+            });
+        }
+        res.json({Code: 200, Info: 'sucessfull'});
+
+    })
 });
 
 router.post('/partsequipments', function (req, res, next) {
