@@ -259,7 +259,7 @@ router.post('/create_workorder', function (req, res, next) {
                         });
                     });
 
-                    res.json({Code: 200, Info: 'sucessfull'});
+                    res.json({Code: 200, Info: {msg: 'sucessfull', workorder_number: result.seq}});
                 }
             });
         });
@@ -799,7 +799,11 @@ router.post('/manager_workorder', function (req, res, next) {
                     if (role.role_name == 'technician') {
                         query.workorder_technician = req.body._id;
                     }
-                    WorkOrder.find(query, function (err, workorders) {
+                    WorkOrder.find(query, {}, {
+                        sort: {
+                            _id: -1 //Sort by Date Added DESC
+                        }
+                    }, function (err, workorders) {
                         if (err) {
                             return next(err)
                         }
@@ -873,13 +877,13 @@ router.post('/search_status', function (req, res, next) {
 router.post('/get_users_type', function (req, res, next) {
     Facility.findOne({
         facility_number: req.body.facility_number
-
     }, function (err, facility) {
 
         if (err) {
             return next(err)
         }
         if (facility != null) {
+            console.log(facility);
             var fusers = facility.facility_users;
             var user_ids = [];
             for (var user_key in fusers) {
@@ -937,7 +941,6 @@ router.post('/get_user', function (req, res, next) {
 });
 router.post('/update_workorder', function (req, res, next) {
     var requestedArray = req.body;
-    console.log(req.body);
     if (req.body.wo_pm_frequency > 0) {
         var pmNumber;
         requestedArray.workorder_PM = pmNumber = 'PM-' + new Date().valueOf() + "-" + req.body.user_id;
@@ -958,17 +961,23 @@ router.post('/update_workorder', function (req, res, next) {
             status: 1
         };
         var where = {pm_number: pm_task.pm_number};
-        req.body.workorder_number = parseInt(req.body.workorder_number);
+        requestedArray.workorder_number = parseInt(req.body.workorder_number);
+        if (requestedArray.wo_datecomplete == 'NaN') {
+            delete requestedArray['wo_datecomplete'];
+        }
         PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
             if (err) {
-                console.log(err)
+                console.log(err);
             }
-            ;
-            updateWorkOrder({'workorder_number': req.body.workorder_number}, requestedArray, req, res);
+            updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
         });
     } else {
+        requestedArray.workorder_number = parseInt(req.body.workorder_number);
+        if (requestedArray.wo_datecomplete == 'NaN') {
+            delete requestedArray['wo_datecomplete'];
+        }
         console.log('no pm');
-        updateWorkOrder({'workorder_number': req.body.workorder_number}, requestedArray, req, res);
+        updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
     }
 
 
@@ -1083,6 +1092,7 @@ var SendMail = function (req) {
     });
 }
 var updateWorkOrder = function (query, requestedArray, req, res) {
+    console.log(requestedArray);
     //delete requestedArray['user_id'];
     delete requestedArray['wo_pm_frequency'];
     delete requestedArray['wo_pm_date'];

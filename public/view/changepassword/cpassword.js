@@ -28,11 +28,29 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
   function ChangePassword(){
     $scope.user_id = API.ChangePassword.save($scope.user,function(res){
       if(res.Code == 200){
+        swal({
+          title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+          text: 'Successfully Changed password',
+          width: "450px",
+          confirmButtonText: 'Ok'
+        });
         $location.path("/");
       }else {
+        swal({
+          title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+          text: 'Error with changing Password',
+          width: "450px",
+          confirmButtonText: 'Ok'
+        });
         $scope.ChangePasswordForm.password.error = true;
       }
     },function (error) {
+      swal({
+        title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+        text: "Oop's.. Something went worng.. Try again later",
+        width: "450px",
+        confirmButtonText: 'Ok'
+      });
       console.log(error)
     });
   }

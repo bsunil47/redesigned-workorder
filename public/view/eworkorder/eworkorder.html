@@ -82,6 +82,7 @@
                                                 <label class="col-sm-5 control-label">Facility:</label>
                                                 <div class="col-sm-7">
                                                     <select class="form-control" ng-disabled="disableFacility"
+                                                            readonly="readonly"
                                                             ng-model="workOrder.workorder_facility"
                                                             name="workorder_facility"
                                                             ng-options='facility.facility_number as facility.facility_name for facility in facilities'>

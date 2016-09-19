@@ -45,12 +45,29 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
             if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {
                 $scope.category_id = API.CreateCategory.Category($scope.category, function (res) {
                     if (res.Code == 200) {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: 'Sucessfully created category',
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         $location.path("/categories");
                     } else {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: 'Error creating category',
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
-                    alert(error);
+                    swal({
+                        title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                        text: "Oop's.. Something went worng.. Try again later",
+                        width: "450px",
+                        confirmButtonText: 'Ok'
+                    });
                 });
             }
         }
