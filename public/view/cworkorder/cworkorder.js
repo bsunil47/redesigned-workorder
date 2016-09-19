@@ -90,6 +90,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         if (res.Code == 200) {
           $scope.facilities = res.Info.facilities;
           $scope.selected_facility = $scope.facilities[0].facility_number;
+          $scope.selected_facility = $scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
           $cookies.putObject('facilities', res.Info.facilities);
           //$cookies.put('userDetails',res)
         } else {
