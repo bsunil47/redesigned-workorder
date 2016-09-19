@@ -92,6 +92,45 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
           $scope.selected_facility = $scope.facilities[0].facility_number;
           $scope.selected_facility = $scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
           $cookies.putObject('facilities', res.Info.facilities);
+          API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
+            if (res.Code == 200) {
+
+              $scope.categories = res.Info.categories;
+              $scope.workOrder.workorder_category = $scope.categories[0]._id;
+              //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+          }, function (error) {
+            alert(error);
+          });
+          API.SEquipment.Recent({facility_number: $scope.selected_facility}, function (res) {
+            if (res.Code == 200) {
+
+              $scope.equipments = res.Info.equipments;
+              $scope.workOrder.workorder_equipment = $scope.equipments[0]._id;
+              //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+          }, function (error) {
+            alert(error);
+          });
+          API.SPriority.Recent({facility_number: $scope.selected_facility}, function (res) {
+            if (res.Code == 200) {
+
+              $scope.priorities = res.Info.priorities;
+              $scope.workOrder.workorder_priority = $scope.priorities[0]._id;
+              //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+          }, function (error) {
+            alert(error);
+          });
           //$cookies.put('userDetails',res)
         } else {
 
@@ -101,45 +140,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         alert(error);
       });
 
-  API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
-        if (res.Code == 200) {
 
-          $scope.categories = res.Info.categories;
-          $scope.workOrder.workorder_category = $scope.categories[0]._id;
-          //$cookies.put('userDetails',res)
-        } else {
-
-        }
-
-      }, function (error) {
-        alert(error);
-      });
-  API.SEquipment.Recent({facility_number: $scope.selected_facility}, function (res) {
-    if (res.Code == 200) {
-
-      $scope.equipments = res.Info.equipments;
-      $scope.workOrder.workorder_equipment = $scope.equipments[0]._id;
-      //$cookies.put('userDetails',res)
-    } else {
-
-    }
-
-  }, function (error) {
-    alert(error);
-  });
-  API.SPriority.Recent({facility_number: $scope.selected_facility}, function (res) {
-    if (res.Code == 200) {
-
-      $scope.priorities = res.Info.priorities;
-      $scope.workOrder.workorder_priority = $scope.priorities[0]._id;
-      //$cookies.put('userDetails',res)
-    } else {
-
-    }
-
-  }, function (error) {
-    alert(error);
-  });
 
 
   function CreateWorkOrder() {
