@@ -2,27 +2,20 @@
 <div class="page-wrapper">
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
-        <!--<div class="container">-->
-        <div class="row">
-            <div class="col-sm-1">
-            </div>
-            <div class="col-sm-4">
-                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
-                                                                                  alt="Prysmian Group"></a></div>
-            </div>
-            <div class="col-sm-6">
-                <div class="site-title clearfix">Maintenance Work Order Application</div>
-            </div>
-            <div class="col-sm-1">
-                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
-                        <a class="btn" ng-click="Logout()">
-                            <img src="/images/logout.png" alt="logout">
-                        </a>
-                    </span>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="site-logo clearfix"><a ng-click="redirectLoc('equipments')"><img
+                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="site-title clearfix">Maintenance Work Order Application</div>
+                </div>
             </div>
         </div>
-        <!--</div>-->
     </header>
+    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn"
+                                                                                                      ng-click="Logout()">logout</a></span>
     <!-- Page wrapper header end -->
     <!-- Page wrapper container start -->
     <div class="page-wrapper-container">
@@ -42,7 +35,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Equipment Number:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="equiment.equipment_number" type="text" class="form-control"
+                                            <input ng-model="equipment.equipment_number" type="text"
+                                                   class="form-control"
                                                    name="equipment_number" required>
                                         </div>
                                     </div>
@@ -64,14 +58,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label class="col-sm-6 control-label">Equipment Vendor Name:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="equiment.equipment_vendorname" type="text"
+                                            <input ng-model="equipment.equipment_vendorname" type="text"
                                                    class="form-control"
                                                    name="equipment_vendorname" required>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                 </div>
                             </div>

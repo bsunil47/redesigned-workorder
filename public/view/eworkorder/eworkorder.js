@@ -9,7 +9,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
   });
 }])
 
-    .controller('EworkorderCtrl', ["$scope", "$cookies", "$location", 'API', '$routeParams', function ($scope, $cookies, $location, API, $routeParams) {
+    .controller('EworkorderCtrl', ["$scope", "$cookies", "$location", 'API', '$filter', '$routeParams', function ($scope, $cookies, $location, API, $filter, $routeParams) {
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
@@ -81,6 +81,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         if (res.Code == 200) {
 
           $scope.workOrder = res.Info.workorder;
+            $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
+            console.log($scope.workOrder.workorder_number);
 
             var currentDt = new Date(parseInt($scope.workOrder.created_on));
             var mm = currentDt.getMonth() + 1;

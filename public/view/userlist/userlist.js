@@ -85,22 +85,37 @@ PGapp.filter('getById', function() {
 });
 
 PGapp.filter('getByFacilityNumber', function () {
-  //console.log(input);
-  return function (propertyName, propertyValue, collection) {
-      try {
-          if (collection != 'undefined') {
-              var i = 0,
-                  len = collection.length;
-              for (i; i < len; i++) {
-                  if (collection[i][propertyName] == propertyValue) {
-                      return collection[i];
-                  }
-              }
-          }
-      } catch (err) {
-          return null;
-      }
+    //console.log(input);
+    return function (propertyName, propertyValue, collection) {
+        try {
+            if (collection != 'undefined') {
+                var i = 0,
+                    len = collection.length;
+                for (i; i < len; i++) {
+                    if (collection[i][propertyName] == propertyValue) {
+                        return collection[i];
+                    }
+                }
+            }
+        } catch (err) {
+            return null;
+        }
 
 
-  }
+    }
+});
+
+PGapp.filter('setPadZeros', function () {
+    //console.log(input);
+    return function (num, size) {
+        try {
+            var s = num + "";
+            while (s.length < size) s = "0" + s;
+            return s;
+        } catch (err) {
+            return null;
+        }
+
+
+    }
 });

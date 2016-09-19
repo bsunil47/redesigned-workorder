@@ -182,6 +182,9 @@ angular.module('PGapp.sorders', ['ngRoute','ngAnimate', 'ngCookies'])
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
   }
+        $scope.showWithzeros = function (Order) {
+            return $filter('setPadZeros')(Order, 8);
+        }
 
       $scope.showEquipment = function (equipment) {
         console.log(equipment);

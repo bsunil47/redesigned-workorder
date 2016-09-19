@@ -278,7 +278,7 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="workorder in workOrders">
-                                    <td>{{workorder.workorder_number}}</td>
+                                    <td>{{showWithzeros(workorder.workorder_number)}}</td>
                                     <td>{{workorder.workorder_description}}</td>
                                     <td>{{showEquipment(workorder.workorder_equipment)}}</td>
                                     <td><i class="fa fa-eye"></i></td>

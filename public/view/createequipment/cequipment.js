@@ -39,10 +39,11 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.equipment = {
             facility_number: "",
             equipment_name: "",
-            equipment_number: "",
-            equipment_vendor_name: ""
+            equipment_number: ""
+            //equipment_vendor_name: ""
         };
         function CreateEquipment() {
+            console.log($scope.equipment);
             if ($scope.CreateEquipmentForm.equipment_name.$valid && $scope.CreateEquipmentForm.facility_number.$valid) {
                 $scope.equipment_id = API.CreateEquipment.Equipment($scope.equipment, function (res) {
                     if (res.Code == 200) {

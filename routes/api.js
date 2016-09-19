@@ -373,7 +373,7 @@ router.post('/classes', function (req, res, next) {
     });
 });
 
-router.post('/create_equipment', function (req, res, next) {
+/*router.post('/create_equipment', function (req, res, next) {
     Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
         if (err) {
             return next(err);
@@ -382,7 +382,6 @@ router.post('/create_equipment', function (req, res, next) {
             facility_number: req.body.facility_number,
             equipment_name: req.body.equipment_name,
             equipment_number: req.body.equipment_number,
-            equipment_vendorname: req.body.equipment_vendorname,
             status: 1
         });
         equipment.save(function (err, resp) {
@@ -397,6 +396,53 @@ router.post('/create_equipment', function (req, res, next) {
             }
         });
     })
+ });*/
+router.post('/create_equipment', function (req, res, next) {
+    Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
+        if (err) {
+            return next(err);
+        }
+
+        var equipment = new Equipment({
+            facilities: {facility_number: req.body.facility_number},
+            equipment_name: req.body.equipment_name,
+            equipment_number: req.body.equipment_number,
+            //equipment_vendorname: req.body.equipment_vendorname,
+            status: 1
+        });
+        var upsertData = equipment.toObject();
+
+        Equipment.count({
+            equipment_number: req.body.equipment_number,
+            equipment_name: req.body.equipment_name,
+            facilities: {facility_number: req.body.facility_number}
+        }, function (err, count) {
+            if (count) {
+                res.json({Code: 200, Info: 'Document already exists'});
+            }
+            else {
+                Equipment.update({equipment_number: req.body.equipment_number}, equipment, {upsert: true}, function (err, resp) {
+                    console.log("Session1: " + JSON.stringify(err));
+                    if (err) {
+                        Equipment.update({equipment_number: req.body.equipment_number}, {$push: {"facilities": {facility_number: req.body.facility_number}}}, function (err, resp) {
+                            if (err) {
+                                console.log(err);
+
+                                res.json({
+                                    Code: 499,
+                                    message: err,
+                                });
+                            } else {
+                                res.json({Code: 200, Info: 'sucessfull in if'});
+                            }
+                        });
+                    } else {
+                        res.json({Code: 200, Info: 'sucessfull'});
+                    }
+                });
+            }
+        });
+    });
 });
 router.post('/equipments', function (req, res, next) {
     Equipment.find({}, function (err, equipments) {
@@ -407,7 +453,7 @@ router.post('/equipments', function (req, res, next) {
         if (equipments != null) {
             res.json({Code: 200, Info: {equipments: equipments}});
         } else {
-            res.json({Code: 406, Info: 'no class'});
+            res.json({Code: 406, Info: 'no equipments'});
         }
     });
 });
@@ -560,6 +606,100 @@ router.post('/status_list', function (req, res, next) {
             res.json({Code: 200, Info: {status_list: status}});
         } else {
             res.json({Code: 406, Info: 'no status'});
+        }
+    });
+});
+
+router.post('/createparts', function (req, res, next) {
+    Equipment.findOne({
+        equipment_name: req.body.equipment_name,
+        equipment_number: req.body.equipment_number
+    }, function (err, facility) {
+        if (err) {
+            return next(err);
+        }
+
+        var pequipments = new Equipment({
+            equipment_name: req.body.equipment_name,
+            equipment_number: req.body.equipment_number,
+            material_number: req.body.part_number,
+            material_description: req.body.part_name,
+            vendor_number: req.body.vendor_number,
+            vendor_name: req.body.vendor_name,
+            min_qty: req.body.min_qty,
+            max_qty: req.body.max_qty,
+            //equipment_vendorname: req.body.equipment_vendorname,
+            status: 1
+        });
+        var upsertData = pequipments.toObject();
+
+        Equipment.count({
+            equipment_number: req.body.equipment_number, equipment_name: req.body.equipment_name, equipments: {
+                material_number: req.body.part_number,
+                material_description: req.body.part_name,
+                vendor_number: req.body.vendor_number,
+                vendor_name: req.body.vendor_name,
+                min_qty: req.body.min_qty,
+                max_qty: req.body.max_qty
+            }
+        }, function (err, count) {
+            if (count) {
+                res.json({Code: 200, Info: 'Document already exists'});
+            }
+            else {
+                Equipment.update({equipment_number: req.body.equipment_number}, pequipments, {upsert: true}, function (err, resp) {
+                    console.log("Session1: " + JSON.stringify(err));
+                    if (err) {
+                        Equipment.update({equipment_number: req.body.equipment_number}, {
+                            $push: {
+                                "equipments": {
+                                    material_number: req.body.part_number,
+                                    material_description: req.body.part_name,
+                                    vendor_number: req.body.vendor_number,
+                                    vendor_name: req.body.vendor_name,
+                                    min_qty: req.body.min_qty,
+                                    max_qty: req.body.max_qty
+                                }
+                            }
+                        }, function (err, resp) {
+                            if (err) {
+                                console.log(err);
+
+                                res.json({
+                                    Code: 499,
+                                    message: err,
+                                });
+                            } else {
+                                res.json({Code: 200, Info: 'sucessfull in if'});
+                            }
+                        });
+                    } else {
+                        res.json({Code: 200, Info: 'sucessfull'});
+                    }
+                });
+            }
+        });
+    });
+});
+
+router.post('/partsequipments', function (req, res, next) {
+    Equipment.find({}, {_id: 0, equipment_number: 1, equipment_name: 1}, function (err, partsequipments) {
+        if (err) {
+            return next(err)
+        }
+        // var partsequipments_obj = [];
+        // for (var pe in partsequipments) {
+        //             partsequipments_obj.push(partsequipments[pe].equipment_number + ":" +  partsequipments[pe].equipment_name);
+        //         }
+        // console.log("partsequipments_obj: "+ JSON.stringify(partsequipments_obj));
+        // console.log("partsequipments_obj_0: "+ JSON.stringify(partsequipments_obj[0]));
+        // console.log("partsequipments_obj_1: "+ JSON.stringify(partsequipments_obj[1]));
+        if (partsequipments != null) {
+            res.json({Code: 200, Info: {partsequipments: partsequipments}});
+            //res.json({Code: 200, Info: {partsequipments: partsequipments_obj}});
+
+        } else {
+            res.json({Code: 406, Info: 'no class'});
         }
     });
 });
@@ -818,6 +958,7 @@ router.post('/update_workorder', function (req, res, next) {
             status: 1
         };
         var where = {pm_number: pm_task.pm_number};
+        req.body.workorder_number = parseInt(req.body.workorder_number);
         PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
             if (err) {
                 console.log(err)
