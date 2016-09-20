@@ -83,6 +83,7 @@ router.post('/', function (req, res, next) {
                         if (er) {
                             return false;
                         }
+                        work.workorder_number = setPadZeros(parseInt(work.workorder_number), 8);
                         work.workorder_equipment = ra.equipment_name;
                         callback(null, work);
                     });
@@ -166,7 +167,9 @@ router.post('/report_category', function (req, res, next) {
                         if (er) {
                             return false;
                         }
+
                         var date = dateFormat(new Date(parseInt(work.wo_datecomplete)), 'isoDate');
+                        work.workorder_number = setPadZeros(parseInt(work.workorder_number), 8);
                         work.wo_datecomplete = date;
                         work.workorder_equipment = ra.equipment_name;
                         callback(null, work);
@@ -205,5 +208,16 @@ router.post('/report_category', function (req, res, next) {
     // res.render('index', { title: 'Prysmian Group - Maintenance Work Order Application' });
 });
 
+var setPadZeros = function (num, size) {
+    try {
+        var s = num + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+    } catch (err) {
+        return null;
+    }
+
+
+}
 
 module.exports = router;

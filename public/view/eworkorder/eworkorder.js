@@ -47,6 +47,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
   $scope.disableTimeSpent = true;
   $scope.disableDateCompleted = true;
   $scope.showClerk = false;
+        $scope.accessManager = true;
       $scope.disableSkill = true;
       $scope.disableTechnician = true;
       $scope.disableClass = true;
@@ -72,6 +73,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         $scope.disableCategory = false;
         $scope.disableEquipment = false;
         $scope.disablePriority = false;
+          $scope.accessManager = false;
+
       }
 
   if(userdetail.role == 'clerk') {
@@ -224,7 +227,13 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                         var yyyy = currentDt.getFullYear();
                         var date = mm + '/' + dd + '/' + yyyy;
                         $scope.workOrder.wo_pm_previous_date = date;
-                        $scope.workOrder.wo_pm_date = res.Info.pm_task.pm_next_date;
+                        var wo_pm_date = new Date(parseInt(res.Info.pm_task.pm_next_date));
+                        var mm = wo_pm_date.getMonth() + 1;
+                        mm = (mm < 10) ? '0' + mm : mm;
+                        var dd = wo_pm_date.getDate();
+                        var yyyy = wo_pm_date.getFullYear();
+                        var date = mm + '/' + dd + '/' + yyyy;
+                        $scope.workOrder.wo_pm_date = date;
                         $scope.workOrder.wo_pm_frequency = res.Info.pm_task.pm_frequency;
                         $scope.workOrder.wo_pm_number = res.Info.pm_task.pm_number;
                         $scope.workOrder.pm_task = 1;
@@ -273,13 +282,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 var yyyy = currentDt.getFullYear();
                 var date = mm + '/' + dd + '/' + yyyy;
                 $scope.workOrder.wo_pm_date = date;
-                $scope.workOrder.wo_pm_number = 'PM-{date-string}' + "-XX"
             } else {
                 $scope.workOrder.wo_pm_date = "";
-                if ($scope.workOrder.pm_task == 0) {
-                    $scope.workOrder.wo_pm_number = "";
-                }
-
             }
 
         }

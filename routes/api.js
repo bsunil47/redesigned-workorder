@@ -219,17 +219,17 @@ router.post('/create_workorder', function (req, res, next) {
                                         // Comma separated list of recipients
                                         to: mail_to,
                                         // Subject of the message
-                                        subject: 'New Maintenance Work Order number ' + req.body.workorder_number + "-" + count + ' has been submited for your approval', //
+                                        subject: 'New Maintenance Work Order number ' + setPadZeros(result.seq, 8) + ' has been submited for your approval', //
 
                                         // plaintext body
                                         //text: 'Hello to sunil',
 
                                         // HTML body
-                                        html: '<p>New Maintenace Work Order number <b>' + req.body.workorder_number + "-" + count + '</b> has been submited for your approval</p>'
+                                        html: '<p>New Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
                                         +
                                         '<p><b>Work Order Details</b></p>'
                                         +
-                                        '<p><b>Work Order Number</b>: ' + req.body.workorder_number + "-" + count + '</p>'
+                                        '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
                                         +
                                         '<p><b>Work Order Date</b>: ' + date + '</p>'
                                         +
@@ -276,8 +276,12 @@ router.post('/create_category', function (req, res, next) {
         var query = {
             category_name: req.body.category_name
         };
-        Category.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-            {safe: true, upsert: false},
+        Category.update(query, {
+                operator_available: Boolean(req.body.operator_available),
+                status: 1,
+                $push: {"facilities": {facility_number: req.body.facility_number}}
+            },
+            {safe: true, upsert: true},
             function (err, model) {
                 if (err) {
                     console.log(err);
@@ -738,12 +742,18 @@ router.post('/search_facilities', function (req, res, next) {
 });
 
 router.post('/search_category', function (req, res, next) {
+    var query = {
+        facilities: {
+            $elemMatch: {facility_number: req.body.facility_number}
+        }
+    };
+    console.log(req.body.operator_available);
+    if (typeof req.body.operator_available !== 'undefined') {
+        query.operator_available = Boolean(req.body.operator_available);
+    }
+    console.log(query);
     Category.find(
-        {
-            facilities: {
-                $elemMatch: {facility_number: req.body.facility_number}
-            }
-        }, function (err, categories) {
+        query, function (err, categories) {
             if (err) {
                 return next(err)
             }
@@ -893,12 +903,10 @@ router.post('/get_users_type', function (req, res, next) {
     Facility.findOne({
         facility_number: req.body.facility_number
     }, function (err, facility) {
-
         if (err) {
             return next(err)
         }
         if (facility != null) {
-            console.log(facility);
             var fusers = facility.facility_users;
             var user_ids = [];
             for (var user_key in fusers) {
@@ -956,7 +964,7 @@ router.post('/get_user', function (req, res, next) {
 });
 router.post('/update_workorder', function (req, res, next) {
     var requestedArray = req.body;
-    if (req.body.wo_pm_frequency > 0) {
+    if (req.body.wo_pm_frequency > 0 && requestedArray.workorder_PM != "") {
         var pmNumber;
         requestedArray.workorder_PM = pmNumber = 'PM-' + new Date().valueOf() + "-" + req.body.user_id;
         if (req.body.pm_task == 1) {
@@ -970,9 +978,9 @@ router.post('/update_workorder', function (req, res, next) {
         var pm_task = {
             pm_number: pmNumber,
             pm_frequency: req.body.wo_pm_frequency,
-            pm_next_date: req.body.wo_pm_date,
-            pm_current_date: new Date(),
-            pm_previous_date: previous_date,
+            pm_next_date: new Date(req.body.wo_pm_date).valueOf(),
+            pm_current_date: new Date().valueOf(),
+            pm_previous_date: new Date(previous_date).valueOf(),
             status: 1
         };
         var where = {pm_number: pm_task.pm_number};
@@ -1039,37 +1047,44 @@ var SendMail = function (req) {
                             if (err) {
                                 console.log(err);
                             }
-                            if (role.role_name == 'technician') {
-                                var mail_to = '"Arun" <pgmanager7@gmail.com>';
-                                if (req.body.status == 1) {
-                                    var last_message = ' has been updated';
-                                } else {
-                                    if (req.body.status == 2) {
-                                        var last_message = ' has been closed';
+                            if (role.role_name == 'clerk') {
+                                var mail_to = '"Arun" <pgmanager7@gmail.com>, "Technician" <pgtechnician@gmail.com>';
+                                var last_message = ' parts received';
+                            } else {
+                                if (role.role_name == 'technician') {
+                                    var mail_to = '"Arun" <pgmanager7@gmail.com>';
+                                    if (req.body.status == 1) {
+                                        var last_message = ' has been updated';
                                     } else {
-                                        var last_message = ' has been on hold';
+                                        if (req.body.status == 2) {
+                                            var last_message = ' has been closed';
+                                        } else {
+                                            var last_message = ' has been on hold';
+                                        }
                                     }
+
+                                } else {
+                                    var mail_to = '"Technician" <pgtechnician@gmail.com>';
+                                    var last_message = ' has been updated';
                                 }
 
-                            } else {
-                                var mail_to = '"Technician" <pgtechnician@gmail.com>';
-                                var last_message = ' has been updated';
                             }
+
                             var mailData = {
                                 // Comma separated list of recipients
                                 to: mail_to,
                                 // Subject of the message
-                                subject: 'Maintenance Work Order number ' + req.body.workorder_number + last_message, //
+                                subject: 'Maintenance Work Order number ' + setPadZeros(parseInt(req.body.workorder_number), 8) + last_message, //
 
                                 // plaintext body
                                 //text: 'Hello to sunil',
 
                                 // HTML body
-                                html: '<p>Maintenace Work Order number <b>' + req.body.workorder_number + '</b>' + last_message + '</p>'
+                                html: '<p>Maintenace Work Order number <b>' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</b>' + last_message + '</p>'
                                 +
                                 '<p><b>Work Order Details</b></p>'
                                 +
-                                '<p><b>Work Order Number</b>: ' + req.body.workorder_number + '</p>'
+                                '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
                                 +
                                 '<p><b>Work Order Date</b>: ' + req.body.created_on + '</p>'
                                 +
@@ -1091,7 +1106,6 @@ var SendMail = function (req) {
                                     console.log(err);
                                 }
                                 console.log('Message sent successfully!');
-                                console.log(info);
 
                             });
                         });
@@ -1107,7 +1121,6 @@ var SendMail = function (req) {
     });
 }
 var updateWorkOrder = function (query, requestedArray, req, res) {
-    console.log(requestedArray);
     //delete requestedArray['user_id'];
     delete requestedArray['wo_pm_frequency'];
     delete requestedArray['wo_pm_date'];
@@ -1131,5 +1144,16 @@ function getNextSequence(name) {
     );
 
     return ret.seq;
+}
+var setPadZeros = function (num, size) {
+    try {
+        var s = num + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+    } catch (err) {
+        return null;
+    }
+
+
 }
 module.exports = router;

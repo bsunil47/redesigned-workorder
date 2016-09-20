@@ -152,13 +152,20 @@
                                                     <input type="text" class="form-control"
                                                            ng-disabled="disableTimeSpent"
                                                            ng-model="workOrder.wo_timespent"
-                                                           name="wo_timespent">
+                                                           name="wo_timespent" bs-timepicker data-time-format="HH:mm"
+                                                           data-length="1" data-minute-step="15"
+                                                           data-arrow-behavior="picker" type="text">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-5 control-label">Date Completed:</label>
                                                 <div class="col-sm-7">
-                                                    <md-content layout-padding>
+                                                    <input ng-disabled="disableDateCompleted" class="form-control"
+                                                           data-date-format="MM/dd/yyyy"
+                                                           ng-model="workOrder.wo_datecomplete" name="wo_datecomplete"
+                                                           type="text" data-min-date="{{minDate}}" data-max-date="today"
+                                                           bs-datepicker/>
+                                                    <!--<md-content layout-padding>
                                                         <div layout-gt-xs="row">
                                                             <div flex-gt-xs>
                                                                 <md-datepicker name="wo_datecomplete"
@@ -170,7 +177,7 @@
                                                             </div>
 
                                                         </div>
-                                                    </md-content>
+                                                    </md-content>-->
 
                                                     <!--<input type="text" class="form-control"
                                                            ng-disabled="disableDateCompleted"
@@ -185,24 +192,25 @@
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Skill:</label>
                                         <div class="col-sm-7">
-                                            <select class="form-control" ng-disabled="disableSkill"
+                                            <select required class="form-control" ng-disabled="disableSkill"
                                                     ng-model="workOrder.workorder_skill"
                                                     name="workorder_skill"
                                                     ng-options='skill._id as skill.skill_name for skill in skills'
                                                     ng-change="selectAction()">
+                                                <option value="">-- Select One --</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Technician:</label>
                                         <div class="col-sm-7">
-                                            <select class="form-control" ng-disabled="disableTechnician"
+                                            <select required class="form-control" ng-disabled="disableTechnician"
                                                     ng-model="workOrder.workorder_technician"
                                                     name="workorder_technician"
                                                     ng-options='technician._id as technician.username for technician in technicians'
                                                     ng-change="selectAction()"
                                             >
-
+                                                <option value="">-- Select One --</option>
                                             </select>
                                         </div>
                                     </div>
@@ -220,11 +228,12 @@
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Class:</label>
                                         <div class="col-sm-7">
-                                            <select class="form-control" ng-disabled="disableClass"
+                                            <select required class="form-control" ng-disabled="disableClass"
                                                     ng-model="workOrder.workorder_class"
                                                     name="workorder_class"
                                                     ng-options='class._id as class.class_name for class in classes'
                                                     ng-change="selectAction()">
+                                                <option value="">-- Select One --</option>
                                             </select>
                                         </div>
                                     </div>
@@ -233,7 +242,7 @@
                                         <div class="col-sm-7">
                                             <input type="hidden" class="form-control" ng-model="workOrder.pm_task"
                                             >
-                                            <input type="text" class="form-control" readonly=""
+                                            <input type="text" class="form-control" required
                                                    ng-readonly="readOnlyPMTask" ng-model="workOrder.wo_pm_number"
                                                    name="wo_pm_number">
                                         </div>
@@ -264,21 +273,21 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Description of Issue:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" rows="5" ng-model="workOrder.workorder_description"
-                                              name="workorder_description"></textarea>
+                                    <textarea class="form-control" rows="2" ng-model="workOrder.workorder_description"
+                                              name="workorder_description" ng-readonly="accessManager"></textarea>
                                 </div>
                             </div>
                             <div class="form-group" ng-hide="showTechnician">
                                 <label class="col-sm-2 control-label">Supervisor Comments:</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" ng-model="workOrder.workorder_leadcomments"
-                                           name="workorder_leadcomments">
+                                           name="workorder_leadcomments" ng-readonly="accessManager">
                                 </div>
                             </div>
                             <div class="form-group" ng-hide="showTechnician">
                                 <label class="col-sm-2 control-label">Action Taken:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" rows="5" ng-model="workOrder.workorder_actiontaken"
+                                    <textarea class="form-control" rows="2" ng-model="workOrder.workorder_actiontaken"
                                               name="workorder_actiontaken"></textarea>
                                 </div>
                             </div>
