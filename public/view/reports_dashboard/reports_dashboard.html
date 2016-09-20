@@ -3,25 +3,25 @@
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
         <!--<div class="container">-->
-            <div class="row">
-                <div class="col-sm-1">
-                </div>
-                <div class="col-sm-4">
-                    <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"></a></div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="site-title clearfix">Maintenance Work Order Application</div>
-                </div>
-                <div class="col-sm-1">
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
                     <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
                         <a class="btn" ng-click="Logout()">
                             <img src="/images/logout.png" alt="logout">
                         </a>
                     </span>
-                </div>
             </div>
+        </div>
         <!--</div>-->
-
 
 
     </header>
@@ -34,21 +34,23 @@
                 <div class="col-sm-12">
                     <!-- Main container start -->
                     <div class="main-container clearfix">
-                        <h1>{{screenTypeTitle}} Home Page</h1>
+                        <div class="col-sm-12 text-right"><a ng-click="redirectLoc('reports_dashboard')"
+                                                             class="btn btn-primary">Back</a>
+                        <h1>Reports</h1>
                         <div class="row">
                             <div class="col-sm-4 col-sm-offset-4">
                                 <!-- Demo menu start -->
                                 <nav class="demo-menu-nav">
-                                    <h2 class="demo-menu-header clearfix">{{screenTypeTitle}} Menu</h2>
+                                    <h2 class="demo-menu-header clearfix">Reports</h2>
                                     <div class="demo-menu-container clearfix">
                                         <ul class="demo-menu">
-                                            <li ng-hide="hideCreateworkorder"><a ng-click="redirectLoc('create_workorder')" class="btn btn-lg btn-primary">Create Work Order</a></li>
-                                            <li ng-hide="hideSearchWorkOrder"><a ng-click="redirectLoc('search_workorder')"  class="btn btn-lg btn-primary">Search/Edit Work Order</a></li>
-                                            <li ng-hide="hidePartList"><a ng-click="redirectLoc('parts_list')"  class="btn btn-lg btn-primary">Parts List</a></li>
-                                            <li ng-show="showManager"><a ng-click="redirectLoc('reports_dashboard')"
-                                                                         class="btn btn-lg btn-primary">Reports</a></li>
-                                            <li ng-show="showAdmin"><a ng-click="redirectLoc('system_settings')"  class="btn btn-lg btn-primary">System Settings</a></li>
-                                            <li><a ng-click="redirectLoc('change_password')" class="btn btn-lg btn-primary">Change Password</a></li>
+
+                                            <li ng-show="showManager"><a ng-click="redirectLoc('search_report_hour')"
+                                                                         class="btn btn-lg btn-primary">Hours by
+                                                Equipment</a></li>
+                                            <li ng-show="showManager"><a ng-click="redirectLoc('search_closed_report')"
+                                                                         class="btn btn-lg btn-primary">Closed Work
+                                                Order</a></li>
                                         </ul>
                                     </div>
                                 </nav>
@@ -67,7 +69,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="site-copy-rights clearfix">&copy; <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All Rights Reserved.</div>
+                    <div class="site-copy-rights clearfix">&copy;
+                        <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All
+                        Rights Reserved.
+                    </div>
                 </div>
             </div>
         </div>

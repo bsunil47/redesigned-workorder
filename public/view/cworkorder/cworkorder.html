@@ -2,19 +2,28 @@
 <div class="page-wrapper">
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="site-logo clearfix"><a ng-click="redirectLoc('dashboard')"><img
-                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="site-title clearfix">Maintenance Work Order Application</div>
-                </div>
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
             </div>
         </div>
+        <!--</div>-->
     </header>
-    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn" ng-click="Logout()">logout</a></span>
+
     <!-- Page wrapper header end -->
     <!-- Page wrapper container start -->
     <div class="page-wrapper-container">
@@ -30,17 +39,17 @@
                         <form class="form-horizontal clearfix" name="CreateWorkOrderForm">
                             <div class="row">
                                 <div class="col-sm-8">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label class="col-sm-6 control-label">Work Order: #</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" value="{{workorder_number}}"
-                                                           readonly="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <!--<div class="row">-->
+                                    <!--<div class="col-sm-6">-->
+                                    <!--<div class="form-group">-->
+                                    <!--<label class="col-sm-6 control-label">Work Order: #</label>-->
+                                    <!--<div class="col-sm-6">-->
+                                    <!--<input type="text" class="form-control" value="{{workorder_number}}"-->
+                                    <!--readonly="">-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
@@ -86,8 +95,12 @@
                                                 <div class="col-sm-6">
                                                     <select class="form-control" ng-disabled="disableCategory"
                                                             ng-model="workOrder.workorder_category"
-                                                            name="workorder_category"
-                                                            ng-options='category._id as category.category_name for category in categories'>
+                                                            name="workorder_category" required>
+                                                        <!--ng-options='category._id as category.category_name for category in categories' >-->
+                                                        <option value="">-- Select One --</option>
+                                                        <option ng-repeat="category in categories"
+                                                                value="{{category._id}}">{{category.category_name}}
+                                                        </option>
 
                                                     </select>
                                                 </div>
@@ -97,7 +110,8 @@
                                                 <div class="col-sm-6">
                                                     <select class="form-control" ng-disabled="disableEquipment"
                                                             ng-model="workOrder.workorder_equipment"
-                                                            name="workorder_equipment">
+                                                            name="workorder_equipment" required>
+                                                        <option value="">-- Select One --</option>
                                                         <option ng-repeat="equipment in equipments"
                                                                 value="{{equipment._id}}">{{equipment.equipment_name}}
                                                         </option>
@@ -109,7 +123,8 @@
                                                 <div class="col-sm-6">
                                                     <select class="form-control" ng-disabled="disablePriority"
                                                             ng-model="workOrder.workorder_priority"
-                                                            name="workorder_priority">
+                                                            name="workorder_priority" required>
+                                                        <option value="">-- Select One --</option>
                                                         <option ng-repeat="priority in priorities"
                                                                 value="{{priority._id}}">{{priority.priority_name}}
                                                         </option>

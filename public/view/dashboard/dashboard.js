@@ -16,7 +16,7 @@ angular.module('PGapp.dashboard', ['ngRoute','ngAnimate', 'ngCookies'])
     $location.path('login');
   }
   var userdetail = $cookies.getObject('userDetails');
-  API.SFacilities.Recent(userdetail.user, function (res) {
+  API.Facilities.Recent(userdetail.user, function (res) {
     if (res.Code == 200) {
       $scope.facilities = res.Info.facilities;
       $cookies.putObject('facilities', res.Info.facilities);

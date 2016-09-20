@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('PGapp.equipmentlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
+angular.module('PGapp.partsequipmentlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
     .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/equipments', {
-            templateUrl: 'view/equipmentlist/equipmentlist.html',
-            controller: 'EquipmentListCtrl'
+        $routeProvider.when('/partsequipmentlist', {
+            templateUrl: 'view/partsequipmentlist/partsequipmentlist.html',
+            controller: 'PartsequipmentListCtrl'
         });
     }])
 
-    .controller('EquipmentListCtrl', ["$scope", "$cookies", "$location", "$filter", 'API', function ($scope, $cookies, $location, $filter, API) {
+    .controller('PartsequipmentListCtrl', ["$scope", "$cookies", "$location", "$filter", 'API', function ($scope, $cookies, $location, $filter, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
@@ -38,13 +38,12 @@ angular.module('PGapp.equipmentlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.showFacility = function (facility_number) {
             var facilities_numbers = "";
             var facility_length = facility_number.length;
-
             for (var faci in facility_number) {
                 var found = $filter('getByFacilityNumber')('facility_number', facility_number[faci].facility_number, facilities);
                 if (angular.isUndefined(found) || found === null) {
                     facilities_numbers = facilities_numbers
                 } else {
-                    if (facility_length - 1 <= faci) {
+                    if (facility_length - 1 < faci) {
                         facilities_numbers = facilities_numbers + found.facility_name;
                     } else {
                         facilities_numbers = facilities_numbers + found.facility_name + ", ";

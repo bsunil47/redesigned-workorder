@@ -31,6 +31,8 @@ var Priority = mongoose.model('Collection_Priority');
 var Skill = mongoose.model('Collection_Skills');
 var Status = mongoose.model('Collection_Status');
 var PM = mongoose.model('Collection_PM_Task');
+var PartsRequest = mongoose.model('Collection_PartRequest');
+var counters = mongoose.model('counter');
 
 router.post('/', function(req, res, next) {
 
@@ -166,96 +168,103 @@ router.post('/create_workorder', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var date = new Date();
-        var workOrder = new WorkOrder({
-            workorder_number: req.body.workorder_number + "-" + count,
-            workorder_creator: req.body.creator,
-            workorder_description: req.body.workorder_description,
-            workorder_facility: req.body.workorder_facility,
-            workorder_category: req.body.workorder_category,
-            workorder_equipment: req.body.workorder_equipment,
-            workorder_priority: req.body.workorder_priority,
-            created_on: new Date(),
-            status: 1
-        });
-        workOrder.save(function (err, resp) {
+        counters.increment('workorder_number', function (err, result) {
             if (err) {
-                console.log(err);
-                res.json({
-                    Code: 499,
-                    message: err,
-                });
-            } else {
-                var facility, category, equipment, priority;
-                Facility.findOne({facility_number: req.body.workorder_facility}, function (err, facility) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    Category.findOne({_id: req.body.workorder_category}, function (err, category) {
+                console.error('Counter on photo save error: ' + err);
+                return;
+            }
+            var date = new Date();
+            var workOrder = new WorkOrder({
+                workorder_number: result.seq,
+                workorder_creator: req.body.creator,
+                workorder_description: req.body.workorder_description,
+                workorder_facility: req.body.workorder_facility,
+                workorder_category: req.body.workorder_category,
+                workorder_equipment: req.body.workorder_equipment,
+                workorder_priority: req.body.workorder_priority,
+                created_on: new Date().valueOf(),
+                status: 1
+            });
+            workOrder.save(function (err, resp) {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        Code: 499,
+                        message: err,
+                    });
+                } else {
+                    var facility, category, equipment, priority;
+                    Facility.findOne({facility_number: req.body.workorder_facility}, function (err, facility) {
                         if (err) {
                             console.log(err);
                         }
-                        Equipment.findOne({_id: req.body.workorder_equipment}, function (err, equipment) {
+                        Category.findOne({_id: req.body.workorder_category}, function (err, category) {
                             if (err) {
                                 console.log(err);
                             }
-                            Priority.findOne({_id: req.body.workorder_priority}, function (err, priority) {
+                            Equipment.findOne({_id: req.body.workorder_equipment}, function (err, equipment) {
                                 if (err) {
                                     console.log(err);
                                 }
-                                if (req.body.workorder_facility == 'US51') {
-                                    var mail_to = '"Arun" <pgmanager7@gmail.com>';
-                                } else {
-                                    var mail_to = '"Eshwar" <pgmanager7@gmail.com>';
-                                }
-                                var mailData = {
-                                    // Comma separated list of recipients
-                                    to: mail_to,
-                                    // Subject of the message
-                                    subject: 'New Maintenance Work Order number ' + req.body.workorder_number + "-" + count + ' has been submited for your approval', //
-
-                                    // plaintext body
-                                    //text: 'Hello to sunil',
-
-                                    // HTML body
-                                    html: '<p>New Maintenace Work Order number <b>' + req.body.workorder_number + "-" + count + '</b> has been submited for your approval</p>'
-                                    +
-                                    '<p><b>Work Order Details</b></p>'
-                                    +
-                                    '<p><b>Work Order Number</b>: ' + req.body.workorder_number + "-" + count + '</p>'
-                                    +
-                                    '<p><b>Work Order Date</b>: ' + date + '</p>'
-                                    +
-                                    '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
-                                    +
-                                    '<p><b>Category</b>: ' + category.category_name + '</p>'
-                                    +
-                                    '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
-                                    +
-                                    '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
-                                    +
-                                    '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
-                                    +
-                                    '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
-
-                                };
-                                transporter.sendMail(mailData, function (err, info) {
+                                Priority.findOne({_id: req.body.workorder_priority}, function (err, priority) {
                                     if (err) {
                                         console.log(err);
                                     }
-                                    console.log('Message sent successfully!');
-                                    console.log(info);
+                                    if (req.body.workorder_facility == 'US51') {
+                                        var mail_to = '"Arun" <pgmanager7@gmail.com>';
+                                    } else {
+                                        var mail_to = '"Eshwar" <pgmanager7@gmail.com>';
+                                    }
+                                    var mailData = {
+                                        // Comma separated list of recipients
+                                        to: mail_to,
+                                        // Subject of the message
+                                        subject: 'New Maintenance Work Order number ' + req.body.workorder_number + "-" + count + ' has been submited for your approval', //
+
+                                        // plaintext body
+                                        //text: 'Hello to sunil',
+
+                                        // HTML body
+                                        html: '<p>New Maintenace Work Order number <b>' + req.body.workorder_number + "-" + count + '</b> has been submited for your approval</p>'
+                                        +
+                                        '<p><b>Work Order Details</b></p>'
+                                        +
+                                        '<p><b>Work Order Number</b>: ' + req.body.workorder_number + "-" + count + '</p>'
+                                        +
+                                        '<p><b>Work Order Date</b>: ' + date + '</p>'
+                                        +
+                                        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+                                        +
+                                        '<p><b>Category</b>: ' + category.category_name + '</p>'
+                                        +
+                                        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+                                        +
+                                        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+                                        +
+                                        '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
+                                        +
+                                        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+
+                                    };
+                                    transporter.sendMail(mailData, function (err, info) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        console.log('Message sent successfully!');
+                                        console.log(info);
+
+                                    });
 
                                 });
-
                             });
                         });
                     });
-                });
 
-                res.json({Code: 200, Info: 'sucessfull'});
-            }
+                    res.json({Code: 200, Info: {msg: 'sucessfull', workorder_number: result.seq}});
+                }
+            });
         });
+
     })
 });
 
@@ -365,7 +374,7 @@ router.post('/classes', function (req, res, next) {
     });
 });
 
-router.post('/create_equipment', function (req, res, next) {
+/*router.post('/create_equipment', function (req, res, next) {
     Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
         if (err) {
             return next(err);
@@ -374,7 +383,6 @@ router.post('/create_equipment', function (req, res, next) {
             facility_number: req.body.facility_number,
             equipment_name: req.body.equipment_name,
             equipment_number: req.body.equipment_number,
-            equipment_vendorname: req.body.equipment_vendorname,
             status: 1
         });
         equipment.save(function (err, resp) {
@@ -389,6 +397,53 @@ router.post('/create_equipment', function (req, res, next) {
             }
         });
     })
+ });*/
+router.post('/create_equipment', function (req, res, next) {
+    Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
+        if (err) {
+            return next(err);
+        }
+
+        var equipment = new Equipment({
+            facilities: {facility_number: req.body.facility_number},
+            equipment_name: req.body.equipment_name,
+            equipment_number: req.body.equipment_number,
+            //equipment_vendorname: req.body.equipment_vendorname,
+            status: 1
+        });
+        var upsertData = equipment.toObject();
+
+        Equipment.count({
+            equipment_number: req.body.equipment_number,
+            equipment_name: req.body.equipment_name,
+            facilities: {facility_number: req.body.facility_number}
+        }, function (err, count) {
+            if (count) {
+                res.json({Code: 200, Info: 'Document already exists'});
+            }
+            else {
+                Equipment.update({equipment_number: req.body.equipment_number}, equipment, {upsert: true}, function (err, resp) {
+                    console.log("Session1: " + JSON.stringify(err));
+                    if (err) {
+                        Equipment.update({equipment_number: req.body.equipment_number}, {$push: {"facilities": {facility_number: req.body.facility_number}}}, function (err, resp) {
+                            if (err) {
+                                console.log(err);
+
+                                res.json({
+                                    Code: 499,
+                                    message: err,
+                                });
+                            } else {
+                                res.json({Code: 200, Info: 'sucessfull in if'});
+                            }
+                        });
+                    } else {
+                        res.json({Code: 200, Info: 'sucessfull'});
+                    }
+                });
+            }
+        });
+    });
 });
 router.post('/equipments', function (req, res, next) {
     Equipment.find({}, function (err, equipments) {
@@ -399,7 +454,7 @@ router.post('/equipments', function (req, res, next) {
         if (equipments != null) {
             res.json({Code: 200, Info: {equipments: equipments}});
         } else {
-            res.json({Code: 406, Info: 'no class'});
+            res.json({Code: 406, Info: 'no equipments'});
         }
     });
 });
@@ -556,6 +611,114 @@ router.post('/status_list', function (req, res, next) {
     });
 });
 
+router.post('/createparts', function (req, res, next) {
+    Equipment.findOne({
+        equipment_name: req.body.equipment_name,
+        equipment_number: req.body.equipment_number
+    }, function (err, facility) {
+        if (err) {
+            return next(err);
+        }
+
+        var pequipments = new Equipment({
+            equipment_name: req.body.equipment_name,
+            equipment_number: req.body.equipment_number,
+            material_number: req.body.part_number,
+            material_description: req.body.part_name,
+            vendor_number: req.body.vendor_number,
+            vendor_name: req.body.vendor_name,
+            min_qty: req.body.min_qty,
+            max_qty: req.body.max_qty,
+            //equipment_vendorname: req.body.equipment_vendorname,
+            status: 1
+        });
+        var upsertData = pequipments.toObject();
+
+        Equipment.count({
+            equipment_number: req.body.equipment_number, equipment_name: req.body.equipment_name, equipments: {
+                material_number: req.body.part_number,
+                material_description: req.body.part_name,
+                vendor_number: req.body.vendor_number,
+                vendor_name: req.body.vendor_name,
+                min_qty: req.body.min_qty,
+                max_qty: req.body.max_qty
+            }
+        }, function (err, count) {
+            if (count) {
+                res.json({Code: 200, Info: 'Document already exists'});
+            }
+            else {
+                Equipment.update({equipment_number: req.body.equipment_number}, pequipments, {upsert: true}, function (err, resp) {
+                    console.log("Session1: " + JSON.stringify(err));
+                    if (err) {
+                        Equipment.update({equipment_number: req.body.equipment_number}, {
+                            $push: {
+                                "equipments": {
+                                    material_number: req.body.part_number,
+                                    material_description: req.body.part_name,
+                                    vendor_number: req.body.vendor_number,
+                                    vendor_name: req.body.vendor_name,
+                                    min_qty: req.body.min_qty,
+                                    max_qty: req.body.max_qty
+                                }
+                            }
+                        }, function (err, resp) {
+                            if (err) {
+                                console.log(err);
+
+                                res.json({
+                                    Code: 499,
+                                    message: err,
+                                });
+                            } else {
+                                res.json({Code: 200, Info: 'sucessfull in if'});
+                            }
+                        });
+                    } else {
+                        res.json({Code: 200, Info: 'sucessfull'});
+                    }
+                });
+            }
+        });
+    });
+});
+
+router.post('/create_part_request', function (req, res, next) {
+    var partRequest = new PartsRequest(req.body);
+    partRequest.save(function (er) {
+        if (er) {
+            res.json({
+                Code: 499,
+                message: 'issue with content',
+            });
+        }
+        res.json({Code: 200, Info: 'sucessfull'});
+
+    })
+});
+
+router.post('/partsequipments', function (req, res, next) {
+    Equipment.find({}, {_id: 0, equipment_number: 1, equipment_name: 1}, function (err, partsequipments) {
+        if (err) {
+            return next(err)
+        }
+        // var partsequipments_obj = [];
+        // for (var pe in partsequipments) {
+        //             partsequipments_obj.push(partsequipments[pe].equipment_number + ":" +  partsequipments[pe].equipment_name);
+        //         }
+        // console.log("partsequipments_obj: "+ JSON.stringify(partsequipments_obj));
+        // console.log("partsequipments_obj_0: "+ JSON.stringify(partsequipments_obj[0]));
+        // console.log("partsequipments_obj_1: "+ JSON.stringify(partsequipments_obj[1]));
+        if (partsequipments != null) {
+            res.json({Code: 200, Info: {partsequipments: partsequipments}});
+            //res.json({Code: 200, Info: {partsequipments: partsequipments_obj}});
+
+        } else {
+            res.json({Code: 406, Info: 'no class'});
+        }
+    });
+});
+
 router.post('/search_facilities', function (req, res, next) {
     Facility.find(
         {
@@ -651,7 +814,11 @@ router.post('/manager_workorder', function (req, res, next) {
                     if (role.role_name == 'technician') {
                         query.workorder_technician = req.body._id;
                     }
-                    WorkOrder.find(query, function (err, workorders) {
+                    WorkOrder.find(query, {}, {
+                        sort: {
+                            _id: -1 //Sort by Date Added DESC
+                        }
+                    }, function (err, workorders) {
                         if (err) {
                             return next(err)
                         }
@@ -725,13 +892,13 @@ router.post('/search_status', function (req, res, next) {
 router.post('/get_users_type', function (req, res, next) {
     Facility.findOne({
         facility_number: req.body.facility_number
-
     }, function (err, facility) {
 
         if (err) {
             return next(err)
         }
         if (facility != null) {
+            console.log(facility);
             var fusers = facility.facility_users;
             var user_ids = [];
             for (var user_key in fusers) {
@@ -789,7 +956,6 @@ router.post('/get_user', function (req, res, next) {
 });
 router.post('/update_workorder', function (req, res, next) {
     var requestedArray = req.body;
-    console.log(req.body);
     if (req.body.wo_pm_frequency > 0) {
         var pmNumber;
         requestedArray.workorder_PM = pmNumber = 'PM-' + new Date().valueOf() + "-" + req.body.user_id;
@@ -810,16 +976,23 @@ router.post('/update_workorder', function (req, res, next) {
             status: 1
         };
         var where = {pm_number: pm_task.pm_number};
+        requestedArray.workorder_number = parseInt(req.body.workorder_number);
+        if (requestedArray.wo_datecomplete == 'NaN') {
+            delete requestedArray['wo_datecomplete'];
+        }
         PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
             if (err) {
-                console.log(err)
+                console.log(err);
             }
-            ;
-            updateWorkOrder({'workorder_number': req.body.workorder_number}, requestedArray, req, res);
+            updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
         });
     } else {
+        requestedArray.workorder_number = parseInt(req.body.workorder_number);
+        if (requestedArray.wo_datecomplete == 'NaN') {
+            delete requestedArray['wo_datecomplete'];
+        }
         console.log('no pm');
-        updateWorkOrder({'workorder_number': req.body.workorder_number}, requestedArray, req, res);
+        updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
     }
 
 
@@ -934,6 +1107,7 @@ var SendMail = function (req) {
     });
 }
 var updateWorkOrder = function (query, requestedArray, req, res) {
+    console.log(requestedArray);
     //delete requestedArray['user_id'];
     delete requestedArray['wo_pm_frequency'];
     delete requestedArray['wo_pm_date'];
@@ -946,5 +1120,16 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
     });
 }
 
+function getNextSequence(name) {
+    counters.increment
+    var ret = counters.findAndModify(
+        {
+            query: {_id: name},
+            update: {$inc: {seq: 1}},
+            new: true
+        }
+    );
 
+    return ret.seq;
+}
 module.exports = router;
