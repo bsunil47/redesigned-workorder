@@ -223,13 +223,13 @@
                             <div class="form-group" ng-hide="showTechnician">
                                 <label class="col-sm-2 control-label">Action Taken:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" rows="5"></textarea>
+                                    <textarea class="form-control" rows="2"></textarea>
                                 </div>
                             </div>
                             <div class="text-center clearfix">
                                 <p>
                                     <button type="submit" class="btn btn-primary" ng-click="CreateWorkOrder()"
-                                            ng-disabled="CreateWorkOrderForm.workorder_description.$dirty && CreateWorkOrderForm.workorder_description.$invalid">
+                                            ng-disabled="CreateWorkOrderForm.workorder_description.$dirty && CreateWorkOrderForm.workorder_description.$invalid && CreateWorkOrderForm.workorder_category.$invalid && CreateWorkOrderForm.workorder_priority.$invalid && CreateWorkOrderForm.workorder_equipment.$invalid">
                                         Save
                                     </button>
                                     <button type="button" class="btn btn-primary">Print</button>
