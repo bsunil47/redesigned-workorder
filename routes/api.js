@@ -210,11 +210,15 @@ router.post('/create_workorder', function (req, res, next) {
                                     if (err) {
                                         console.log(err);
                                     }
-                                    if (req.body.workorder_facility == 'US51') {
-                                        var mail_to = '"Arun" <pgmanager7@gmail.com>';
-                                    } else {
-                                        var mail_to = '"Eshwar" <pgmanager7@gmail.com>';
+                                    var facility_namagers = facility.facility_managers;
+                                    var manager_email = "";
+                                    for (var man in facility_namagers) {
+                                        if (typeof facility_namagers[man].email !== 'undefined') {
+                                            manager_email += facility_namagers[man].email + ", ";
+                                        }
                                     }
+                                    var mail_to = manager_email;
+
                                     var mailData = {
                                         // Comma separated list of recipients
                                         to: mail_to,
@@ -1047,12 +1051,20 @@ var SendMail = function (req) {
                             if (err) {
                                 console.log(err);
                             }
+                            var facility_namagers = facility.facility_managers;
+                            var manager_email = "";
+                            for (var man in facility_namagers) {
+                                if (typeof facility_namagers[man].email !== 'undefined') {
+                                    manager_email += facility_namagers[man].email + ", ";
+                                }
+                            }
+                            console.log(manager_email);
                             if (role.role_name == 'clerk') {
-                                var mail_to = '"Arun" <pgmanager7@gmail.com>, "Technician" <pgtechnician@gmail.com>';
+                                var mail_to = manager_email + '<pgtechnician@gmail.com>';
                                 var last_message = ' parts received';
                             } else {
                                 if (role.role_name == 'technician') {
-                                    var mail_to = '"Arun" <pgmanager7@gmail.com>';
+                                    var mail_to = manager_email;
                                     if (req.body.status == 1) {
                                         var last_message = ' has been updated';
                                     } else {

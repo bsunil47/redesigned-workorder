@@ -197,10 +197,11 @@
                                         <div class="col-sm-7">
                                             <select required class="form-control" ng-disabled="disableSkill"
                                                     ng-model="workOrder.workorder_skill"
-                                                    name="workorder_skill"
-                                                    ng-options='skill._id as skill.skill_name for skill in skills'
-                                                    ng-change="selectAction()">
+                                                    name="workorder_skill" required>
                                                 <option value="">-- Select One --</option>
+                                                <option ng-repeat="skill in skills" value="{{skill._id}}">
+                                                    {{skill.skill_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
@@ -212,6 +213,7 @@
                                                     name="workorder_technician"
                                                     ng-options='technician._id as technician.username for technician in technicians'
                                                     ng-change="selectAction()"
+                                                    required
                                             >
                                                 <option value="">-- Select One --</option>
                                             </select>
@@ -235,7 +237,7 @@
                                                     ng-model="workOrder.workorder_class"
                                                     name="workorder_class"
                                                     ng-options='class._id as class.class_name for class in classes'
-                                                    ng-change="selectAction()">
+                                                    ng-change="selectAction()" required>
                                                 <option value="">-- Select One --</option>
                                             </select>
                                         </div>
@@ -244,6 +246,7 @@
                                         <label class="col-sm-5 control-label">PM Task: #</label>
                                         <div class="col-sm-7">
                                             <input type="hidden" class="form-control" ng-model="workOrder.pm_task"
+                                                   required
                                             >
                                             <input type="text" class="form-control" required
                                                    ng-readonly="readOnlyPMTask" ng-model="workOrder.wo_pm_number"
@@ -301,8 +304,7 @@
                                             && EditWorkOrderForm.workorder_description.$invalid
                                             && EditWorkOrderForm.workorder_skill.$invalid
                                             && EditWorkOrderForm.workorder_class.$invalid
-                                            && EditWorkOrderForm.workorder_technician.$invalid
-                                    ">
+                                            && EditWorkOrderForm.workorder_technician.$invalid">
                                         Save
                                     </button>
                                     <button type="button" class="btn btn-primary">Print</button>
