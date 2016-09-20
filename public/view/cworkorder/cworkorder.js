@@ -48,7 +48,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
     $scope.disableEquipment = false;
     $scope.disablePriority = false;
     $scope.workOrder.creator = userdetail.user._id;
-    $scope.requestor_name = userdetail.user.firstname;
+    $scope.requestor_name = userdetail.user.firstname + " " + userdetail.user.lastname;
     $scope.workorder_number = "WO-" + new Date().valueOf() + "-XX";
     $scope.workOrder.workorder_number = "WO-" + new Date().valueOf();
     var currentDt = new Date();
@@ -96,7 +96,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             if (res.Code == 200) {
 
               $scope.categories = res.Info.categories;
-              $scope.workOrder.workorder_category = $scope.categories[0]._id;
+              $scope.workOrder.workorder_category = "";
               //$cookies.put('userDetails',res)
             } else {
 
@@ -109,7 +109,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             if (res.Code == 200) {
 
               $scope.equipments = res.Info.equipments;
-              $scope.workOrder.workorder_equipment = $scope.equipments[0]._id;
+              $scope.workOrder.workorder_equipment = "";
               //$cookies.put('userDetails',res)
             } else {
 
@@ -122,7 +122,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             if (res.Code == 200) {
 
               $scope.priorities = res.Info.priorities;
-              $scope.workOrder.workorder_priority = $scope.priorities[0]._id;
+              $scope.workOrder.workorder_priority = "";
               //$cookies.put('userDetails',res)
             } else {
 

@@ -37,6 +37,19 @@ angular.module('PGapp.sorders', ['ngRoute','ngAnimate', 'ngCookies'])
   var userdetail = $cookies.getObject('userDetails');
       $scope.facilities = $cookies.getObject('facilities');
       $scope.selected_facility = $scope.facilities[0].facility_number;
+        API.Equipments.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.allequipments = res.Info.equipments;
+
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
   API.ManageWorkorders.Recent(userdetail.user, function (res) {
     if (res.Code == 200) {
 
@@ -186,12 +199,34 @@ angular.module('PGapp.sorders', ['ngRoute','ngAnimate', 'ngCookies'])
             return $filter('setPadZeros')(Order, 8);
         }
 
+
+        var status_list;
+        API.Status.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                status_list = res.Info.status_list;
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
+
       $scope.showEquipment = function (equipment) {
-        console.log(equipment);
-        var found = $filter('getByFacilityNumber')('_id', equipment, $scope.equipments);
+          var found = $filter('getByFacilityNumber')('_id', equipment, $scope.allequipments);
         if (angular.isUndefined(found) || found === null) {
           return null;
         }
         return found.equipment_name;
       }
+        $scope.showStatus = function (status_number) {
+            var found = $filter('getByFacilityNumber')('status_number', status_number, status_list);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            return found.status_name;
+        }
+
 }]);
