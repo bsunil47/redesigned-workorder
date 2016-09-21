@@ -1084,7 +1084,7 @@ var SendMail = function (req) {
                                 } else {
                                     Users.findOne({_id: req.body.workorder_technician}, function (err, tech) {
                                         var mail_to = tech.email;
-                                        var last_message = ' has been updated';
+                                        var last_message = ' has been assgined';
                                         send(mail_to, last_message, req, facility, category, equipment, priority);
                                     });
                                     
