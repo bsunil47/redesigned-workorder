@@ -218,6 +218,7 @@ router.post('/create_workorder', function (req, res, next) {
                                         }
                                     }
                                     var mail_to = manager_email;
+                                    var mail_to = 'pgmanager7@gmail.com';
 
                                     var mailData = {
                                         // Comma separated list of recipients
@@ -1058,6 +1059,7 @@ var SendMail = function (req) {
                                     manager_email += facility_namagers[man].email + ", ";
                                 }
                             }
+                            manager_email = "pgmanager7@gmail.com,";
                             console.log(manager_email);
                             if (role.role_name == 'clerk') {
                                 var mail_to = manager_email + '<pgtechnician@gmail.com>';
