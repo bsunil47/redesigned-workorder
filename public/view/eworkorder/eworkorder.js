@@ -324,7 +324,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                       confirmButtonText: 'Ok'
                   });
               } else {
-                  if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
+                  //console.log($scope.EditWorkOrderForm.$valid);
+                  if ($scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
                       var data_post = $scope.workOrder;
                       if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                           data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
