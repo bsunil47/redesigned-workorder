@@ -162,7 +162,7 @@ var createWorkOrder = function (task) {
                                             manager_email += facility_namagers[man].email + ", ";
                                         }
                                     }
-                                    manager_email = "pgmanager7@gmail.com,";
+                                    //manager_email = "pgmanager7@gmail.com,";
                                     var mail_to = manager_email;
                                     var mailData = {
                                         // Comma separated list of recipients
