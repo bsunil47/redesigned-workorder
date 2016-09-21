@@ -1065,7 +1065,7 @@ var SendMail = function (req) {
                                 Users.findOne({_id: req.body.workorder_technician}, function (err, tech) {
                                     var mail_to = manager_email + tech.email;
                                     var last_message = ' parts received';
-                                    send((mail_to, last_message, req, facility, category, equipment , priority));
+                                    send(mail_to, last_message, req, facility, category, equipment, priority);
                                 });
                                 
                             } else {
@@ -1080,13 +1080,13 @@ var SendMail = function (req) {
                                             var last_message = ' has been on hold';
                                         }
                                     }
-                                    send((mail_to, last_message, req, facility, category, equipment , priority));
+                                    send(mail_to, last_message, req, facility, category, equipment, priority);
                                 } else {
                                     Users.findOne({_id: req.body.workorder_technician}, function (err, tech) {
                                         var mail_to = tech.email;
                                         var last_message = ' has been updated';
-                                        send((mail_to, last_message, req, facility, category, equipment , priority));
-                                    })
+                                        send(mail_to, last_message, req, facility, category, equipment, priority);
+                                    });
                                     
                                 }
 
