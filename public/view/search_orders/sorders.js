@@ -228,5 +228,13 @@ angular.module('PGapp.sorders', ['ngRoute','ngAnimate', 'ngCookies'])
             }
             return found.status_name;
         }
+        $scope.showEdit = function (status) {
+            console.log(status);
+            if (status == 2 && userdetail.role == 'technician') {
+                return false;
+            } else {
+                return true;
+            }
+        }
 
 }]);

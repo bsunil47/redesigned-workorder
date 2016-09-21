@@ -28,7 +28,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         workorder_class: "",
         wo_goodsreceipt: "",
         wo_equipmentcost: "",
-        wo_timespent: 0,
+          wo_timespent: "00:00",
         wo_datecomplete: "",
         workorder_description: "",
         workorder_leadcomments: "",
@@ -54,11 +54,18 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
       $scope.readOnlyPMTask = true;
       $scope.readOnlyNextPMDate = true;
       $scope.readOnlyFrequency = true;
+        $scope.reqPMTask = false;
+        $scope.reqCost = false;
+        $scope.reqDateComplete = false;
+        $scope.reqTimeSpent = false;
   if(userdetail.role == 'technician') {
     $scope.showTechnician = false;
     $scope.disableEquipmentCost = false;
     $scope.disableTimeSpent = false;
     $scope.disableDateCompleted = false;
+      $scope.reqCost = true;
+      $scope.reqDateComplete = true;
+      $scope.reqTimeSpent = true;
   }
 
       if (userdetail.role == 'manager') {
@@ -84,8 +91,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         if (res.Code == 200) {
 
           $scope.workOrder = res.Info.workorder;
+            if ($scope.workOrder.status == 2) {
+                $scope.reqPMTask = true;
+            }
             $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
-            console.log($scope.workOrder.workorder_number);
 
             var currentDt = new Date(parseInt($scope.workOrder.created_on));
             var mm = currentDt.getMonth() + 1;
@@ -358,5 +367,13 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 return null;
             }
             return found.firstname;
+        }
+
+        $scope.showTimeChange = function () {
+            if ($scope.workOrder.wo_timespent === "00:00") {
+                console.log('asd')
+                $scope.workOrder.wo_timespent = 'undefined';
+            }
+            console.log($scope.workOrder.wo_timespent);
         }
 }]);

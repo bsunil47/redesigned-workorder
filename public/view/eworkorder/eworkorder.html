@@ -140,10 +140,10 @@
                                             <div class="form-group">
                                                 <label class="col-sm-5 control-label">Equipment Cost:</label>
                                                 <div class="col-sm-7">
-                                                    <input type="text" class="form-control"
+                                                    <input type="number" class="form-control"
                                                            ng-disabled="disableEquipmentCost"
                                                            ng-model="workOrder.wo_equipmentcost"
-                                                           name="wo_equipmentcost">
+                                                           name="wo_equipmentcost" ng-required="reqCost">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -154,10 +154,13 @@
                                                            ng-model="workOrder.wo_timespent"
                                                            name="wo_timespent" bs-timepicker data-time-format="HH:mm"
                                                            data-length="1" data-minute-step="15"
-                                                           placeholder="HH:mm"
+                                                           placeholder="hh:mm"
+                                                           data-min-time="00:15"
                                                            data-autoclose="1"
+                                                           ng-change="showTimeChange()"
                                                            data-time-type="string"
-                                                           data-arrow-behavior="picker" type="text">
+                                                           data-arrow-behavior="picker" type="text"
+                                                           ng-required="reqTimeSpent">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -167,7 +170,7 @@
                                                            data-date-format="MM/dd/yyyy"
                                                            ng-model="workOrder.wo_datecomplete" name="wo_datecomplete"
                                                            type="text" data-min-date="{{minDate}}" data-max-date="today"
-                                                           bs-datepicker/>
+                                                           bs-datepicker ng-required="reqDateComplete"/>
                                                     <!--<md-content layout-padding>
                                                         <div layout-gt-xs="row">
                                                             <div flex-gt-xs>
@@ -248,7 +251,7 @@
                                             <input type="hidden" class="form-control" ng-model="workOrder.pm_task"
                                                    required
                                             >
-                                            <input type="text" class="form-control" required
+                                            <input type="text" class="form-control" ng-required="reqPMTask"
                                                    ng-readonly="readOnlyPMTask" ng-model="workOrder.wo_pm_number"
                                                    name="wo_pm_number">
                                         </div>

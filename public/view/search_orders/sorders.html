@@ -283,7 +283,8 @@
                                     <td>{{showEquipment(workorder.workorder_equipment)}}</td>
                                     <td>{{showStatus(workorder.status)}}</td>
                                     <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(workorder.workorder_number)"></i>
+                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(workorder.workorder_number)"
+                                           ng-show="showEdit(workorder.status)"></i>
                                     </td>
                                 </tr>
                                 </tbody>
