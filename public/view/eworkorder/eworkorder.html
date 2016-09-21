@@ -169,7 +169,7 @@
                                                     <input ng-disabled="disableDateCompleted" class="form-control"
                                                            data-date-format="MM/dd/yyyy"
                                                            ng-model="workOrder.wo_datecomplete" name="wo_datecomplete"
-                                                           type="text" data-min-date="{{minDate}}" data-max-date="today"
+                                                           type="date"
                                                            bs-datepicker ng-required="reqDateComplete"/>
                                                     <!--<md-content layout-padding>
                                                         <div layout-gt-xs="row">
@@ -198,7 +198,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Skill:</label>
                                         <div class="col-sm-7">
-                                            <select required class="form-control" ng-disabled="disableSkill"
+                                            <select class="form-control" ng-disabled="disableSkill"
                                                     ng-model="workOrder.workorder_skill"
                                                     name="workorder_skill" required>
                                                 <option value="">-- Select One --</option>
@@ -249,8 +249,7 @@
                                         <label class="col-sm-5 control-label">PM Task: #</label>
                                         <div class="col-sm-7">
                                             <input type="hidden" class="form-control" ng-model="workOrder.pm_task"
-                                                   required
-                                            >
+                                                   name="pm_task"/>
                                             <input type="text" class="form-control" ng-required="reqPMTask"
                                                    ng-readonly="readOnlyPMTask" ng-model="workOrder.wo_pm_number"
                                                    name="wo_pm_number">

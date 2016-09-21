@@ -37,6 +37,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
           pm_task: 0,
         status: 1
       };
+        $scope.today = new Date();
+        $scope.minDate = new Date();
   $scope.workOrderTitle = "Edit Work Order";
   $scope.showTechnician = false;
   $scope.disableFacility = true;
@@ -324,8 +326,22 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                       confirmButtonText: 'Ok'
                   });
               } else {
-                  //console.log($scope.EditWorkOrderForm.$valid);
-                  if ($scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
+                  console.log($scope.reqDateComplete);
+                  if (angular.isUndefined($scope.workOrder.wo_datecomplete)) {
+                      //$scope.workOrder.wo_datecomplete = new Date();
+                  }
+
+                  /*.EditWorkOrderForm.wo_datecomplete.$error.date = true;
+                   $scope.EditWorkOrderForm.wo_datecomplete.$error.min = true;
+                   $scope.EditWorkOrderForm.wo_datecomplete.$error.max = true;
+                   $scope.EditWorkOrderForm.wo_datecomplete.$valid = true;
+                   if(!$scope.EditWorkOrderForm.wo_datecomplete.$valid){
+                   //$scope.EditWorkOrderForm.$valid = true;
+                   }*/
+
+                  console.log($scope.EditWorkOrderForm);
+                  console.log($scope.EditWorkOrderForm.$valid);
+                  if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
                       var data_post = $scope.workOrder;
                       if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                           data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
