@@ -1025,8 +1025,7 @@ router.post('/get_pm_task', function (req, res, next) {
 });
 
 
-
-var SendMail = function (req) {
+var SendMail = function (req, it_pm_workorder) {
     Facility.findOne({facility_number: req.body.workorder_facility}, function (err, facility) {
         if (err) {
             console.log(err);
@@ -1082,11 +1081,14 @@ var SendMail = function (req) {
                                     }
                                     send(mail_to, last_message, req, facility, category, equipment, priority);
                                 } else {
-                                    Users.findOne({_id: req.body.workorder_technician}, function (err, tech) {
-                                        var mail_to = tech.email;
-                                        var last_message = ' has been assgined';
-                                        send(mail_to, last_message, req, facility, category, equipment, priority);
-                                    });
+                                    if (it_pm_workorder != 1 && req.body.status != 2) {
+                                        Users.findOne({_id: req.body.workorder_technician}, function (err, tech) {
+                                            var mail_to = tech.email;
+                                            var last_message = ' has been assgined';
+                                            send(mail_to, last_message, req, facility, category, equipment, priority);
+                                        });
+                                    }
+
                                     
                                 }
 
@@ -1142,13 +1144,18 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
 }
 var updateWorkOrder = function (query, requestedArray, req, res) {
     //delete requestedArray['user_id'];
+    if (requestedArray.wo_pm_frequency != "") {
+        var it_pm_workorder = 1;
+    } else {
+        var it_pm_workorder = 0;
+    }
     delete requestedArray['wo_pm_frequency'];
     delete requestedArray['wo_pm_date'];
     delete requestedArray['wo_pm_previous_date'];
     delete requestedArray['__v'];
     WorkOrder.findOneAndUpdate(query, requestedArray, {upsert: false}, function (err, doc) {
         if (err) return res.json(500, {error: err});
-        SendMail(req);
+        SendMail(req, it_pm_workorder);
         res.json({Code: 200, Info: "succesfully saved"});
     });
 }

@@ -60,6 +60,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         $scope.reqCost = false;
         $scope.reqDateComplete = false;
         $scope.reqTimeSpent = false;
+        $scope.reqActionTaken = false;
   if(userdetail.role == 'technician') {
     $scope.showTechnician = false;
     $scope.disableEquipmentCost = false;
@@ -68,6 +69,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
       $scope.reqCost = true;
       $scope.reqDateComplete = true;
       $scope.reqTimeSpent = true;
+      $scope.reqActionTaken = true;
   }
 
       if (userdetail.role == 'manager') {

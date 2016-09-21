@@ -188,6 +188,9 @@ angular.module('PGapp.sorders', ['ngRoute','ngAnimate', 'ngCookies'])
   $scope.editWorkOrder = function (workorder_id) {
     $location.path('edit_workorder/'+workorder_id);
   };
+        $scope.viewWorkOrder = function (workorder_id) {
+            $location.path('view_workorder/' + workorder_id);
+        };
   $scope.Logout = function () {
       $cookies.remove('userDetails');
     $location.path("/");
