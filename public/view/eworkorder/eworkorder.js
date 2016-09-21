@@ -94,6 +94,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             if ($scope.workOrder.status == 2) {
                 $scope.reqPMTask = true;
             }
+            if (!angular.isUndefined($scope.workOrder.wo_equipmentcost)) {
+                console.log($scope.workOrder.wo_equipmentcost)
+                $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
+            }
             $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
 
             var currentDt = new Date(parseInt($scope.workOrder.created_on));
