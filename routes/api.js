@@ -971,7 +971,7 @@ router.post('/update_workorder', function (req, res, next) {
     var requestedArray = req.body;
     if (req.body.wo_pm_frequency > 0 && requestedArray.workorder_PM != "") {
         var pmNumber;
-        requestedArray.workorder_PM = pmNumber = 'PM-' + new Date().valueOf() + "-" + req.body.user_id;
+        requestedArray.workorder_PM = pmNumber = req.body.wo_pm_number;
         if (req.body.pm_task == 1) {
             requestedArray.workorder_PM = pmNumber = req.body.wo_pm_number;
         }
