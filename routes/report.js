@@ -47,7 +47,7 @@ router.post('/', function (req, res, next) {
             wo_timespent: {$exists: true, $not: {$size: 0}},
             wo_datecomplete: {
                 '$gte': req.body.wo_datefrom,
-                '$lt': req.body.wo_dateto
+                '$lte': req.body.wo_dateto
             }
         }
     }
@@ -137,7 +137,7 @@ router.post('/report_category', function (req, res, next) {
             status: 2,
             wo_datecomplete: {
                 '$gte': req.body.wo_datefrom,
-                '$lt': req.body.wo_dateto
+                '$lte': req.body.wo_dateto
 
             }
         }
