@@ -1078,21 +1078,47 @@ router.post('/get_search_wo', function (req, res, next) {
         delete query['wo_datecomplete_from'];
     }
     if (typeof req.body.wo_pm_date_from !== "undefined") {
-        console.log('pmdate');
-        WorkOrder.find(req.body, {}, {
-            sort: {
-                _id: -1 //Sort by Date Added DESC
-            }
-        }, function (err, workOrders) {
+        var pMquery = {};
+        if (typeof req.body.wo_pm_date_to === "undefined") {
+            var created_on = new Date().valueOf();
+        } else {
+            var created_on = new Date(req.body.wo_datecomplete_to).valueOf();
+            delete query['wo_pm_date_to'];
+        }
+        pMquery.pm_next_date = {
+            '$gte': new Date(req.body.wo_pm_date_from).valueOf(),
+            '$lt': parseInt(created_on)
+        };
+        delete query['wo_pm_date_from'];
+        PM.find(pMquery, function (err, pm) {
             if (err) {
                 return next(err)
             }
-            if (workOrders != null) {
-                res.json({Code: 200, Info: {workorders: workOrders}});
-            } else {
-                res.json({Code: 406, Info: 'No Users'});
+            var pm_list = [];
+            for (var ky in pm) {
+                console.log(pm[ky]);
+                pm_list.push(pm[ky].pm_number)
             }
+            query.workorder_PM = {$in: pm_list};
+            console.log('pmdate');
+            console.log(query);
+            WorkOrder.find(query, {}, {
+                sort: {
+                    _id: -1 //Sort by Date Added DESC
+                }
+            }, function (err, workOrders) {
+                if (err) {
+                    return next(err)
+                }
+                if (workOrders != null) {
+                    res.json({Code: 200, Info: {workorders: workOrders}});
+                } else {
+                    res.json({Code: 406, Info: 'No Users'});
+                }
+            });
         });
+
+
     } else {
         console.log(query);
         WorkOrder.find(query, {}, {

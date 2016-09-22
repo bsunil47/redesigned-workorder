@@ -239,7 +239,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }
 
         $scope.clearForm = function () {
-            $scope.workOrder = null;
+            $scope.workOrder = {};
         }
 
         function isNullOrEmptyOrUndefined(value) {
