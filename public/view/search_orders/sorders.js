@@ -232,12 +232,8 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 }, function (error) {
                     alert(error);
                 });
-
             }
-
-
         }
-
         $scope.clearForm = function () {
             $scope.workOrder = {};
         }
