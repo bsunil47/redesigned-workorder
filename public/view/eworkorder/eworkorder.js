@@ -112,16 +112,35 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             var date = mm + '/' + dd + '/' + yyyy;
             $scope.workOrder.created_on = date;
             if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
+
                 $scope.workOrder.wo_datecomplete = new Date(parseInt($scope.workOrder.wo_datecomplete));
-                $scope.maxDate = new Date(
+                var currentDt = new Date();
+                console.log($scope.workOrder.wo_datecomplete);
+                $scope.maxDate = new Date();
+                $scope.minDate = new Date(
                     $scope.workOrder.wo_datecomplete.getFullYear(),
                     $scope.workOrder.wo_datecomplete.getMonth(),
                     $scope.workOrder.wo_datecomplete.getDate());
+
+                $scope.maxDate = new Date(
+                    currentDt.getFullYear(),
+                    currentDt.getMonth(),
+                    currentDt.getDate());
+            } else {
+                var currentDt = new Date();
+                if (userdetail.role == 'technician') {
+                    $scope.workOrder.wo_datecomplete = new Date(currentDt.getFullYear(),
+                        currentDt.getMonth(),
+                        currentDt.getDate());
+                    var currentDt = new Date();
+                    $scope.maxDate = new Date(currentDt.getFullYear(),
+                        currentDt.getMonth(),
+                        currentDt.getDate());
+                }
+
             }
-            $scope.minDate = new Date(
-                currentDt.getFullYear(),
-                currentDt.getMonth(),
-                currentDt.getDate());
+
+
             $scope.selected_facility = $scope.workOrder.workorder_facility;
             API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
                 if (res.Code == 200) {
@@ -346,7 +365,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                   if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
                       var data_post = $scope.workOrder;
                       if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
-                          data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
+                          // data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
                       }
                       //data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
                       data_post.created_on = new Date(data_post.created_on).valueOf();

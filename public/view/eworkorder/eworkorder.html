@@ -166,24 +166,27 @@
                                             <div class="form-group">
                                                 <label class="col-sm-5 control-label">Date Completed:</label>
                                                 <div class="col-sm-7">
-                                                    <input ng-disabled="disableDateCompleted" class="form-control"
+                                                    <!--<input ng-disabled="disableDateCompleted" class="form-control"
                                                            data-date-format="MM/dd/yyyy"
                                                            ng-model="workOrder.wo_datecomplete" name="wo_datecomplete"
                                                            type="text"
-                                                           bs-datepicker ng-required="reqDateComplete"/>
-                                                    <!--<md-content layout-padding>
+                                                           bs-datepicker ng-required="reqDateComplete"/>-->
+                                                    <md-content layout-padding>
                                                         <div layout-gt-xs="row">
                                                             <div flex-gt-xs>
                                                                 <md-datepicker name="wo_datecomplete"
+                                                                               ng-required="reqDateComplete"
+
+                                                                               ng-disabled="disableDateCompleted"
                                                                                md-min-date="minDate"
                                                                                md-max-date="maxDate"
                                                                                ng-model="workOrder.wo_datecomplete"
                                                                                md-placeholder="Enter date"
-                                                                               ng-disabled="disableDateCompleted"></md-datepicker>
+                                                                ></md-datepicker>
                                                             </div>
 
                                                         </div>
-                                                    </md-content>-->
+                                                    </md-content>
 
                                                     <!--<input type="text" class="form-control"
                                                            ng-disabled="disableDateCompleted"
