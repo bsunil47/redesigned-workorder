@@ -1059,7 +1059,7 @@ router.post('/get_search_wo', function (req, res, next) {
         }
         query.created_on = {
             '$gte': new Date(req.body.created_on_from).valueOf(),
-            '$lt': parseInt(created_on)
+            '$lte': parseInt(created_on)
 
         };
         delete query['created_on_from'];
@@ -1073,7 +1073,7 @@ router.post('/get_search_wo', function (req, res, next) {
         }
         query.created_on = {
             '$gte': new Date(req.body.wo_datecomplete_from).valueOf(),
-            '$lt': parseInt(created_on)
+            '$lte': parseInt(created_on)
         };
         delete query['wo_datecomplete_from'];
     }
@@ -1087,7 +1087,7 @@ router.post('/get_search_wo', function (req, res, next) {
         }
         pMquery.pm_next_date = {
             '$gte': new Date(req.body.wo_pm_date_from).valueOf(),
-            '$lt': parseInt(created_on)
+            '$lte': parseInt(created_on)
         };
         delete query['wo_pm_date_from'];
         PM.find(pMquery, function (err, pm) {
