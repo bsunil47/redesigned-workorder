@@ -1023,6 +1023,47 @@ router.post('/get_pm_task', function (req, res, next) {
         }
     });
 });
+router.post('/get_role', function (req, res, next) {
+    Roles.findOne(req.body, function (err, user_role) {
+        if (err) {
+            return next(err)
+        }
+        if (user_role != null) {
+            res.json({Code: 200, Info: {user_role: user_role}});
+        } else {
+            res.json({Code: 406, Info: 'No User Role'});
+        }
+    });
+});
+router.post('/get_users', function (req, res, next) {
+    Users.find(req.body, function (err, users) {
+        if (err) {
+            return next(err)
+        }
+        if (users != null) {
+            res.json({Code: 200, Info: {users: users}});
+        } else {
+            res.json({Code: 406, Info: 'No Users'});
+        }
+    });
+});
+
+router.post('/get_search_wo', function (req, res, next) {
+    WorkOrder.find(req.body, {}, {
+        sort: {
+            _id: -1 //Sort by Date Added DESC
+        }
+    }, function (err, workOrders) {
+        if (err) {
+            return next(err)
+        }
+        if (workOrders != null) {
+            res.json({Code: 200, Info: {workorders: workOrders}});
+        } else {
+            res.json({Code: 406, Info: 'No Users'});
+        }
+    });
+});
 
 
 var SendMail = function (req, it_pm_workorder) {
