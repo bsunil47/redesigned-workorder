@@ -1049,20 +1049,68 @@ router.post('/get_users', function (req, res, next) {
 });
 
 router.post('/get_search_wo', function (req, res, next) {
-    WorkOrder.find(req.body, {}, {
-        sort: {
-            _id: -1 //Sort by Date Added DESC
-        }
-    }, function (err, workOrders) {
-        if (err) {
-            return next(err)
-        }
-        if (workOrders != null) {
-            res.json({Code: 200, Info: {workorders: workOrders}});
+    var query = req.body;
+    if (typeof req.body.created_on_from !== "undefined") {
+        if (typeof req.body.created_on_to === "undefined") {
+            var created_on = new Date().valueOf();
         } else {
-            res.json({Code: 406, Info: 'No Users'});
+            var created_on = new Date(req.body.created_on_to).valueOf();
+            delete query['created_on_to'];
         }
-    });
+        query.created_on = {
+            '$gte': new Date(req.body.created_on_from).valueOf(),
+            '$lt': parseInt(created_on)
+
+        };
+        delete query['created_on_from'];
+    }
+    if (typeof req.body.wo_datecomplete_from !== "undefined") {
+        if (typeof req.body.wo_datecomplete_to === "undefined") {
+            var created_on = new Date().valueOf();
+        } else {
+            var created_on = new Date(req.body.wo_datecomplete_to).valueOf();
+            delete query['wo_datecomplete_to'];
+        }
+        query.created_on = {
+            '$gte': new Date(req.body.wo_datecomplete_from).valueOf(),
+            '$lt': parseInt(created_on)
+        };
+        delete query['wo_datecomplete_from'];
+    }
+    if (typeof req.body.wo_pm_date_from !== "undefined") {
+        console.log('pmdate');
+        WorkOrder.find(req.body, {}, {
+            sort: {
+                _id: -1 //Sort by Date Added DESC
+            }
+        }, function (err, workOrders) {
+            if (err) {
+                return next(err)
+            }
+            if (workOrders != null) {
+                res.json({Code: 200, Info: {workorders: workOrders}});
+            } else {
+                res.json({Code: 406, Info: 'No Users'});
+            }
+        });
+    } else {
+        console.log(query);
+        WorkOrder.find(query, {}, {
+            sort: {
+                _id: -1 //Sort by Date Added DESC
+            }
+        }, function (err, workOrders) {
+            if (err) {
+                return next(err)
+            }
+            if (workOrders != null) {
+                res.json({Code: 200, Info: {workorders: workOrders}});
+            } else {
+                res.json({Code: 406, Info: 'No Users'});
+            }
+        });
+    }
+
 });
 
 
