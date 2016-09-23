@@ -264,4 +264,17 @@ input[type="number"]::-webkit-inner-spin-button {
     height: 65px;
 }
 
+.timepicker.dropdown-menu {
+    padding: 0 4px;
+}
+
+.timepicker.dropdown-menu button {
+    outline: none;
+    border: 0px;
+}
+
+.timepicker.dropdown-menu tbody button {
+    padding: 6px;
+}
+
 /*# sourceMappingURL=style.css.map */

@@ -31,7 +31,8 @@ var PGapp = angular.module('PGapp', [
   'PGapp.searchclosedreport',
   'PGapp.partsequipmentlist',
   'PGapp.createparts',
-  'PGapp.vworkorder'
+  'PGapp.vworkorder',
+  'PGapp.searchpmtask'
 
 ]);
 PGapp.
