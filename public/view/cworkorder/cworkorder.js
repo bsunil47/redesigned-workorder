@@ -92,7 +92,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
           $scope.selected_facility = $scope.facilities[0].facility_number;
           $scope.selected_facility = $scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
           $cookies.putObject('facilities', res.Info.facilities);
-          API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
+          API.SCategory.Recent({facility_number: $scope.selected_facility, operator_available: true}, function (res) {
             if (res.Code == 200) {
 
               $scope.categories = res.Info.categories;
@@ -144,7 +144,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
 
   function CreateWorkOrder() {
-    if ($scope.CreateWorkOrderForm.workorder_description.$valid) {
+    if ($scope.CreateWorkOrderForm.workorder_description.$valid && $scope.CreateWorkOrderForm.workorder_category.$valid && $scope.CreateWorkOrderForm.workorder_equipment.$valid && $scope.CreateWorkOrderForm.workorder_priority.$valid) {
       var data_post = $scope.workOrder;
       data_post.created_on = new Date(data_post.created_on).valueOf();
       $scope.user_id = API.CreateWorkOrder.save(data_post, function (res) {

@@ -81,7 +81,7 @@
                                             <div class="form-group">
                                                 <label class="col-sm-5 control-label">Facility:</label>
                                                 <div class="col-sm-7">
-                                                    <select class="form-control" ng-disabled="disableFacility"
+                                                    <select class="form-control" ng-disabled="true"
                                                             readonly="readonly"
                                                             ng-model="workOrder.workorder_facility"
                                                             name="workorder_facility"
@@ -92,7 +92,7 @@
                                             <div class="form-group">
                                                 <label class="col-sm-5 control-label">Category:</label>
                                                 <div class="col-sm-7">
-                                                    <select class="form-control" ng-disabled="disableCategory"
+                                                    <select class="form-control" ng-disabled="true"
                                                             ng-model="workOrder.workorder_category"
                                                             name="workorder_category"
                                                             ng-options='category._id as category.category_name for category in categories'>
@@ -103,7 +103,7 @@
                                             <div class="form-group">
                                                 <label class="col-sm-5 control-label">Equipment:</label>
                                                 <div class="col-sm-7">
-                                                    <select class="form-control" ng-disabled="disableEquipment"
+                                                    <select class="form-control" ng-disabled="true"
                                                             ng-model="workOrder.workorder_equipment"
                                                             name="workorder_equipment">
                                                         <option ng-repeat="equipment in equipments"
@@ -115,7 +115,7 @@
                                             <div class="form-group">
                                                 <label class="col-sm-5 control-label">Priority:</label>
                                                 <div class="col-sm-7">
-                                                    <select class="form-control" ng-disabled="disablePriority"
+                                                    <select class="form-control" ng-disabled="true"
                                                             ng-model="workOrder.workorder_priority"
                                                             name="workorder_priority">
                                                         <option ng-repeat="priority in priorities"
@@ -128,7 +128,7 @@
                                         <div class="col-sm-6" ng-hide="showTechnician">
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <div class="checkbox" >
+                                                    <div class="checkbox">
                                                         <label ng-show="showClerk">
                                                             <input type="checkbox" ng-show="showClerk"
                                                                    ng-model="workOrder.wo_goodsreceipt"
@@ -141,7 +141,7 @@
                                                 <label class="col-sm-5 control-label">Equipment Cost:</label>
                                                 <div class="col-sm-7">
                                                     <input type="number" class="form-control"
-                                                           ng-disabled="disableEquipmentCost"
+                                                           ng-readonly="true"
                                                            ng-model="workOrder.wo_equipmentcost"
                                                            name="wo_equipmentcost" ng-required="reqCost">
                                                 </div>
@@ -150,7 +150,7 @@
                                                 <label class="col-sm-5 control-label">Time Spent:</label>
                                                 <div class="col-sm-7">
                                                     <input type="text" class="form-control"
-                                                           ng-disabled="disableTimeSpent"
+                                                           ng-disabled="true"
                                                            ng-model="workOrder.wo_timespent"
                                                            name="wo_timespent" bs-timepicker data-time-format="HH:mm"
                                                            data-length="1" data-minute-step="15"
@@ -166,27 +166,24 @@
                                             <div class="form-group">
                                                 <label class="col-sm-5 control-label">Date Completed:</label>
                                                 <div class="col-sm-7">
-                                                    <!--<input ng-disabled="disableDateCompleted" class="form-control"
+                                                    <input ng-disabled="true" class="form-control"
                                                            data-date-format="MM/dd/yyyy"
                                                            ng-model="workOrder.wo_datecomplete" name="wo_datecomplete"
                                                            type="text"
-                                                           bs-datepicker ng-required="reqDateComplete"/>-->
-                                                    <md-content layout-padding>
+                                                           bs-datepicker ng-required="reqDateComplete"/>
+                                                    <!--<md-content layout-padding>
                                                         <div layout-gt-xs="row">
                                                             <div flex-gt-xs>
                                                                 <md-datepicker name="wo_datecomplete"
-                                                                               ng-required="reqDateComplete"
-
-                                                                               ng-disabled="disableDateCompleted"
                                                                                md-min-date="minDate"
                                                                                md-max-date="maxDate"
                                                                                ng-model="workOrder.wo_datecomplete"
                                                                                md-placeholder="Enter date"
-                                                                ></md-datepicker>
+                                                                               ng-disabled="disableDateCompleted"></md-datepicker>
                                                             </div>
 
                                                         </div>
-                                                    </md-content>
+                                                    </md-content>-->
 
                                                     <!--<input type="text" class="form-control"
                                                            ng-disabled="disableDateCompleted"
@@ -201,7 +198,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Skill:</label>
                                         <div class="col-sm-7">
-                                            <select class="form-control" ng-disabled="disableSkill"
+                                            <select class="form-control" ng-disabled="true"
                                                     ng-model="workOrder.workorder_skill"
                                                     name="workorder_skill" required>
                                                 <option value="">-- Select One --</option>
@@ -214,7 +211,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Technician:</label>
                                         <div class="col-sm-7">
-                                            <select required class="form-control" ng-disabled="disableTechnician"
+                                            <select required class="form-control" ng-disabled="true"
                                                     ng-model="workOrder.workorder_technician"
                                                     name="workorder_technician"
                                                     ng-options='technician._id as technician.username for technician in technicians'
@@ -228,7 +225,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Status:</label>
                                         <div class="col-sm-7">
-                                            <select required class="form-control" ng-model="workOrder.status"
+                                            <select ng-disabled="true" class="form-control" ng-model="workOrder.status"
                                                     name="status"
                                                     ng-options='status.status_number as status.status_name for status in statuses'
                                                     ng-change="selectAction()">
@@ -239,7 +236,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-5 control-label">Class:</label>
                                         <div class="col-sm-7">
-                                            <select required class="form-control" ng-disabled="disableClass"
+                                            <select required class="form-control" ng-disabled="true"
                                                     ng-model="workOrder.workorder_class"
                                                     name="workorder_class"
                                                     ng-options='class._id as class.class_name for class in classes'
@@ -255,7 +252,7 @@
                                                    name="pm_task"/>
                                             <input type="text" class="form-control" ng-required="reqPMTask"
                                                    ng-readonly="readOnlyPMTask" ng-model="workOrder.wo_pm_number"
-                                                   name="wo_pm_number">
+                                                   name="wo_pm_number" ng-disabled="true">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -263,7 +260,7 @@
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control" ng-model="workOrder.wo_pm_date"
                                                    name="wo_pm_date"
-                                                   ng-readonly="readOnlyNextPMDate">
+                                                   ng-readonly="true">
                                             <input type="hidden" class="form-control"
                                                    ng-model="workOrder.wo_pm_previous_date"
                                                    name="wo_pm_previous_date"
@@ -275,6 +272,7 @@
                                         <div class="col-sm-7">
                                             <input id="Number" type="number" min="0" max="365" step="1"
                                                    class="form-control" ng-model="workOrder.wo_pm_frequency"
+                                                   ng-disabled="true"
                                                    name="wo_pm_frequency"
                                                    value="0" ng-readonly="readOnlyFrequency" ng-change="pgWorkOrder()">
                                         </div>
@@ -285,35 +283,27 @@
                                 <label class="col-sm-2 control-label">Description of Issue:</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" rows="2" ng-model="workOrder.workorder_description"
-                                              name="workorder_description" ng-readonly="accessManager"></textarea>
+                                              name="workorder_description" ng-readonly="true"></textarea>
                                 </div>
                             </div>
                             <div class="form-group" ng-hide="showTechnician">
                                 <label class="col-sm-2 control-label">Supervisor Comments:</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" ng-model="workOrder.workorder_leadcomments"
-                                           name="workorder_leadcomments" ng-readonly="accessManager">
+                                           name="workorder_leadcomments" ng-readonly="true">
                                 </div>
                             </div>
                             <div class="form-group" ng-hide="showTechnician">
                                 <label class="col-sm-2 control-label">Action Taken:</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" rows="2" ng-model="workOrder.workorder_actiontaken"
-                                              name="workorder_actiontaken" ng-required="reqActionTaken"></textarea>
+                                              name="workorder_actiontaken" ng-required="reqActionTaken"
+                                              readonly="true"></textarea>
                                 </div>
                             </div>
                             <div class="text-center clearfix">
-                                <p>
-                                    <button type="submit" class="btn btn-primary" ng-click="updateWorkOrder()"
-                                            ng-disabled="EditWorkOrderForm.workorder_description.$dirty
-                                            && EditWorkOrderForm.workorder_description.$invalid
-                                            && EditWorkOrderForm.workorder_skill.$invalid
-                                            && EditWorkOrderForm.workorder_class.$invalid
-                                            && EditWorkOrderForm.workorder_technician.$invalid">
-                                        Save
-                                    </button>
-                                    <button type="button" class="btn btn-primary">Print</button>
-                                </p>
+                                <button type="button" class="btn btn-primary">Print</button>
+
                             </div>
                         </form>
                         <!-- Edit work order form end -->
@@ -329,7 +319,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="site-copy-rights clearfix">&copy; <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All Rights Reserved.</div>
+                    <div class="site-copy-rights clearfix">&copy;
+                        <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All
+                        Rights Reserved.
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 // Declare app level module which depends on views, and components
 var PGapp = angular.module('PGapp', [
   'ngRoute',
-  'ngAnimate', 'ngCookies', 'ngResource', 'ngAria', 'ngMaterial', 'dnTimepicker',
+  'ngAnimate', 'ngCookies', 'ngResource', 'ngAria', 'ngMaterial', 'dnTimepicker', 'mgcrea.ngStrap',
   'PGapp.login',
   'PGapp.dashboard',
   'PGapp.cworkorder',
@@ -30,7 +30,8 @@ var PGapp = angular.module('PGapp', [
   'PGapp.searchreporthour',
   'PGapp.searchclosedreport',
   'PGapp.partsequipmentlist',
-  'PGapp.createparts'
+  'PGapp.createparts',
+  'PGapp.vworkorder'
 
 ]);
 PGapp.

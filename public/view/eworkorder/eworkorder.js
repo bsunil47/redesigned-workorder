@@ -28,7 +28,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         workorder_class: "",
         wo_goodsreceipt: "",
         wo_equipmentcost: "",
-        wo_timespent: 0,
+          wo_timespent: "00:00",
         wo_datecomplete: "",
         workorder_description: "",
         workorder_leadcomments: "",
@@ -37,6 +37,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
           pm_task: 0,
         status: 1
       };
+        $scope.today = new Date();
+        $scope.minDate = new Date();
   $scope.workOrderTitle = "Edit Work Order";
   $scope.showTechnician = false;
   $scope.disableFacility = true;
@@ -47,17 +49,27 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
   $scope.disableTimeSpent = true;
   $scope.disableDateCompleted = true;
   $scope.showClerk = false;
+        $scope.accessManager = true;
       $scope.disableSkill = true;
       $scope.disableTechnician = true;
       $scope.disableClass = true;
       $scope.readOnlyPMTask = true;
       $scope.readOnlyNextPMDate = true;
       $scope.readOnlyFrequency = true;
+        $scope.reqPMTask = false;
+        $scope.reqCost = false;
+        $scope.reqDateComplete = false;
+        $scope.reqTimeSpent = false;
+        $scope.reqActionTaken = false;
   if(userdetail.role == 'technician') {
     $scope.showTechnician = false;
     $scope.disableEquipmentCost = false;
     $scope.disableTimeSpent = false;
     $scope.disableDateCompleted = false;
+      $scope.reqCost = true;
+      $scope.reqDateComplete = true;
+      $scope.reqTimeSpent = true;
+      $scope.reqActionTaken = true;
   }
 
       if (userdetail.role == 'manager') {
@@ -72,6 +84,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         $scope.disableCategory = false;
         $scope.disableEquipment = false;
         $scope.disablePriority = false;
+          $scope.accessManager = false;
+
       }
 
   if(userdetail.role == 'clerk') {
@@ -81,8 +95,14 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         if (res.Code == 200) {
 
           $scope.workOrder = res.Info.workorder;
+            if ($scope.workOrder.status == 2) {
+                $scope.reqPMTask = true;
+            }
+            if (!angular.isUndefined($scope.workOrder.wo_equipmentcost)) {
+                console.log($scope.workOrder.wo_equipmentcost)
+                $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
+            }
             $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
-            console.log($scope.workOrder.workorder_number);
 
             var currentDt = new Date(parseInt($scope.workOrder.created_on));
             var mm = currentDt.getMonth() + 1;
@@ -92,16 +112,35 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             var date = mm + '/' + dd + '/' + yyyy;
             $scope.workOrder.created_on = date;
             if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
+
                 $scope.workOrder.wo_datecomplete = new Date(parseInt($scope.workOrder.wo_datecomplete));
-                $scope.maxDate = new Date(
+                var currentDt = new Date();
+                console.log($scope.workOrder.wo_datecomplete);
+                $scope.maxDate = new Date();
+                $scope.minDate = new Date(
                     $scope.workOrder.wo_datecomplete.getFullYear(),
                     $scope.workOrder.wo_datecomplete.getMonth(),
                     $scope.workOrder.wo_datecomplete.getDate());
+
+                $scope.maxDate = new Date(
+                    currentDt.getFullYear(),
+                    currentDt.getMonth(),
+                    currentDt.getDate());
+            } else {
+                var currentDt = new Date();
+                if (userdetail.role == 'technician') {
+                    $scope.workOrder.wo_datecomplete = new Date(currentDt.getFullYear(),
+                        currentDt.getMonth(),
+                        currentDt.getDate());
+                    var currentDt = new Date();
+                    $scope.maxDate = new Date(currentDt.getFullYear(),
+                        currentDt.getMonth(),
+                        currentDt.getDate());
+                }
+
             }
-            $scope.minDate = new Date(
-                currentDt.getFullYear(),
-                currentDt.getMonth(),
-                currentDt.getDate());
+
+
             $scope.selected_facility = $scope.workOrder.workorder_facility;
             API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
                 if (res.Code == 200) {
@@ -214,7 +253,9 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
           }, function (error) {
             alert(error);
           });
+            $scope.pmTaskAlreadySet = true;
             if ($scope.workOrder.wo_pm_number != "") {
+                $scope.pmTaskAlreadySet = false;
                 API.GetPMTask.Recent({pm_number: $scope.workOrder.workorder_PM}, function (res) {
                     if (res.Code == 200) {
                         var currentDt = new Date(res.Info.pm_task.pm_previous_date);
@@ -224,7 +265,13 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                         var yyyy = currentDt.getFullYear();
                         var date = mm + '/' + dd + '/' + yyyy;
                         $scope.workOrder.wo_pm_previous_date = date;
-                        $scope.workOrder.wo_pm_date = res.Info.pm_task.pm_next_date;
+                        var wo_pm_date = new Date(parseInt(res.Info.pm_task.pm_next_date));
+                        var mm = wo_pm_date.getMonth() + 1;
+                        mm = (mm < 10) ? '0' + mm : mm;
+                        var dd = wo_pm_date.getDate();
+                        var yyyy = wo_pm_date.getFullYear();
+                        var date = mm + '/' + dd + '/' + yyyy;
+                        $scope.workOrder.wo_pm_date = date;
                         $scope.workOrder.wo_pm_frequency = res.Info.pm_task.pm_frequency;
                         $scope.workOrder.wo_pm_number = res.Info.pm_task.pm_number;
                         $scope.workOrder.pm_task = 1;
@@ -273,13 +320,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 var yyyy = currentDt.getFullYear();
                 var date = mm + '/' + dd + '/' + yyyy;
                 $scope.workOrder.wo_pm_date = date;
-                $scope.workOrder.wo_pm_number = 'PM-{date-string}' + "-XX"
             } else {
                 $scope.workOrder.wo_pm_date = "";
-                if ($scope.workOrder.pm_task == 0) {
-                    $scope.workOrder.wo_pm_number = "";
-                }
-
             }
 
         }
@@ -296,59 +338,151 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         console.log($scope.workOrder.status);
 
         console.log($scope.workOrder);
-          var data_post = $scope.workOrder;
-          if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
-              data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
-          }
-          //data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
-          data_post.created_on = new Date(data_post.created_on).valueOf();
-          data_post.user_id = userdetail.user._id;
-
-          API.UpdateWorkOrder.Recent(data_post, function (res) {
-              if (res.Code == 200) {
-                  //$scope.categories = res.Info.categories;
-                  //$scope.workOrder.workorder_category = $scope.categories[0]._id;
-                  //$cookies.put('userDetails',res);
-                  if (userdetail.role == 'technician') {
-                      var msg = "WorkOrder has been updated and an email has been sent to manager.";
-                  } else {
-                      if (userdetail.role == 'manager') {
-                          var msg = "WorkOrder assigned to " + $scope.showtechnician($scope.workOrder.workorder_technician) + " an email has been sent.";
-                      } else {
-                          var msg = "WorkOrder parts recived, an email has been sent to " + $scope.showtechnician($scope.workOrder.workorder_technician) + ".";
-                      }
-                  }
+          API.GetPMTask.Recent({pm_number: $scope.workOrder.workorder_PM}, function (res) {
+              if (res.Code == 200 && $scope.pmTaskAlreadySet) {
                   swal({
                       title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                      text: msg,
+                      text: 'PM Task already in use',
                       width: "450px",
                       confirmButtonText: 'Ok'
                   });
-                  $location.path("/search_workorder");
               } else {
+                  console.log($scope.reqDateComplete);
+                  if (angular.isUndefined($scope.workOrder.wo_datecomplete)) {
+                      //$scope.workOrder.wo_datecomplete = new Date();
+                  }
+
+                  /*.EditWorkOrderForm.wo_datecomplete.$error.date = true;
+                   $scope.EditWorkOrderForm.wo_datecomplete.$error.min = true;
+                   $scope.EditWorkOrderForm.wo_datecomplete.$error.max = true;
+                   $scope.EditWorkOrderForm.wo_datecomplete.$valid = true;
+                   if(!$scope.EditWorkOrderForm.wo_datecomplete.$valid){
+                   //$scope.EditWorkOrderForm.$valid = true;
+                   }*/
+
+                  console.log($scope.EditWorkOrderForm);
+                  console.log($scope.EditWorkOrderForm.$valid);
+                  if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
+                      var data_post = $scope.workOrder;
+                      if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
+                          // data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
+                      }
+                      //data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
+                      data_post.created_on = new Date(data_post.created_on).valueOf();
+                      data_post.user_id = userdetail.user._id;
+
+                      API.UpdateWorkOrder.Recent(data_post, function (res) {
+                          if (res.Code == 200) {
+
+                              //$scope.categories = res.Info.categories;
+                              //$scope.workOrder.workorder_category = $scope.categories[0]._id;
+                              //$cookies.put('userDetails',res);
+                              if (userdetail.role == 'technician') {
+                                  var msg = "WorkOrder has been updated and an email has been sent to manager.";
+                              } else {
+                                  if (userdetail.role == 'manager') {
+                                      var msg = "WorkOrder assigned to " + $scope.showtechnician($scope.workOrder.workorder_technician) + " an email has been sent.";
+                                  } else {
+                                      var msg = "WorkOrder parts recived, an email has been sent to " + $scope.showtechnician($scope.workOrder.workorder_technician) + ".";
+                                  }
+                              }
+                              swal({
+                                  title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                                  text: msg,
+                                  width: "450px",
+                                  confirmButtonText: 'Ok'
+                              });
+                              $location.path("/search_workorder");
+                          } else {
+                              swal({
+                                  title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                                  text: "WorkOrder has'nt been updated",
+                                  width: "450px",
+                                  confirmButtonText: 'Ok'
+                              });
+                          }
+
+                      }, function (error) {
+                          swal({
+                              title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                              text: "Oop's.. Something went worng.. Try again later",
+                              width: "450px",
+                              confirmButtonText: 'Ok'
+                          });
+                      });
+                  }
+
+              }
+          }, function (error) {
+              alert(error);
+          });
+          /*
+          if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
+              var data_post = $scope.workOrder;
+              if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
+                  data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
+              }
+              //data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
+              data_post.created_on = new Date(data_post.created_on).valueOf();
+              data_post.user_id = userdetail.user._id;
+
+              API.UpdateWorkOrder.Recent(data_post, function (res) {
+                  if (res.Code == 200) {
+                      //$scope.categories = res.Info.categories;
+                      //$scope.workOrder.workorder_category = $scope.categories[0]._id;
+                      //$cookies.put('userDetails',res);
+                      if (userdetail.role == 'technician') {
+                          var msg = "WorkOrder has been updated and an email has been sent to manager.";
+                      } else {
+                          if (userdetail.role == 'manager') {
+                              var msg = "WorkOrder assigned to " + $scope.showtechnician($scope.workOrder.workorder_technician) + " an email has been sent.";
+                          } else {
+                              var msg = "WorkOrder parts recived, an email has been sent to " + $scope.showtechnician($scope.workOrder.workorder_technician) + ".";
+                          }
+                      }
+                      swal({
+                          title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                          text: msg,
+                          width: "450px",
+                          confirmButtonText: 'Ok'
+                      });
+                      $location.path("/search_workorder");
+                  } else {
+                      swal({
+                          title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                          text: "WorkOrder has'nt been updated",
+                          width: "450px",
+                          confirmButtonText: 'Ok'
+                      });
+                  }
+
+              }, function (error) {
                   swal({
                       title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                      text: "WorkOrder has'nt been updated",
+                      text: "Oop's.. Something went worng.. Try again later",
                       width: "450px",
                       confirmButtonText: 'Ok'
                   });
-              }
-
-          }, function (error) {
-              swal({
-                  title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                  text: "Oop's.. Something went worng.. Try again later",
-                  width: "450px",
-                  confirmButtonText: 'Ok'
               });
-          });
-
-          $scope.showtechnician = function (technicain) {
-              var found = $filter('getByFacilityNumber')('_id', technicain, $scope.technicians);
-              if (angular.isUndefined(found) || found === null) {
-                  return null;
-              }
-              return found.firstname;
           }
-  }
+           */
+
+
+      }
+
+        $scope.showtechnician = function (technicain) {
+            var found = $filter('getByFacilityNumber')('_id', technicain, $scope.technicians);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            return found.firstname;
+        }
+
+        $scope.showTimeChange = function () {
+            if ($scope.workOrder.wo_timespent === "00:00") {
+                console.log('asd')
+                $scope.workOrder.wo_timespent = 'undefined';
+            }
+            console.log($scope.workOrder.wo_timespent);
+        }
 }]);

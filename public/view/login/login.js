@@ -22,9 +22,13 @@ angular.module('PGapp.login', ['ngRoute','ngAnimate', 'ngCookies'])
         if($scope.loginForm.username.$valid && $scope.loginForm.password.$valid){
             $scope.user_id = API.Login.login($scope.user,function(res){
                 if(res.Code == 200){
-                    var expireDate = new Date();
-                    expireDate.setDate(expireDate.getDate() + 1);
-                    $cookies.putObject('userDetails',res.Info,{'expires': expireDate});
+                    var now = new Date();
+                    var time = now.getTime();
+                    time += 3600 * 1000;
+                    now.setTime(time);
+                    /*var expireDate = new Date();
+                     expireDate.setDate(expireDate.getDate() + 1);*/
+                    $cookies.putObject('userDetails', res.Info, {'expires': now});
                     $location.path('dashboard');
                     //$cookies.put('userDetails',res)
                 }else {

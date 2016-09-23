@@ -123,6 +123,15 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         CreatePartsRequest: $resource(url + 'api/create_part_request', {}, {
             Recent: post_set
         }),
+        UserRole: $resource(url + 'api/get_role', {}, {
+            Recent: post_set
+        }),
+        GetUsers: $resource(url + 'api/get_users', {}, {
+            Recent: post_set
+        }),
+        GetSearchedWorkOrders: $resource(url + 'api/get_search_wo', {}, {
+            Recent: post_set
+        }),
 
 
 

@@ -17,6 +17,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var api = require('./routes/api');
 var report = require('./routes/report');
+var cron = require('./routes/cron');
 
 var app = express();
 
