@@ -8,6 +8,7 @@ var Collection_PartRequestSchema = new mongoose.Schema({
     material_number: {type: String, required: true},
     qty: {type: Number, required: true},
     workorder_number: String,
+    status: {type: Number, default: 1},
     created_on: Date,
     update_on: Date
 });

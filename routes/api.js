@@ -102,7 +102,6 @@ router.post('/createuser', function(req, res, next) {
           message: 'Already used',
         });
       } else {
-
           var query = {facility_number: req.body.facility};
           if (req.body.userrole == 'manager' || req.body.userrole == 'admin') {
               Facility.update(query, {
@@ -693,12 +692,14 @@ router.post('/createparts', function (req, res, next) {
 });
 
 router.post('/create_part_request', function (req, res, next) {
-    var partRequest = new PartsRequest(req.body);
+    var in_qry = req.body;
+    in_qry.status = 1;
+    var partRequest = new PartsRequest(in_qry);
     partRequest.save(function (er) {
         if (er) {
             res.json({
                 Code: 499,
-                message: 'issue with content',
+                message: 'issue with content'
             });
         }
         res.json({Code: 200, Info: 'sucessfull'});
@@ -829,21 +830,59 @@ router.post('/manager_workorder', function (req, res, next) {
                     if (role.role_name == 'technician') {
                         query.workorder_technician = req.body._id;
                     }
-                    WorkOrder.find(query, {}, {
-                        sort: {
-                            _id: -1 //Sort by Date Added DESC
-                        }
-                    }, function (err, workorders) {
-                        if (err) {
-                            return next(err)
-                        }
-                        if (workorders != null) {
-                            res.json({Code: 200, Info: {workorders: workorders}});
-                        } else {
-                            res.json({Code: 406, Info: 'no workorders'});
-                        }
+                    if (role.role_name == 'clerk') {
+                        //query.workorder_technician = req.body._id;
+                        PartsRequest.find({
+                            status: 1,
+                            workorder_number: {$exists: true}
+                        }, function (error, partrequest) {
+                            if (error) {
+                                return next(err);
+                            }
 
-                    });
+                            if (partrequest != null) {
+                                var list_workorders = [];
+                                for (var ky in partrequest) {
+                                    list_workorders.push(partrequest[ky].workorder_number);
+                                }
+                                query = {
+                                    workorder_number: {$in: list_workorders}
+                                };
+                                console.log(query);
+                                WorkOrder.find(query, {}, {
+                                    sort: {
+                                        _id: -1 //Sort by Date Added DESC
+                                    }
+                                }, function (err, workorders) {
+                                    if (err) {
+                                        return next(err)
+                                    }
+                                    if (workorders != null) {
+                                        res.json({Code: 200, Info: {workorders: workorders}});
+                                    } else {
+                                        res.json({Code: 406, Info: 'no workorders'});
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        WorkOrder.find(query, {}, {
+                            sort: {
+                                _id: -1 //Sort by Date Added DESC
+                            }
+                        }, function (err, workorders) {
+                            if (err) {
+                                return next(err)
+                            }
+                            if (workorders != null) {
+                                res.json({Code: 200, Info: {workorders: workorders}});
+                            } else {
+                                res.json({Code: 406, Info: 'no workorders'});
+                            }
+
+                        });
+                    }
+
 
                 });
 
@@ -969,6 +1008,11 @@ router.post('/get_user', function (req, res, next) {
 });
 router.post('/update_workorder', function (req, res, next) {
     var requestedArray = req.body;
+    if (req.body.wo_goodsreceipt == 1) {
+        PartsRequest.findOneAndUpdate({'workorder_number': req.body.workorder_number}, {'status': 1}, {upsert: false}, function (err, doc) {
+
+        });
+    }
     if (req.body.wo_pm_frequency > 0 && requestedArray.workorder_PM != "") {
         var pmNumber;
         requestedArray.workorder_PM = pmNumber = req.body.wo_pm_number;
@@ -1050,6 +1094,17 @@ router.post('/get_users', function (req, res, next) {
 
 router.post('/get_search_wo', function (req, res, next) {
     var query = req.body;
+    var user_details = {
+        user_id: req.body.user_id,
+        userrole: req.body.userrole,
+        role: req.body.role
+    };
+    delete query['user_id'];
+    delete query['userrole'];
+    delete query['role'];
+    if (user_details.role == 'technician') {
+        query.workorder_technician = user_details.user_id;
+    }
     if (typeof req.body.created_on_from !== "undefined") {
         if (typeof req.body.created_on_to === "undefined") {
             var created_on = new Date().valueOf();

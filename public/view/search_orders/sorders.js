@@ -221,6 +221,9 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         qry[i] = $scope.workOrder[i];
                     }
                 }
+                qry.userrole = userdetail.user.userrole;
+                qry.user_id = userdetail.user._id
+                qry.role = userdetail.role;
                 //var qry = $scope.workOrder;
                 API.GetSearchedWorkOrders.Recent(qry, function (res) {
                     if (res.Code == 200) {
