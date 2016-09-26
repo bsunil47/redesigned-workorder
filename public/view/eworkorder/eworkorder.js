@@ -143,6 +143,18 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     }
 
                 }
+                console.log($scope.workOrder.wo_pm_date);
+                if (!angular.isUndefined($scope.workOrder.wo_pm_date)) {
+                    var currentDt = new Date(parseInt($scope.workOrder.wo_pm_date));
+                    var mm = currentDt.getMonth() + 1;
+                    mm = (mm < 10) ? '0' + mm : mm;
+                    var dd = currentDt.getDate();
+                    var yyyy = currentDt.getFullYear();
+                    var date = mm + '/' + dd + '/' + yyyy;
+                    $scope.workOrder.wo_pm_date = date;
+                    console.log($scope.workOrder.wo_pm_date);
+                }
+               
 
 
                 $scope.selected_facility = $scope.workOrder.workorder_facility;
@@ -275,7 +287,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                             var dd = wo_pm_date.getDate();
                             var yyyy = wo_pm_date.getFullYear();
                             var date = mm + '/' + dd + '/' + yyyy;
-                            $scope.workOrder.wo_pm_date = date;
+                            //$scope.workOrder.wo_pm_date = date;
                             $scope.workOrder.wo_pm_frequency = res.Info.pm_task.pm_frequency;
                             $scope.workOrder.wo_pm_number = res.Info.pm_task.pm_number;
                             $scope.workOrder.pm_task = 1;
@@ -354,7 +366,15 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     if (angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                         //$scope.workOrder.wo_datecomplete = new Date();
                     }
-
+                    if (!angular.isUndefined($scope.workOrder.wo_pm_date)) {
+                        if (isNaN(parseInt($scope.workOrder.wo_pm_date))) {
+                            $scope.workOrder.wo_pm_date = new Date($scope.workOrder.wo_pm_date).valueOf();
+                        }
+                    }
+                    if ($scope.workOrder.wo_pm_date != "") {
+                        $scope.workOrder.wo_pm_date = new Date($scope.workOrder.wo_pm_date).valueOf();
+                    }
+                    console.log($scope.workOrder.wo_pm_date);
                     /*.EditWorkOrderForm.wo_datecomplete.$error.date = true;
                      $scope.EditWorkOrderForm.wo_datecomplete.$error.min = true;
                      $scope.EditWorkOrderForm.wo_datecomplete.$error.max = true;
@@ -363,8 +383,6 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                      //$scope.EditWorkOrderForm.$valid = true;
                      }*/
 
-                    console.log($scope.EditWorkOrderForm);
-                    console.log($scope.EditWorkOrderForm.$valid);
                     if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
                         var data_post = $scope.workOrder;
                         if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {

@@ -1191,7 +1191,7 @@ router.post('/update_workorder', function (req, res, next) {
         var pm_task = {
             pm_number: pmNumber,
             pm_frequency: req.body.wo_pm_frequency,
-            pm_next_date: new Date(req.body.wo_pm_date).valueOf(),
+            pm_next_date: req.body.wo_pm_date,
             pm_current_date: new Date().valueOf(),
             pm_previous_date: new Date(previous_date).valueOf(),
             status: 1
@@ -1205,6 +1205,7 @@ router.post('/update_workorder', function (req, res, next) {
             if (err) {
                 console.log(err);
             }
+            console.log(pm);
             updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
         });
     } else {
@@ -1584,7 +1585,7 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
                 created_on: {'$gt': requestedArray.created_on}
             }, function (err, wrkordr) {
                 if (err) {
-
+                    console.log(err);
                 }
                 if (wrkordr == 0) {
                     createWorkOrderPM({
@@ -1596,7 +1597,7 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
             });
 
         }
-        SendMail(req, it_pm_workorder);
+        //SendMail(req, it_pm_workorder);
         res.json({Code: 200, Info: "succesfully saved"});
     });
 }
@@ -1611,6 +1612,9 @@ var createWorkOrderPM = function (task) {
                 console.error('Counter on workeOrder error: ' + err);
                 return;
             }
+            var pm_date = new Date(parseInt(task.wo_pm_date));
+            pm_date.setDate(pm_date.getDate() + parseInt(task.pm_frequency));
+            
             var insert_query = {
                 workorder_number: result.seq,
                 workorder_creator: wkOrd.workorder_creator,
@@ -1619,9 +1623,11 @@ var createWorkOrderPM = function (task) {
                 workorder_category: wkOrd.workorder_category,
                 workorder_equipment: wkOrd.workorder_equipment,
                 workorder_priority: wkOrd.workorder_priority,
-                created_on: new Date().valueOf(),
+                workorder_skill: wkOrd.workorder_skill,
+                workorder_class: wkOrd.workorder_class,
+                created_on: task.wo_pm_date,
                 workorder_PM: wkOrd.workorder_PM,
-                wo_pm_date: new Date(task.wo_pm_date).valueOf(),
+                wo_pm_date: new Date(pm_date).valueOf(),
                 status: 1
             };
             console.log(insert_query);
@@ -1727,6 +1733,44 @@ var createWorkOrderPM = function (task) {
         });
     });
 
+}
+var sendMailPartRequest = function (mail_to, last_message, req, facility, category, equipment, priority) {
+    var mailData = {
+        // Comma separated list of recipients
+        to: mail_to,
+        // Subject of the message
+        subject: 'Part Request' + setPadZeros(parseInt(req.body.workorder_number), 8) + last_message, //
+
+        // plaintext body
+        //text: 'Hello to sunil',
+
+        // HTML body
+        html: '<p>Part Request <b>' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</b>' + last_message + '</p>'
+        +
+        '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
+        +
+        '<p><b>Work Order Date</b>: ' + dateFormat(parseInt(req.body.created_on), 'shortDate') + '</p>'
+        +
+        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+        +
+        '<p><b>Category</b>: ' + category.category_name + '</p>'
+        +
+        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+        +
+        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+        +
+        '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
+        +
+        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+
+    };
+    transporter.sendMail(mailData, function (err, info) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Message sent successfully!');
+
+    });
 }
 
 function getNextSequence(name) {
