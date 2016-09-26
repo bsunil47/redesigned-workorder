@@ -9,7 +9,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         });
     }])
 
-    .controller('VworkorderCtrl', ["$scope", "$cookies", "$location", 'API', '$filter', '$routeParams', function ($scope, $cookies, $location, API, $filter, $routeParams) {
+    .controller('VworkorderCtrl', ["$scope", "$cookies", "$location", 'API', '$filter', '$routeParams', 'ngDialog', function ($scope, $cookies, $location, API, $filter, $routeParams, ngDialog) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
@@ -91,6 +91,44 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         if (userdetail.role == 'clerk') {
             $scope.showClerk = true;
         }
+        $scope.clickToOpen = function (workorder) {
+            $scope.selectedWorkOrder = workorder;
+            $scope.selectedWorkOrder.workorder_number = showWithzeros($scope.selectedWorkOrder.workorder_number);
+            $scope.selectedWorkOrder.workorder_equipment = showEquipment(workorder.workorder_equipment);
+            $scope.selectedWorkOrder.status = showStatus(workorder.status);
+            $scope.selectedWorkOrder.workorder_technician = showtechnician(workorder.workorder_technician);
+            var currentDt = new Date(parseInt(workorder.created_on));
+            var mm = currentDt.getMonth() + 1;
+            mm = (mm < 10) ? '0' + mm : mm;
+            var dd = currentDt.getDate();
+            var yyyy = currentDt.getFullYear();
+            var date = mm + '/' + dd + '/' + yyyy;
+            $scope.selectedWorkOrder.created_on = date;
+            var currentDt = new Date(parseInt(workorder.wo_datecomplete));
+            var mm = currentDt.getMonth() + 1;
+            mm = (mm < 10) ? '0' + mm : mm;
+            var dd = currentDt.getDate();
+            var yyyy = currentDt.getFullYear();
+            var date = mm + '/' + dd + '/' + yyyy;
+            $scope.selectedWorkOrder.wo_datecomplete = date;
+            $scope.selectedWorkOrder.workorder_skill = showSkill(workorder.workorder_skill);
+            $scope.selectedWorkOrder.workorder_category = showCategory(workorder.workorder_category);
+            $scope.selectedWorkOrder.workorder_priority = showPriority(workorder.workorder_priority);
+            $scope.selectedWorkOrder.workorder_class = showClass(workorder.workorder_class);
+            var date = mm + '/' + dd + '/' + yyyy;
+            $scope.selectedWorkOrder.created_on = date;
+            var currentDt = new Date(parseInt(workorder.wo_pm_date));
+            var mm = currentDt.getMonth() + 1;
+            mm = (mm < 10) ? '0' + mm : mm;
+            var dd = currentDt.getDate();
+            var yyyy = currentDt.getFullYear();
+            var date = mm + '/' + dd + '/' + yyyy;
+            $scope.selectedWorkOrder.wo_pm_date = date
+            console.log(workorder.workorder_facility);
+            $scope.selectedWorkOrder.workorder_facility = showFacility(workorder.workorder_facility);
+            $scope.selectedWorkOrder.workorder_creator = showRequestor(workorder.workorder_creator);
+            ngDialog.open({template: 'view/popup/popupTmpl.html', className: 'ngdialog-theme-default', scope: $scope});
+        };
         API.GetWorkOrder.Recent({workorder_number: currentId}, function (res) {
             if (res.Code == 200) {
 
@@ -102,6 +140,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     console.log($scope.workOrder.wo_equipmentcost)
                     $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
                 }
+
                 $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
 
                 var currentDt = new Date(parseInt($scope.workOrder.created_on));
@@ -278,7 +317,15 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
         //$scope.workOrder= $scope.facilities[0].facility_number;
         //console.log($scope.facilities);
-
+        API.Status.Recent({facility_number: $scope.selected_facility}, function (res) {
+            if (res.Code == 200) {
+                $scope.statuses = res.Info.status_list;
+                console.log($scope.statuses)
+            } else {
+            }
+        }, function (error) {
+            alert(error);
+        });
 
         $scope.Logout = function () {
             $cookies.remove('userDetails');
@@ -450,7 +497,33 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
         }
 
-        $scope.showtechnician = function (technicain) {
+        $scope.showTimeChange = function () {
+            if ($scope.workOrder.wo_timespent === "00:00") {
+                console.log('asd')
+                $scope.workOrder.wo_timespent = 'undefined';
+            }
+            console.log($scope.workOrder.wo_timespent);
+        }
+        $scope.showEquipment = showEquipment;
+        function showEquipment(equipment) {
+            var found = $filter('getByFacilityNumber')('_id', equipment, $scope.equipments);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            return found.equipment_name;
+        }
+
+        $scope.showStatus = showStatus;
+        function showStatus(status_number) {
+            var found = $filter('getByFacilityNumber')('status_number', status_number, status_list);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            return found.status_name;
+        }
+
+        $scope.showtechnician = showtechnician;
+        function showtechnician(technicain) {
             var found = $filter('getByFacilityNumber')('_id', technicain, $scope.technicians);
             if (angular.isUndefined(found) || found === null) {
                 return null;
@@ -458,11 +531,63 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             return found.firstname;
         }
 
-        $scope.showTimeChange = function () {
-            if ($scope.workOrder.wo_timespent === "00:00") {
-                console.log('asd')
-                $scope.workOrder.wo_timespent = 'undefined';
+        $scope.showSkill = showSkill;
+        function showSkill(skill) {
+            var found = $filter('getByFacilityNumber')('_id', skill, $scope.skills);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
             }
-            console.log($scope.workOrder.wo_timespent);
+            return found.skill_name;
+        }
+
+        $scope.showCategory = showCategory;
+        function showCategory(category) {
+            var found = $filter('getByFacilityNumber')('_id', category, $scope.categories);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            return found.category_name;
+        }
+
+        $scope.showPriority = showPriority;
+        function showPriority(priority) {
+            var found = $filter('getByFacilityNumber')('_id', priority, $scope.priorities);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            return found.priority_name;
+        }
+
+        $scope.showClass = showClass;
+        function showClass(cls) {
+            var found = $filter('getByFacilityNumber')('_id', cls, $scope.classes);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            return found.class_name;
+        }
+
+        $scope.showFacility = showFacility;
+        function showFacility(facility_number) {
+            var found = $filter('getByFacilityNumber')('facility_number', facility_number, $scope.facilities);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            console.log(found);
+            return found.facility_name;
+        }
+
+        $scope.showRequestor = showRequestor;
+        function showRequestor(user) {
+            var found = $filter('getByFacilityNumber')('_id', user, $scope.requestors);
+            if (angular.isUndefined(found) || found === null) {
+                return null;
+            }
+            return found.firstname;
+        }
+
+        $scope.showWithzeros = showWithzeros;
+        function showWithzeros(Order) {
+            return $filter('setPadZeros')(Order, 8);
         }
     }]);

@@ -53,6 +53,10 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
         return facilities_numbers;
     };
     var status_list;
+    $scope.editUser = function (user_email) {
+        console.log("User emailin userlist js: " + user_email);
+        $location.path('edituser/' + user_email);
+    };
     API.Status.Recent(userdetail.user, function (res) {
         if (res.Code == 200) {
 

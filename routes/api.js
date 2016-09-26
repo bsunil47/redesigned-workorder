@@ -729,6 +729,80 @@ router.post('/partsequipments', function (req, res, next) {
     });
 });
 
+router.post('/get_parts', function (req, res, next) {
+    Equipment.aggregate([
+        {
+            $unwind: "$equipments"
+        },
+        {
+            $match: {
+                "equipments.material_number": req.body.part_number,
+
+            }
+        },
+        {
+            $project: {
+                equipment_number: 1,
+                equipment_name: 1,
+                "equipments.material_number": 1,
+                "equipments.material_description": 1,
+                "equipments.vendor_number": 1,
+                "equipments.vendor_name": 1,
+                "equipments.min_qty": 1,
+                "equipments.max_qty": 1
+
+            }
+
+        }], function (err, result) {
+        if (err) {
+            return next(err)
+        }
+        if (result != null) {
+            console.log("API result: " + JSON.stringify(result));
+            var tempstr = JSON.stringify(result).slice(1, -1);
+            var gpresult = JSON.parse(tempstr);
+            res.json({Code: 200, Info: {equipment: gpresult}});
+        } else {
+            res.json({Code: 406, Info: 'provide details are wrong.'});
+        }
+    });
+});
+
+router.post('/edit_parts', function (req, res, next) {
+    console.log("Api JS Edit parts 1: " + JSON.stringify(req.body));
+    Equipment.count({
+        _id: req.body._id,
+        equipment_number: req.body.equipment_number,
+        equipment_name: req.body.equipment_name,
+        "equipments.material_number": req.body.material_number,
+        "equipments.min_qty": req.body.min_qty,
+        "equipments.max_qty": req.body.max_qty
+    }, function (err, equipment_count) {
+        if (err) {
+            return next(err);
+        }
+        else if (equipment_count) {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+
+            next();
+        }
+        else {
+            Equipment.update({
+                    _id: req.body._id,
+                    equipment_number: req.body.equipment_number,
+                    "equipments.material_number": req.body.material_number
+                }, {$set: {"equipments.$.min_qty": req.body.min_qty, "equipments.$.max_qty": req.body.max_qty}},
+                function (err, model) {
+                    console.log(err);
+                });
+        }
+        res.json({Code: 200, Info: 'Document updated'});
+    });
+
+}, function (err) {
+    console.log(err);
+});
+
 router.post('/search_facilities', function (req, res, next) {
     Facility.find(
         {
@@ -743,6 +817,50 @@ router.post('/search_facilities', function (req, res, next) {
                 res.json({Code: 200, Info: {facilities: facilities}});
             } else {
                 res.json({Code: 406, Info: 'no facilities'});
+            }
+        });
+});
+router.post('/edit_facility', function (req, res, next) {
+    Facility.count({
+        _id: req.body._id,
+        facility_number: req.body.facility_number,
+        facility_name: req.body.facility_name
+    }, function (err, facility_count) {
+        if (err) {
+            return next(err);
+        }
+        else if (facility_count) {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+
+            next();
+        }
+        else {
+            Facility.update({
+                    _id: req.body._id,
+                    facility_number: req.body.facility_number
+                }, {$set: {"facility_name": req.body.facility_name}},
+                function (err, model) {
+                    console.log(err);
+                });
+        }
+        res.json({Code: 200, Info: 'Document updated'});
+    });
+
+}, function (err) {
+    console.log(err);
+});
+router.post('/get_facility', function (req, res, next) {
+    Facility.findOne(
+        {
+            facility_number: req.body.facility_number
+        }, {facility_number: 1, facility_name: 1}, function (err, facility) {
+            if (err) {
+                return next(err)
+            }
+            if (facility != null) {
+                res.json({Code: 200, Info: {facility: facility}});
+            } else {
+                res.json({Code: 406, Info: 'provide details are wrong.'});
             }
         });
 });
@@ -787,6 +905,51 @@ router.post('/search_equipment', function (req, res, next) {
                 res.json({Code: 406, Info: 'no equipments'});
             }
         });
+});
+router.post('/get_equipment', function (req, res, next) {
+    Equipment.findOne(
+        {
+            equipment_number: req.body.equipment_number
+        }, {equipment_number: 1, equipment_name: 1, facilities: 1}, function (err, equipment) {
+            if (err) {
+                return next(err)
+            }
+            if (equipment != null) {
+                res.json({Code: 200, Info: {equipment: equipment}});
+            } else {
+                res.json({Code: 406, Info: 'provide details are wrong.'});
+            }
+        });
+});
+
+router.post('/edit_equipment', function (req, res, next) {
+    Equipment.count({
+        _id: req.body._id,
+        equipment_number: req.body.equipment_number,
+        equipment_name: req.body.equipment_name
+    }, function (err, equipment_count) {
+        if (err) {
+            return next(err);
+        }
+        else if (equipment_count) {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+
+            next();
+        }
+        else {
+            Equipment.update({
+                    _id: req.body._id,
+                    equipment_number: req.body.equipment_number
+                }, {$set: {"equipment_name": req.body.equipment_name}},
+                function (err, model) {
+                    console.log(err);
+                });
+        }
+        res.json({Code: 200, Info: 'Document updated'});
+    });
+
+}, function (err) {
+    console.log(err);
 });
 router.post('/search_priority', function (req, res, next) {
     Priority.find(
@@ -1090,6 +1253,94 @@ router.post('/get_users', function (req, res, next) {
             res.json({Code: 406, Info: 'No Users'});
         }
     });
+});
+
+router.post('/get_user_details', function (req, res, next) {
+    var userd;
+    console.log("in apijs get user details: " + req.body.user_email);
+    Users.aggregate([
+        {
+            $match: {"email": req.body.user_email}
+        },
+        {
+            $lookup: {
+                from: "collection_roles",
+                localField: "userrole",
+                foreignField: "_id",
+                as: "roles"
+            }
+        }], function (err, result) {
+        if (result) {
+            var tempstr = JSON.stringify(result).slice(1, -1);
+            userd = JSON.parse(tempstr);
+            var queryud;
+
+            if (userd.roles[0].role_name == "manager") {
+                queryud = {facility_managers: {$elemMatch: {user_id: userd._id, email: userd.email}}};
+            } else {
+                queryud = {facility_users: {$elemMatch: {user_id: userd._id, email: userd.email}}};
+            }
+
+            Facility.findOne(queryud, {facility_number: 1, facility_name: 1}, function (err, facility) {
+                if (err) {
+                    return next(err)
+                }
+                if (facility != null) {
+
+                    userd.facility_number = facility.facility_number;
+                    userd.facility_name = facility.facility_name;
+
+                    res.json({Code: 200, Info: {user: userd}});
+                } else {
+                    userd.facility_number = "";
+                    userd.facility_name = "";
+
+                    res.json({Code: 200, Info: {user: userd}});
+                }
+            });
+            //console.log("userd after log last : "+ JSON.stringify(userd));
+
+        }
+        else {
+            next(err);
+        }
+
+    });
+
+});
+
+router.post('/edit_user', function (req, res, next) {
+    console.log("Details in apijs: " + JSON.stringify(req.body.params));
+    Users.count({
+        _id: req.body._id,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email
+    }, function (err, user_count) {
+        if (err) {
+            return next(err);
+        }
+        else if (user_count) {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+
+            next();
+        }
+        else {
+            Users.update({_id: req.body._id, email: req.body.email}, {
+                    $set: {
+                        "firstname": req.body.firstname,
+                        "lastname": req.body.lastname
+                    }
+                },
+                function (err, model) {
+                    console.log(err);
+                });
+        }
+        res.json({Code: 200, Info: 'Document updated'});
+    });
+
+}, function (err) {
+    console.log(err);
 });
 
 router.post('/get_search_wo', function (req, res, next) {

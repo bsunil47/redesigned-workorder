@@ -32,7 +32,11 @@ var PGapp = angular.module('PGapp', [
   'PGapp.partsequipmentlist',
   'PGapp.createparts',
   'PGapp.vworkorder',
-  'PGapp.searchpmtask'
+  'PGapp.searchpmtask',
+  'PGapp.editfacility',
+  'PGapp.edituser',
+  'PGapp.editparts',
+  'PGapp.editequipment'
 
 ]);
 PGapp.

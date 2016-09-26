@@ -132,6 +132,30 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         GetSearchedWorkOrders: $resource(url + 'api/get_search_wo', {}, {
             Recent: post_set
         }),
+        EditUser: $resource(url + 'api/edit_user', {}, {
+            User: post_set
+        }),
+        GetUserDetails: $resource(url + 'api/get_user_details', {}, {
+            Recent: post_set
+        }),
+        EditEquipment: $resource(url + 'api/edit_equipment', {}, {
+            Equipment: post_set
+        }),
+        GetEquipment: $resource(url + 'api/get_equipment', {}, {
+            Recent: post_set
+        }),
+        EditFacility: $resource(url + 'api/edit_facility', {}, {
+            Facility: post_set
+        }),
+        GetFacility: $resource(url + 'api/get_facility', {}, {
+            Recent: post_set
+        }),
+        EditParts: $resource(url + 'api/edit_parts', {}, {
+            Equipment: post_set
+        }),
+        GetParts: $resource(url + 'api/get_parts', {}, {
+            Recent: post_set
+        }),
 
 
 

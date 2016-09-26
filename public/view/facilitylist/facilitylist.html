@@ -46,6 +46,7 @@
                                     <th>Facility Number</th>
                                     <th>Facility Name</th>
                                     <th>Status</th>
+                                    <th>Edit</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -53,6 +54,8 @@
                                     <td>{{facility.facility_number}}</td>
                                     <td>{{facility.facility_name}}</td>
                                     <td>{{showStatus(facility.status)}}</td>
+                                    <td><i class="fa fa-edit" ng-click="editFacility(facility.facility_number)"></i>
+                                    </td>
                                 </tr>
                                 </tbody>
 
