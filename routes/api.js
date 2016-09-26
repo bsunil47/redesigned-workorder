@@ -31,6 +31,7 @@ var Priority = mongoose.model('Collection_Priority');
 var Skill = mongoose.model('Collection_Skills');
 var Status = mongoose.model('Collection_Status');
 var PM = mongoose.model('Collection_PM_Task');
+var dateFormat = require('dateformat');
 var PartsRequest = mongoose.model('Collection_PartRequest');
 var counters = mongoose.model('counter');
 
@@ -1502,7 +1503,7 @@ var SendMail = function (req, it_pm_workorder) {
                                     }
                                     send(mail_to, last_message, req, facility, category, equipment, priority);
                                 } else {
-                                    if (it_pm_workorder != 1 && req.body.status != 2) {
+                                    if (req.body.status != 2) {
                                         Users.findOne({_id: req.body.workorder_technician}, function (err, tech) {
                                             var mail_to = tech.email;
                                             var last_message = ' has been assgined';
@@ -1540,7 +1541,7 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
         +
         '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
         +
-        '<p><b>Work Order Date</b>: ' + req.body.created_on + '</p>'
+        '<p><b>Work Order Date</b>: ' + dateFormat(parseInt(req.body.created_on), 'shortDate') + '</p>'
         +
         '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
         +

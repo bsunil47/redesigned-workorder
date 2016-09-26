@@ -57,7 +57,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             var dd = currentDt.getDate();
             var yyyy = currentDt.getFullYear();
             var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.created_on = date;
+            $scope.selectedWorkOrder.created_on = new Date(parseInt(workorder.created_on));
             var currentDt = new Date(parseInt(workorder.wo_datecomplete));
             var mm = currentDt.getMonth() + 1;
             mm = (mm < 10) ? '0' + mm : mm;
