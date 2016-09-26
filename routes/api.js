@@ -1315,19 +1315,166 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
 var updateWorkOrder = function (query, requestedArray, req, res) {
     //delete requestedArray['user_id'];
     if (requestedArray.wo_pm_frequency != "") {
+        var pm_frequency = requestedArray['wo_pm_frequency'];
         var it_pm_workorder = 1;
     } else {
         var it_pm_workorder = 0;
     }
     delete requestedArray['wo_pm_frequency'];
-    delete requestedArray['wo_pm_date'];
+    //delete requestedArray['wo_pm_date'];
     delete requestedArray['wo_pm_previous_date'];
     delete requestedArray['__v'];
     WorkOrder.findOneAndUpdate(query, requestedArray, {upsert: false}, function (err, doc) {
         if (err) return res.json(500, {error: err});
+        if (requestedArray.workorder_PM != "" && requestedArray.status == 2) {
+            WorkOrder.count({
+                workorder_PM: requestedArray.workorder_PM,
+                created_on: {'$gt': requestedArray.created_on}
+            }, function (err, wrkordr) {
+                if (err) {
+
+                }
+                if (wrkordr == 0) {
+                    createWorkOrderPM({
+                        pm_number: requestedArray.workorder_PM,
+                        wo_pm_date: requestedArray.wo_pm_date,
+                        pm_frequency: pm_frequency
+                    });
+                }
+            });
+
+        }
         SendMail(req, it_pm_workorder);
         res.json({Code: 200, Info: "succesfully saved"});
     });
+}
+var createWorkOrderPM = function (task) {
+
+    WorkOrder.findOne({workorder_PM: task.pm_number}, function (err, wkOrd) {
+        if (err) {
+            return false;
+        }
+        counters.increment('workorder_number', function (err, result) {
+            if (err) {
+                console.error('Counter on workeOrder error: ' + err);
+                return;
+            }
+            var insert_query = {
+                workorder_number: result.seq,
+                workorder_creator: wkOrd.workorder_creator,
+                workorder_description: wkOrd.workorder_description,
+                workorder_facility: wkOrd.workorder_facility,
+                workorder_category: wkOrd.workorder_category,
+                workorder_equipment: wkOrd.workorder_equipment,
+                workorder_priority: wkOrd.workorder_priority,
+                created_on: new Date().valueOf(),
+                workorder_PM: wkOrd.workorder_PM,
+                wo_pm_date: new Date(task.wo_pm_date).valueOf(),
+                status: 1
+            };
+            console.log(insert_query);
+            var workOrder = new WorkOrder(insert_query);
+            workOrder.save(function (err, resp) {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        Code: 499,
+                        message: err,
+                    });
+                } else {
+                    var currentDt = new Date();
+                    currentDt.setDate(currentDt.getDate() + parseInt(task.pm_frequency));
+                    var pm_task = {
+                        pm_number: task.pm_number,
+                        pm_frequency: task.pm_frequency,
+                        pm_next_date: new Date(currentDt).valueOf(),
+                        pm_current_date: new Date().valueOf(),
+                        pm_previous_date: new Date(parseInt(task.pm_previous_date)).valueOf(),
+                        status: 1
+                    };
+                    var where = {pm_number: task.pm_number};
+                    PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                    var facility, category, equipment, priority;
+                    Facility.findOne({facility_number: wkOrd.workorder_facility}, function (err, facility) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        Category.findOne({_id: wkOrd.workorder_category}, function (err, category) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            Equipment.findOne({_id: wkOrd.workorder_equipment}, function (err, equipment) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                Priority.findOne({_id: wkOrd.workorder_priority}, function (err, priority) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    var facility_namagers = facility.facility_managers;
+                                    var manager_email = "";
+                                    for (var man in facility_namagers) {
+                                        if (typeof facility_namagers[man].email !== 'undefined') {
+                                            manager_email += facility_namagers[man].email + ", ";
+                                        }
+                                    }
+                                    //manager_email = "pgmanager7@gmail.com,";
+                                    var mail_to = manager_email;
+                                    var mailData = {
+                                        // Comma separated list of recipients
+                                        to: mail_to,
+                                        // Subject of the message
+                                        subject: 'New PM Maintenance Work Order number ' + setPadZeros(result.seq, 8) + ' has been submited for your approval', //
+
+                                        // plaintext body
+                                        //text: 'Hello to sunil',
+
+                                        // HTML body
+                                        html: '<p>New PM Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
+                                        +
+                                        '<p><b>Work Order Details</b></p>'
+                                        +
+                                        '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
+                                        +
+                                        '<p><b>Work Order Date</b>: ' + new Date() + '</p>'
+                                        +
+                                        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+                                        +
+                                        '<p><b>Category</b>: ' + category.category_name + '</p>'
+                                        +
+                                        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+                                        +
+                                        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+                                        +
+                                        '<p><b>Description</b>: ' + wkOrd.workorder_description + '</p>'
+                                        +
+                                        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+
+                                    };
+                                    transporter.sendMail(mailData, function (err, info) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        console.log('Message sent successfully!');
+                                        console.log(info);
+
+                                    });
+
+                                });
+                            });
+                        });
+                    });
+                    console.log('WorkOrder ' + result.seq + ' created sucessfully');
+                    //res.json({Code: 200, Info: {msg: 'sucessfull', workorder_number: result.seq}});
+                }
+            });
+        });
+    });
+
 }
 
 function getNextSequence(name) {
@@ -1350,7 +1497,5 @@ var setPadZeros = function (num, size) {
     } catch (err) {
         return null;
     }
-
-
 }
 module.exports = router;

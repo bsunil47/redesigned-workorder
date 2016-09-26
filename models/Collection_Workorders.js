@@ -29,6 +29,7 @@ var WorkorderSchema = new mongoose.Schema({
     workorder_leadcomments: String,
     workorder_actiontaken: String,
     workorder_PM: String,
+    wo_pm_date: String,
     status: {type: Number, default: 1, required: true},
     created_on: String,
     update_on: Date

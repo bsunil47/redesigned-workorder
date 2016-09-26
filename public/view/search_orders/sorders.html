@@ -1,5 +1,5 @@
 <!-- Page wrapper start -->
-<div class="page-wrapper">
+<div class="page-wrapper hidden-print" print-hide>
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
         <!--<div class="container">-->
@@ -304,6 +304,7 @@
                                     <th>Equipment</th>
                                     <th>Status</th>
                                     <th>View</th>
+                                    <!--<th>Print</th>-->
                                     <th>Edit</th>
                                 </tr>
                                 </thead>
@@ -314,6 +315,8 @@
                                     <td>{{showEquipment(workorder.workorder_equipment)}}</td>
                                     <td>{{showStatus(workorder.status)}}</td>
                                     <td><i class="fa fa-eye" ng-click="viewWorkOrder(workorder.workorder_number)"></i>
+                                    </td>
+                                    <td><i class="fa fa-print" ng-click="clickToOpen(workorder)"></i>
                                     </td>
                                     <td><i class="fa fa-edit" ng-click="editWorkOrder(workorder.workorder_number)"
                                            ng-show="showEdit(workorder.status)"></i>
