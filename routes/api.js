@@ -703,6 +703,7 @@ router.post('/create_part_request', function (req, res, next) {
                 message: 'issue with content'
             });
         }
+        sendMailPartRequest(req);
         res.json({Code: 200, Info: 'sucessfull'});
 
     })
@@ -1597,7 +1598,7 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
             });
 
         }
-        //SendMail(req, it_pm_workorder);
+        SendMail(req, it_pm_workorder);
         res.json({Code: 200, Info: "succesfully saved"});
     });
 }
@@ -1734,34 +1735,74 @@ var createWorkOrderPM = function (task) {
     });
 
 }
-var sendMailPartRequest = function (mail_to, last_message, req, facility, category, equipment, priority) {
+var sendMailPartRequest = function (req) {
+    Users.findOne({_id: req.body.user_id}, function (err, user) {
+        if (err) {
+            console.log(err);
+        }
+        if (user != null) {
+            Facility.findOne({
+                facility_users: {
+                    $elemMatch: {user_id: req.body.user_id}
+                }
+            }, function (err, facility) {
+
+                var users = facility.facility_users;
+                var users_managers = facility.facility_managers;
+                console.log(facility.facility_managers);
+                var users_in = [];
+                for (var ky in users) {
+                    users_in.push(users[ky].user_id)
+                }
+                var mail_managers = "";
+                for (var ke in users_managers) {
+                    if (typeof users_managers[ke].email !== 'undefined') {
+                        mail_managers += users_managers[ke].email + ',';
+                    }
+                }
+                console.log('mail');
+                console.log(mail_managers);
+                mail(mail_managers, req);
+                Roles.findOne({role_name: 'clerk'}, function (err, userrole) {
+                    if (err) {
+                    }
+                    Users.find({_id: {$in: users_in}, userrole: userrole._id}, function (err, userlist) {
+                        if (err) {
+                        }
+                        var mail_clerks = "";
+                        for (var k in userlist) {
+                            mail_clerks += userlist[k].email + ',';
+                        }
+                        console.log('mailc');
+                        console.log(mail_clerks);
+                        mail(mail_clerks, req);
+                    });
+                });
+            });
+        }
+    });
+
+
+}
+
+function mail(mail_to, req) {
     var mailData = {
         // Comma separated list of recipients
         to: mail_to,
         // Subject of the message
-        subject: 'Part Request' + setPadZeros(parseInt(req.body.workorder_number), 8) + last_message, //
+        subject: 'Part Request', //
 
         // plaintext body
         //text: 'Hello to sunil',
 
         // HTML body
-        html: '<p>Part Request <b>' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</b>' + last_message + '</p>'
+        html: '<p>Part Request <b>'
         +
         '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
         +
-        '<p><b>Work Order Date</b>: ' + dateFormat(parseInt(req.body.created_on), 'shortDate') + '</p>'
+        '<p><b>Qty</b>: ' + dateFormat(parseInt(req.body.created_on), 'shortDate') + '</p>'
         +
-        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
-        +
-        '<p><b>Category</b>: ' + category.category_name + '</p>'
-        +
-        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
-        +
-        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
-        +
-        '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
-        +
-        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Part request</p>'
 
     };
     transporter.sendMail(mailData, function (err, info) {
