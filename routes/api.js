@@ -1811,6 +1811,12 @@ function mail(mail_to, req) {
             return next(err)
         }
         if (result != null) {
+
+            if (isNaN(parseInt(req.body.workorder_number))) {
+                var wo_number = "-";
+            } else {
+                var wo_number = setPadZeros(parseInt(req.body.workorder_number), 8);
+            }
             console.log("API result: " + JSON.stringify(result));
             var tempstr = JSON.stringify(result).slice(1, -1);
             var gpresult = JSON.parse(tempstr);
@@ -1826,7 +1832,7 @@ function mail(mail_to, req) {
                 // HTML body
                 html: '<p>Parts Request raised for following equipment<b>'
                 +
-                '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
+                '<p><b>Work Order Number</b>: ' + wo_number + '</p>'
                 +
                 '<p><b>Qty</b>: ' + req.body.qty + '</p>'
                 +
@@ -1834,7 +1840,7 @@ function mail(mail_to, req) {
                 +
                 '<p><b>Equipment Number</b>: ' + gpresult.equipment_number + '</p>'
                 +
-                '<p><b>Equipment Name</b>: ' + gpresult.equipment_number + '</p>'
+                '<p><b>Equipment Name</b>: ' + gpresult.equipment_name + '</p>'
                 +
                 '<p><b>Part Number</b>: ' + gpresult.equipments.material_number + '</p>'
                 +
