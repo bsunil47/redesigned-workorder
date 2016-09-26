@@ -1786,32 +1786,79 @@ var sendMailPartRequest = function (req) {
 }
 
 function mail(mail_to, req) {
-    var mailData = {
-        // Comma separated list of recipients
-        to: mail_to,
-        // Subject of the message
-        subject: 'Part Request', //
+    Equipment.aggregate([
+        {
+            $unwind: "$equipments"
+        },
+        {
+            $match: {
+                "equipments.material_number": req.body.material_number,
 
-        // plaintext body
-        //text: 'Hello to sunil',
+            }
+        },
+        {
+            $project: {
+                equipment_number: 1,
+                equipment_name: 1,
+                "equipments.material_number": 1,
+                "equipments.material_description": 1,
+                "equipments.vendor_number": 1,
+                "equipments.vendor_name": 1
+            }
 
-        // HTML body
-        html: '<p>Part Request <b>'
-        +
-        '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
-        +
-        '<p><b>Qty</b>: ' + dateFormat(parseInt(req.body.created_on), 'shortDate') + '</p>'
-        +
-        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Part request</p>'
-
-    };
-    transporter.sendMail(mailData, function (err, info) {
+        }], function (err, result) {
         if (err) {
-            console.log(err);
+            return next(err)
         }
-        console.log('Message sent successfully!');
+        if (result != null) {
+            console.log("API result: " + JSON.stringify(result));
+            var tempstr = JSON.stringify(result).slice(1, -1);
+            var gpresult = JSON.parse(tempstr);
+            var mailData = {
+                // Comma separated list of recipients
+                to: mail_to,
+                // Subject of the message
+                subject: 'Part Request', //
 
+                // plaintext body
+                //text: 'Hello to sunil',
+
+                // HTML body
+                html: '<p>Parts Request raised for following equipment<b>'
+                +
+                '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
+                +
+                '<p><b>Qty</b>: ' + req.body.qty + '</p>'
+                +
+                '<p><b>Date</b>: ' + dateFormat(new Date(), 'shortDate') + '</p>'
+                +
+                '<p><b>Equipment Number</b>: ' + gpresult.equipment_number + '</p>'
+                +
+                '<p><b>Equipment Name</b>: ' + gpresult.equipment_number + '</p>'
+                +
+                '<p><b>Part Number</b>: ' + gpresult.equipments.material_number + '</p>'
+                +
+                '<p><b>Part Description</b>: ' + gpresult.equipments.material_description + '</p>'
+                +
+                '<p><b>Vendor Name</b>: ' + gpresult.equipments.vendor_name + '</p>'
+                +
+                '<p><b>Vendor Number</b>: ' + gpresult.equipments.vendor_number + '</p>'
+                +
+                '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Part request</p>'
+
+            };
+            transporter.sendMail(mailData, function (err, info) {
+                if (err) {
+                    console.log(err);
+                }
+                console.log('Message sent successfully!');
+
+            });
+        } else {
+            res.json({Code: 406, Info: 'provide details are wrong.'});
+        }
     });
+
 }
 
 function getNextSequence(name) {
