@@ -97,20 +97,8 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             $scope.selectedWorkOrder.workorder_equipment = showEquipment(workorder.workorder_equipment);
             $scope.selectedWorkOrder.status = showStatus(workorder.status);
             $scope.selectedWorkOrder.workorder_technician = showtechnician(workorder.workorder_technician);
-            var currentDt = new Date(parseInt(workorder.created_on));
-            var mm = currentDt.getMonth() + 1;
-            mm = (mm < 10) ? '0' + mm : mm;
-            var dd = currentDt.getDate();
-            var yyyy = currentDt.getFullYear();
-            var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.created_on = date;
-            var currentDt = new Date(parseInt(workorder.wo_datecomplete));
-            var mm = currentDt.getMonth() + 1;
-            mm = (mm < 10) ? '0' + mm : mm;
-            var dd = currentDt.getDate();
-            var yyyy = currentDt.getFullYear();
-            var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.wo_datecomplete = date;
+            $scope.selectedWorkOrder.created_on = workorder.created_on;
+            $scope.selectedWorkOrder.wo_datecomplete = workorder.wo_datecomplete;
             $scope.selectedWorkOrder.workorder_skill = showSkill(workorder.workorder_skill);
             $scope.selectedWorkOrder.workorder_category = showCategory(workorder.workorder_category);
             $scope.selectedWorkOrder.workorder_priority = showPriority(workorder.workorder_priority);
@@ -323,6 +311,19 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 console.log($scope.statuses)
             } else {
             }
+        }, function (error) {
+            alert(error);
+        });
+        var status_list;
+        API.Status.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                status_list = res.Info.status_list;
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
         }, function (error) {
             alert(error);
         });
