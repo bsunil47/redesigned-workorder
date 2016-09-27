@@ -72,5 +72,9 @@ angular.module('PGapp.partsequipmentlist', ['ngRoute', 'ngAnimate', 'ngCookies']
             }
             return found.status_name;
         }
+
+        $scope.editParts = function (part_number) {
+            $location.path('editparts/' + part_number);
+        };
     }]);
 

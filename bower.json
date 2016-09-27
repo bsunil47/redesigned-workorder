@@ -22,7 +22,10 @@
     "ng-bootstrap": "^1.0.0",
     "moment": "^2.15.0",
     "sweetalert2": "^5.0.3",
-    "angular-strap": "^2.3.9"
+    "angular-strap": "^2.3.9",
+    "ng-dialog": "^0.6.4",
+    "ngPrint": "*",
+    "angularPrint": "angular-print#^0.3.8"
   },
   "authors": [
     "Kesav"

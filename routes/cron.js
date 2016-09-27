@@ -71,7 +71,7 @@ var cron = require('node-cron');
 
 cron.schedule('* 1 * * *', function () {
     var num = setPadZeros(10, 8);
-    PM.find({}, function (err, tasks) {
+    /*PM.find({}, function (err, tasks) {
         if (err) {
             console.log(err);
         }
@@ -83,11 +83,11 @@ cron.schedule('* 1 * * *', function () {
             }
             var today = new Date();
             if (today.getDate() == nextDate.getDate() && today.getMonth() == nextDate.getMonth() && today.getFullYear() == nextDate.getFullYear()) {
-                createWorkOrder(tasks[ky])
+     ///createWorkOrder(tasks[ky])
             }
 
         }
-    });
+     });*/
     console.log(num + 'running a task every minute');
 });
 

@@ -50,7 +50,8 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
           var set = {
             equipment_number: $scope.equipment_number,
             material_number: part,
-            qty: $scope.p.qty[part]
+            qty: $scope.p.qty[part],
+            user_id: userdetail.user._id,
           };
 
           if (!angular.isUndefined($scope.p.workorder)) {

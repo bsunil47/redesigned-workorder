@@ -1,0 +1,100 @@
+<div class="page-wrapper" id="printThisElement" print-section>
+    <!-- Page wrapper header start -->
+    <header class="page-wrapper-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-12">
+                    <div class="col-sm-4">
+                        <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                          alt="Prysmian Group"></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="site-title clearfix">Maintenance Work Order Application</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Page wrapper header end -->
+    <!-- Page wrapper container start -->
+    <div class="page-wrapper-container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-12">
+                    <!-- Main container start -->
+                    <div class="main-container clearfix">
+                        <h1 class="clearfix" style="display: block; width: 100%">Work Order
+                            #{{selectedWorkOrder.workorder_number}}
+                            <button class="btn btn-primary pull-right hidden-print" print-btn ng-print
+                                    print-element-id="printThisElement">Print
+                            </button>
+                        </h1>
+                        <div class="row">
+                            <div class="col-sm-3"><p><strong>Work Order Date:</strong><br>{{selectedWorkOrder.created_on}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>Status:</strong><br>{{selectedWorkOrder.status}}</p></div>
+                            <div class="col-sm-3"><p><strong>Technician:</strong><br>{{selectedWorkOrder.workorder_technician}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>Requestor:</strong><br>{{selectedWorkOrder.workorder_creator}}
+                            </p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"><p><strong>Date Completed:</strong><br>{{selectedWorkOrder.wo_datecomplete}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>Facility:</strong><br>{{selectedWorkOrder.workorder_facility}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>Category:</strong><br>{{selectedWorkOrder.workorder_category}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>Skill:</strong><br>{{selectedWorkOrder.workorder_skill}}
+                            </p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"><p><strong>Class:</strong><br>{{selectedWorkOrder.workorder_class}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>Equipment:</strong><br>{{selectedWorkOrder.workorder_equipment}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>Cost $:</strong><br>{{selectedWorkOrder.wo_equipmentcost}}
+                            </p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"><p><strong>Actual Hours:</strong><br>{{selectedWorkOrder.wo_timespent}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>PM Task #:</strong><br>{{selectedWorkOrder.workorder_PM}}
+                            </p></div>
+                            <div class="col-sm-3"><p><strong>Next PM Date:</strong><br></p>
+                                {{selectedWorkOrder.wo_pm_date}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <p class="col-sm-12"><strong>Problem Description:</strong>&nbsp;{{selectedWorkOrder.workorder_description}}
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="col-sm-12"><strong>Action Token:</strong>&nbsp;{{selectedWorkOrder.workorder_actiontaken}}
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="col-sm-12"><strong>Comments:</strong>&nbsp;{{selectedWorkOrder.workorder_leadcomments}}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Main container end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page wrapper container end -->
+    <!-- Page wrapper footer start -->
+    <footer class="page-wrapper-footer hidden-print">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="site-copy-rights clearfix">&copy; Prysmian Group. All Rights Reserved.</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Page wrapper footer end -->
+</div>

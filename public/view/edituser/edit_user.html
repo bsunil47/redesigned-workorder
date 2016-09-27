@@ -1,0 +1,125 @@
+Page wrapper start -->
+<div class="page-wrapper">
+    <!-- Page wrapper header start -->
+    <header class="page-wrapper-header">
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
+            </div>
+        </div>
+        <!--</div>-->
+    </header>
+
+    <!-- Page wrapper header end -->
+    <!-- Page wrapper container start -->
+    <div class="page-wrapper-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Main container start -->
+                    <div class="main-container clearfix">
+                        <div class="col-sm-12 text-right"><a ng-click="redirectLoc('users')" class="btn btn-primary">Back</a>
+                        </div>
+                        <h1>Edit User</h1>
+                        <!-- Change password form start -->
+                        <form name="EditUserForm" class="form-horizontal clearfix">
+                            <div class="row">
+                                <div class="col-sm-4 col-sm-offset-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">First Name:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="user.firstname" type="text" class="form-control"
+                                                   name="firstname" value={{user.firstname}} required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Last Name:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="user.lastname" type="text" class="form-control"
+                                                   name="lastname" value={{user.lastname}} required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Email :</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="user.email" ng-disabled="user.email" type="email"
+                                                   class="form-control" name="email"
+                                                   ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" value={{user.email}}
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Password:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="user.password" ng-disabled="user.password" type="password"
+                                                   class="form-control" name="password" value={{user.password}}
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Role:</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control" ng-model="item.role_name"
+                                                   ng-disabled="user.roles" ng-repeat="item in user.roles"
+                                                   name="userrole" ng-value={{item.role_name}} required>
+                                            </input>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Facility:</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control" ng-model="user.facility_name"
+                                                   ng-disabled="user.facility_name"
+                                                   name="facility" vaule={{user.facility_name}} required>
+
+
+                                            </input>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="text-center clearfix">
+                                <p>
+                                    <button type="submit" ng-click="EditUser()" class="btn btn-primary" ng-disabled="EditUserForm.firstname.$dirty && EditUserForm.firstname.$invalid ||
+                                    EditUserForm.lastname.$dirty && EditUserForm.lastname.$invalid">Save
+                                    </button>
+                                    <button type="reset" class="btn btn-primary">Clear</button>
+                                </p>
+                            </div>
+                        </form>
+                        <!-- Change password form end -->
+                    </div>
+                    <!-- Main container end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page wrapper container end -->
+    <!-- Page wrapper footer start -->
+    <footer class="page-wrapper-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="site-copy-rights clearfix">&copy; 2016 Prysmian Group. All Rights Reserved.</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Page wrapper footer end -->
+</div>
+<!-- Page wrapper end

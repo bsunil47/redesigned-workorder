@@ -31,6 +31,7 @@ var Priority = mongoose.model('Collection_Priority');
 var Skill = mongoose.model('Collection_Skills');
 var Status = mongoose.model('Collection_Status');
 var PM = mongoose.model('Collection_PM_Task');
+var dateFormat = require('dateformat');
 var PartsRequest = mongoose.model('Collection_PartRequest');
 var counters = mongoose.model('counter');
 
@@ -102,7 +103,6 @@ router.post('/createuser', function(req, res, next) {
           message: 'Already used',
         });
       } else {
-
           var query = {facility_number: req.body.facility};
           if (req.body.userrole == 'manager' || req.body.userrole == 'admin') {
               Facility.update(query, {
@@ -693,14 +693,17 @@ router.post('/createparts', function (req, res, next) {
 });
 
 router.post('/create_part_request', function (req, res, next) {
-    var partRequest = new PartsRequest(req.body);
+    var in_qry = req.body;
+    in_qry.status = 1;
+    var partRequest = new PartsRequest(in_qry);
     partRequest.save(function (er) {
         if (er) {
             res.json({
                 Code: 499,
-                message: 'issue with content',
+                message: 'issue with content'
             });
         }
+        sendMailPartRequest(req);
         res.json({Code: 200, Info: 'sucessfull'});
 
     })
@@ -728,6 +731,80 @@ router.post('/partsequipments', function (req, res, next) {
     });
 });
 
+router.post('/get_parts', function (req, res, next) {
+    Equipment.aggregate([
+        {
+            $unwind: "$equipments"
+        },
+        {
+            $match: {
+                "equipments.material_number": req.body.part_number,
+
+            }
+        },
+        {
+            $project: {
+                equipment_number: 1,
+                equipment_name: 1,
+                "equipments.material_number": 1,
+                "equipments.material_description": 1,
+                "equipments.vendor_number": 1,
+                "equipments.vendor_name": 1,
+                "equipments.min_qty": 1,
+                "equipments.max_qty": 1
+
+            }
+
+        }], function (err, result) {
+        if (err) {
+            return next(err)
+        }
+        if (result != null) {
+            console.log("API result: " + JSON.stringify(result));
+            var tempstr = JSON.stringify(result).slice(1, -1);
+            var gpresult = JSON.parse(tempstr);
+            res.json({Code: 200, Info: {equipment: gpresult}});
+        } else {
+            res.json({Code: 406, Info: 'provide details are wrong.'});
+        }
+    });
+});
+
+router.post('/edit_parts', function (req, res, next) {
+    console.log("Api JS Edit parts 1: " + JSON.stringify(req.body));
+    Equipment.count({
+        _id: req.body._id,
+        equipment_number: req.body.equipment_number,
+        equipment_name: req.body.equipment_name,
+        "equipments.material_number": req.body.material_number,
+        "equipments.min_qty": req.body.min_qty,
+        "equipments.max_qty": req.body.max_qty
+    }, function (err, equipment_count) {
+        if (err) {
+            return next(err);
+        }
+        else if (equipment_count) {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+
+            next();
+        }
+        else {
+            Equipment.update({
+                    _id: req.body._id,
+                    equipment_number: req.body.equipment_number,
+                    "equipments.material_number": req.body.material_number
+                }, {$set: {"equipments.$.min_qty": req.body.min_qty, "equipments.$.max_qty": req.body.max_qty}},
+                function (err, model) {
+                    console.log(err);
+                });
+        }
+        res.json({Code: 200, Info: 'Document updated'});
+    });
+
+}, function (err) {
+    console.log(err);
+});
+
 router.post('/search_facilities', function (req, res, next) {
     Facility.find(
         {
@@ -742,6 +819,50 @@ router.post('/search_facilities', function (req, res, next) {
                 res.json({Code: 200, Info: {facilities: facilities}});
             } else {
                 res.json({Code: 406, Info: 'no facilities'});
+            }
+        });
+});
+router.post('/edit_facility', function (req, res, next) {
+    Facility.count({
+        _id: req.body._id,
+        facility_number: req.body.facility_number,
+        facility_name: req.body.facility_name
+    }, function (err, facility_count) {
+        if (err) {
+            return next(err);
+        }
+        else if (facility_count) {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+
+            next();
+        }
+        else {
+            Facility.update({
+                    _id: req.body._id,
+                    facility_number: req.body.facility_number
+                }, {$set: {"facility_name": req.body.facility_name}},
+                function (err, model) {
+                    console.log(err);
+                });
+        }
+        res.json({Code: 200, Info: 'Document updated'});
+    });
+
+}, function (err) {
+    console.log(err);
+});
+router.post('/get_facility', function (req, res, next) {
+    Facility.findOne(
+        {
+            facility_number: req.body.facility_number
+        }, {facility_number: 1, facility_name: 1}, function (err, facility) {
+            if (err) {
+                return next(err)
+            }
+            if (facility != null) {
+                res.json({Code: 200, Info: {facility: facility}});
+            } else {
+                res.json({Code: 406, Info: 'provide details are wrong.'});
             }
         });
 });
@@ -787,6 +908,51 @@ router.post('/search_equipment', function (req, res, next) {
             }
         });
 });
+router.post('/get_equipment', function (req, res, next) {
+    Equipment.findOne(
+        {
+            equipment_number: req.body.equipment_number
+        }, {equipment_number: 1, equipment_name: 1, facilities: 1}, function (err, equipment) {
+            if (err) {
+                return next(err)
+            }
+            if (equipment != null) {
+                res.json({Code: 200, Info: {equipment: equipment}});
+            } else {
+                res.json({Code: 406, Info: 'provide details are wrong.'});
+            }
+        });
+});
+
+router.post('/edit_equipment', function (req, res, next) {
+    Equipment.count({
+        _id: req.body._id,
+        equipment_number: req.body.equipment_number,
+        equipment_name: req.body.equipment_name
+    }, function (err, equipment_count) {
+        if (err) {
+            return next(err);
+        }
+        else if (equipment_count) {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+
+            next();
+        }
+        else {
+            Equipment.update({
+                    _id: req.body._id,
+                    equipment_number: req.body.equipment_number
+                }, {$set: {"equipment_name": req.body.equipment_name}},
+                function (err, model) {
+                    console.log(err);
+                });
+        }
+        res.json({Code: 200, Info: 'Document updated'});
+    });
+
+}, function (err) {
+    console.log(err);
+});
 router.post('/search_priority', function (req, res, next) {
     Priority.find(
         {
@@ -829,21 +995,59 @@ router.post('/manager_workorder', function (req, res, next) {
                     if (role.role_name == 'technician') {
                         query.workorder_technician = req.body._id;
                     }
-                    WorkOrder.find(query, {}, {
-                        sort: {
-                            _id: -1 //Sort by Date Added DESC
-                        }
-                    }, function (err, workorders) {
-                        if (err) {
-                            return next(err)
-                        }
-                        if (workorders != null) {
-                            res.json({Code: 200, Info: {workorders: workorders}});
-                        } else {
-                            res.json({Code: 406, Info: 'no workorders'});
-                        }
+                    if (role.role_name == 'clerk') {
+                        //query.workorder_technician = req.body._id;
+                        PartsRequest.find({
+                            status: 1,
+                            workorder_number: {$exists: true}
+                        }, function (error, partrequest) {
+                            if (error) {
+                                return next(err);
+                            }
 
-                    });
+                            if (partrequest != null) {
+                                var list_workorders = [];
+                                for (var ky in partrequest) {
+                                    list_workorders.push(partrequest[ky].workorder_number);
+                                }
+                                query = {
+                                    workorder_number: {$in: list_workorders}
+                                };
+                                console.log(query);
+                                WorkOrder.find(query, {}, {
+                                    sort: {
+                                        _id: -1 //Sort by Date Added DESC
+                                    }
+                                }, function (err, workorders) {
+                                    if (err) {
+                                        return next(err)
+                                    }
+                                    if (workorders != null) {
+                                        res.json({Code: 200, Info: {workorders: workorders}});
+                                    } else {
+                                        res.json({Code: 406, Info: 'no workorders'});
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        WorkOrder.find(query, {}, {
+                            sort: {
+                                _id: -1 //Sort by Date Added DESC
+                            }
+                        }, function (err, workorders) {
+                            if (err) {
+                                return next(err)
+                            }
+                            if (workorders != null) {
+                                res.json({Code: 200, Info: {workorders: workorders}});
+                            } else {
+                                res.json({Code: 406, Info: 'no workorders'});
+                            }
+
+                        });
+                    }
+
 
                 });
 
@@ -969,6 +1173,11 @@ router.post('/get_user', function (req, res, next) {
 });
 router.post('/update_workorder', function (req, res, next) {
     var requestedArray = req.body;
+    if (req.body.wo_goodsreceipt == 1) {
+        PartsRequest.findOneAndUpdate({'workorder_number': req.body.workorder_number}, {'status': 1}, {upsert: false}, function (err, doc) {
+
+        });
+    }
     if (req.body.wo_pm_frequency > 0 && requestedArray.workorder_PM != "") {
         var pmNumber;
         requestedArray.workorder_PM = pmNumber = req.body.wo_pm_number;
@@ -983,7 +1192,7 @@ router.post('/update_workorder', function (req, res, next) {
         var pm_task = {
             pm_number: pmNumber,
             pm_frequency: req.body.wo_pm_frequency,
-            pm_next_date: new Date(req.body.wo_pm_date).valueOf(),
+            pm_next_date: req.body.wo_pm_date,
             pm_current_date: new Date().valueOf(),
             pm_previous_date: new Date(previous_date).valueOf(),
             status: 1
@@ -997,6 +1206,7 @@ router.post('/update_workorder', function (req, res, next) {
             if (err) {
                 console.log(err);
             }
+            console.log(pm);
             updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
         });
     } else {
@@ -1048,8 +1258,107 @@ router.post('/get_users', function (req, res, next) {
     });
 });
 
+router.post('/get_user_details', function (req, res, next) {
+    var userd;
+    console.log("in apijs get user details: " + req.body.user_email);
+    Users.aggregate([
+        {
+            $match: {"email": req.body.user_email}
+        },
+        {
+            $lookup: {
+                from: "collection_roles",
+                localField: "userrole",
+                foreignField: "_id",
+                as: "roles"
+            }
+        }], function (err, result) {
+        if (result) {
+            var tempstr = JSON.stringify(result).slice(1, -1);
+            userd = JSON.parse(tempstr);
+            var queryud;
+
+            if (userd.roles[0].role_name == "manager") {
+                queryud = {facility_managers: {$elemMatch: {user_id: userd._id, email: userd.email}}};
+            } else {
+                queryud = {facility_users: {$elemMatch: {user_id: userd._id, email: userd.email}}};
+            }
+
+            Facility.findOne(queryud, {facility_number: 1, facility_name: 1}, function (err, facility) {
+                if (err) {
+                    return next(err)
+                }
+                if (facility != null) {
+
+                    userd.facility_number = facility.facility_number;
+                    userd.facility_name = facility.facility_name;
+
+                    res.json({Code: 200, Info: {user: userd}});
+                } else {
+                    userd.facility_number = "";
+                    userd.facility_name = "";
+
+                    res.json({Code: 200, Info: {user: userd}});
+                }
+            });
+            //console.log("userd after log last : "+ JSON.stringify(userd));
+
+        }
+        else {
+            next(err);
+        }
+
+    });
+
+});
+
+router.post('/edit_user', function (req, res, next) {
+    console.log("Details in apijs: " + JSON.stringify(req.body.params));
+    Users.count({
+        _id: req.body._id,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email
+    }, function (err, user_count) {
+        if (err) {
+            return next(err);
+        }
+        else if (user_count) {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+
+            next();
+        }
+        else {
+            Users.update({_id: req.body._id, email: req.body.email}, {
+                    $set: {
+                        "firstname": req.body.firstname,
+                        "lastname": req.body.lastname
+                    }
+                },
+                function (err, model) {
+                    console.log(err);
+                });
+        }
+        res.json({Code: 200, Info: 'Document updated'});
+    });
+
+}, function (err) {
+    console.log(err);
+});
+
 router.post('/get_search_wo', function (req, res, next) {
     var query = req.body;
+    var user_details = {
+        user_id: req.body.user_id,
+        userrole: req.body.userrole,
+        role: req.body.role
+    };
+    delete query['user_id'];
+    delete query['userrole'];
+    delete query['role'];
+    if (user_details.role == 'technician') {
+        query.workorder_technician = user_details.user_id;
+    }
     if (typeof req.body.created_on_from !== "undefined") {
         if (typeof req.body.created_on_to === "undefined") {
             var created_on = new Date().valueOf();
@@ -1196,7 +1505,7 @@ var SendMail = function (req, it_pm_workorder) {
                                     }
                                     send(mail_to, last_message, req, facility, category, equipment, priority);
                                 } else {
-                                    if (it_pm_workorder != 1 && req.body.status != 2) {
+                                    if (req.body.status != 2) {
                                         Users.findOne({_id: req.body.workorder_technician}, function (err, tech) {
                                             var mail_to = tech.email;
                                             var last_message = ' has been assgined';
@@ -1234,7 +1543,7 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
         +
         '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
         +
-        '<p><b>Work Order Date</b>: ' + req.body.created_on + '</p>'
+        '<p><b>Work Order Date</b>: ' + dateFormat(parseInt(req.body.created_on), 'shortDate') + '</p>'
         +
         '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
         +
@@ -1260,19 +1569,302 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
 var updateWorkOrder = function (query, requestedArray, req, res) {
     //delete requestedArray['user_id'];
     if (requestedArray.wo_pm_frequency != "") {
+        var pm_frequency = requestedArray['wo_pm_frequency'];
         var it_pm_workorder = 1;
     } else {
         var it_pm_workorder = 0;
     }
     delete requestedArray['wo_pm_frequency'];
-    delete requestedArray['wo_pm_date'];
+    //delete requestedArray['wo_pm_date'];
     delete requestedArray['wo_pm_previous_date'];
     delete requestedArray['__v'];
     WorkOrder.findOneAndUpdate(query, requestedArray, {upsert: false}, function (err, doc) {
         if (err) return res.json(500, {error: err});
+        if (requestedArray.workorder_PM != "" && requestedArray.status == 2) {
+            WorkOrder.count({
+                workorder_PM: requestedArray.workorder_PM,
+                created_on: {'$gt': requestedArray.created_on}
+            }, function (err, wrkordr) {
+                if (err) {
+                    console.log(err);
+                }
+                if (wrkordr == 0) {
+                    createWorkOrderPM({
+                        pm_number: requestedArray.workorder_PM,
+                        wo_pm_date: requestedArray.wo_pm_date,
+                        pm_frequency: pm_frequency
+                    });
+                }
+            });
+
+        }
         SendMail(req, it_pm_workorder);
         res.json({Code: 200, Info: "succesfully saved"});
     });
+}
+var createWorkOrderPM = function (task) {
+
+    WorkOrder.findOne({workorder_PM: task.pm_number}, function (err, wkOrd) {
+        if (err) {
+            return false;
+        }
+        counters.increment('workorder_number', function (err, result) {
+            if (err) {
+                console.error('Counter on workeOrder error: ' + err);
+                return;
+            }
+            var pm_date = new Date(parseInt(task.wo_pm_date));
+            pm_date.setDate(pm_date.getDate() + parseInt(task.pm_frequency));
+            
+            var insert_query = {
+                workorder_number: result.seq,
+                workorder_creator: wkOrd.workorder_creator,
+                workorder_description: wkOrd.workorder_description,
+                workorder_facility: wkOrd.workorder_facility,
+                workorder_category: wkOrd.workorder_category,
+                workorder_equipment: wkOrd.workorder_equipment,
+                workorder_priority: wkOrd.workorder_priority,
+                workorder_skill: wkOrd.workorder_skill,
+                workorder_class: wkOrd.workorder_class,
+                created_on: task.wo_pm_date,
+                workorder_PM: wkOrd.workorder_PM,
+                wo_pm_date: new Date(pm_date).valueOf(),
+                status: 1
+            };
+            console.log(insert_query);
+            var workOrder = new WorkOrder(insert_query);
+            workOrder.save(function (err, resp) {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        Code: 499,
+                        message: err,
+                    });
+                } else {
+                    var currentDt = new Date();
+                    currentDt.setDate(currentDt.getDate() + parseInt(task.pm_frequency));
+                    var pm_task = {
+                        pm_number: task.pm_number,
+                        pm_frequency: task.pm_frequency,
+                        pm_next_date: new Date(currentDt).valueOf(),
+                        pm_current_date: new Date().valueOf(),
+                        pm_previous_date: new Date(parseInt(task.pm_previous_date)).valueOf(),
+                        status: 1
+                    };
+                    var where = {pm_number: task.pm_number};
+                    PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                    var facility, category, equipment, priority;
+                    Facility.findOne({facility_number: wkOrd.workorder_facility}, function (err, facility) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        Category.findOne({_id: wkOrd.workorder_category}, function (err, category) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            Equipment.findOne({_id: wkOrd.workorder_equipment}, function (err, equipment) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                Priority.findOne({_id: wkOrd.workorder_priority}, function (err, priority) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    var facility_namagers = facility.facility_managers;
+                                    var manager_email = "";
+                                    for (var man in facility_namagers) {
+                                        if (typeof facility_namagers[man].email !== 'undefined') {
+                                            manager_email += facility_namagers[man].email + ", ";
+                                        }
+                                    }
+                                    //manager_email = "pgmanager7@gmail.com,";
+                                    var mail_to = manager_email;
+                                    var mailData = {
+                                        // Comma separated list of recipients
+                                        to: mail_to,
+                                        // Subject of the message
+                                        subject: 'New PM Maintenance Work Order number ' + setPadZeros(result.seq, 8) + ' has been submited for your approval', //
+
+                                        // plaintext body
+                                        //text: 'Hello to sunil',
+
+                                        // HTML body
+                                        html: '<p>New PM Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
+                                        +
+                                        '<p><b>Work Order Details</b></p>'
+                                        +
+                                        '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
+                                        +
+                                        '<p><b>Work Order Date</b>: ' + new Date() + '</p>'
+                                        +
+                                        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+                                        +
+                                        '<p><b>Category</b>: ' + category.category_name + '</p>'
+                                        +
+                                        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+                                        +
+                                        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+                                        +
+                                        '<p><b>Description</b>: ' + wkOrd.workorder_description + '</p>'
+                                        +
+                                        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+
+                                    };
+                                    transporter.sendMail(mailData, function (err, info) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        console.log('Message sent successfully!');
+                                        console.log(info);
+
+                                    });
+
+                                });
+                            });
+                        });
+                    });
+                    console.log('WorkOrder ' + result.seq + ' created sucessfully');
+                    //res.json({Code: 200, Info: {msg: 'sucessfull', workorder_number: result.seq}});
+                }
+            });
+        });
+    });
+
+}
+var sendMailPartRequest = function (req) {
+    Users.findOne({_id: req.body.user_id}, function (err, user) {
+        if (err) {
+            console.log(err);
+        }
+        if (user != null) {
+            Facility.findOne({
+                facility_users: {
+                    $elemMatch: {user_id: req.body.user_id}
+                }
+            }, function (err, facility) {
+
+                var users = facility.facility_users;
+                var users_managers = facility.facility_managers;
+                console.log(facility.facility_managers);
+                var users_in = [];
+                for (var ky in users) {
+                    users_in.push(users[ky].user_id)
+                }
+                var mail_managers = "";
+                for (var ke in users_managers) {
+                    if (typeof users_managers[ke].email !== 'undefined') {
+                        mail_managers += users_managers[ke].email + ',';
+                    }
+                }
+                console.log('mail');
+                console.log(mail_managers);
+                mail(mail_managers, req);
+                Roles.findOne({role_name: 'clerk'}, function (err, userrole) {
+                    if (err) {
+                    }
+                    Users.find({_id: {$in: users_in}, userrole: userrole._id}, function (err, userlist) {
+                        if (err) {
+                        }
+                        var mail_clerks = "";
+                        for (var k in userlist) {
+                            mail_clerks += userlist[k].email + ',';
+                        }
+                        console.log('mailc');
+                        console.log(mail_clerks);
+                        mail(mail_clerks, req);
+                    });
+                });
+            });
+        }
+    });
+
+
+}
+
+function mail(mail_to, req) {
+    Equipment.aggregate([
+        {
+            $unwind: "$equipments"
+        },
+        {
+            $match: {
+                "equipments.material_number": req.body.material_number,
+
+            }
+        },
+        {
+            $project: {
+                equipment_number: 1,
+                equipment_name: 1,
+                "equipments.material_number": 1,
+                "equipments.material_description": 1,
+                "equipments.vendor_number": 1,
+                "equipments.vendor_name": 1
+            }
+
+        }], function (err, result) {
+        if (err) {
+            return next(err)
+        }
+        if (result != null) {
+
+            if (isNaN(parseInt(req.body.workorder_number))) {
+                var wo_number = "-";
+            } else {
+                var wo_number = setPadZeros(parseInt(req.body.workorder_number), 8);
+            }
+            console.log("API result: " + JSON.stringify(result));
+            var tempstr = JSON.stringify(result).slice(1, -1);
+            var gpresult = JSON.parse(tempstr);
+            var mailData = {
+                // Comma separated list of recipients
+                to: mail_to,
+                // Subject of the message
+                subject: 'Part Request', //
+
+                // plaintext body
+                //text: 'Hello to sunil',
+
+                // HTML body
+                html: '<p>Parts Request raised for following equipment<b>'
+                +
+                '<p><b>Work Order Number</b>: ' + wo_number + '</p>'
+                +
+                '<p><b>Qty</b>: ' + req.body.qty + '</p>'
+                +
+                '<p><b>Date</b>: ' + dateFormat(new Date(), 'shortDate') + '</p>'
+                +
+                '<p><b>Equipment Number</b>: ' + gpresult.equipment_number + '</p>'
+                +
+                '<p><b>Equipment Name</b>: ' + gpresult.equipment_name + '</p>'
+                +
+                '<p><b>Part Number</b>: ' + gpresult.equipments.material_number + '</p>'
+                +
+                '<p><b>Part Description</b>: ' + gpresult.equipments.material_description + '</p>'
+                +
+                '<p><b>Vendor Name</b>: ' + gpresult.equipments.vendor_name + '</p>'
+                +
+                '<p><b>Vendor Number</b>: ' + gpresult.equipments.vendor_number + '</p>'
+                +
+                '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Part request</p>'
+
+            };
+            transporter.sendMail(mailData, function (err, info) {
+                if (err) {
+                    console.log(err);
+                }
+                console.log('Message sent successfully!');
+
+            });
+        } else {
+            res.json({Code: 406, Info: 'provide details are wrong.'});
+        }
+    });
+
 }
 
 function getNextSequence(name) {
@@ -1295,7 +1887,5 @@ var setPadZeros = function (num, size) {
     } catch (err) {
         return null;
     }
-
-
 }
 module.exports = router;

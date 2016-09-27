@@ -58,6 +58,7 @@
                                     <th>Last Name</th>
                                     <th>Email</th>
                                     <th>Role</th>
+                                    <th>Edit</th>
                                 </tr>
                                 </thead>
 
@@ -67,6 +68,7 @@
                                     <td>{{user.lastname}}</td>
                                     <td>{{user.email}}</td>
                                     <td>{{showRole(user.userrole)}}</td>
+                                    <td><i class="fa fa-edit" ng-click="editUser(user.email)"></i></td>
                                 </tr>
                                 </tbody>
 

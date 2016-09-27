@@ -73,5 +73,9 @@ angular.module('PGapp.equipmentlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             }
             return found.status_name;
         }
+
+        $scope.editEquipment = function (equipment_number) {
+            $location.path('editequipment/' + equipment_number);
+        };
     }]);
 
