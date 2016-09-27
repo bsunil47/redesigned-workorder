@@ -1251,7 +1251,7 @@ router.post('/update_workorder', function (req, res, next) {
                 });
             } else {
                 PM.count(where, function (er, cnt) {
-                    if (count == 0) {
+                    if (cnt == 0) {
                         PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
                             if (err) {
                                 console.log(err);
