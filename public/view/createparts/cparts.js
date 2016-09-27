@@ -92,7 +92,7 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     alert(error);
                 });
             }
-        }
+        };
         $scope.$watch("pe.equipment_number", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.pe.equipment_number)) {
                 var found = $filter('getByFacilityNumber')('equipment_number', $scope.pe.equipment_number, $scope.partsequipments);

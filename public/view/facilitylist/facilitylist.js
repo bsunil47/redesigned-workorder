@@ -54,7 +54,7 @@ angular.module('PGapp.facilitylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 return null;
             }
             return found.status_name;
-        }
+        };
         $scope.editFacility = function (facility_number) {
             $location.path('editfacility/' + facility_number);
         };

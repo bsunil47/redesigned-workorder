@@ -32,7 +32,7 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
   };
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
-  }
+  };
       $scope.$watch("equipment_number", function (newValue, oldValue) {
         if (!angular.isUndefined($scope.equipment_number)) {
           var found = $filter('getByFacilityNumber')('equipment_number', $scope.equipment_number, $scope.equipments);

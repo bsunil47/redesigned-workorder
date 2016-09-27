@@ -65,7 +65,7 @@ var setPadZeros = function (num, size) {
     }
 
 
-}
+};
 var cron = require('node-cron');
 
 cron.schedule('* 1 * * *', function () {
@@ -214,7 +214,7 @@ var createWorkOrder = function (task) {
         });
     });
 
-}
+};
 
 
 
