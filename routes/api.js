@@ -711,17 +711,39 @@ router.post('/create_part_request', function (req, res, next) {
     var in_qry = req.body;
     in_qry.status = 1;
     var partRequest = new PartsRequest(in_qry);
-    partRequest.save(function (er) {
-        if (er) {
-            res.json({
-                Code: 499,
-                message: 'issue with content'
-            });
-        }
-        sendMailPartRequest(req);
-        res.json({Code: 200, Info: 'sucessfull'});
+    if (req.body.workorder_number != "") {
+        WorkOrder.count({workorder_number: req.body.workorder_number, status: 1}, function (err, cnt) {
+            if (err) {
+            }
+            if (cnt != 0) {
+                partRequest.save(function (er) {
+                    if (er) {
+                        res.json({
+                            Code: 499,
+                            message: 'Issue with content'
+                        });
+                    }
+                    sendMailPartRequest(req);
+                    res.json({Code: 200, Info: 'sucessfull'});
+                });
+            } else {
+                res.json({Code: 499, Info: 'This WorkOrder dont exist or already Closed'});
+            }
+        });
+    } else {
+        partRequest.save(function (er) {
+            if (er) {
+                res.json({
+                    Code: 499,
+                    message: 'Issue with content'
+                });
+            }
+            sendMailPartRequest(req);
+            res.json({Code: 200, Info: 'sucessfull'});
+        });
+    }
 
-    })
+
 });
 
 router.post('/partsequipments', function (req, res, next) {
