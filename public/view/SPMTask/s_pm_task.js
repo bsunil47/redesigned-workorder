@@ -58,7 +58,7 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
         $scope.changeDate = function () {
             $scope.workOrder.wo_datefrom = $scope.workOrder.wo_datefrom;
         };

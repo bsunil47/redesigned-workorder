@@ -99,7 +99,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.reqPMTask = true;
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_equipmentcost)) {
-                    console.log($scope.workOrder.wo_equipmentcost)
+                    console.log($scope.workOrder.wo_equipmentcost);
                     $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
                 }
                 $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
@@ -319,14 +319,14 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         $scope.myDate = new Date();
 
         $scope.facilities = $cookies.getObject('facilities');
-        
+
         $scope.Logout = function () {
             $cookies.remove('userDetails');
             $location.path("/");
         };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
 
         $scope.pgWorkOrder = function () {
             console.log($scope.workOrder.wo_pm_frequency);
@@ -344,7 +344,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 $scope.workOrder.wo_pm_date = "";
             }
 
-        }
+        };
 
         function updateWorkOrder() {
             console.log($scope.workOrder.workorder_technician);
@@ -442,71 +442,17 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             }, function (error) {
                 alert(error);
             });
-            /*
-             if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
-             var data_post = $scope.workOrder;
-             if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
-             data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
-             }
-             //data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
-             data_post.created_on = new Date(data_post.created_on).valueOf();
-             data_post.user_id = userdetail.user._id;
-
-             API.UpdateWorkOrder.Recent(data_post, function (res) {
-             if (res.Code == 200) {
-             //$scope.categories = res.Info.categories;
-             //$scope.workOrder.workorder_category = $scope.categories[0]._id;
-             //$cookies.put('userDetails',res);
-             if (userdetail.role == 'technician') {
-             var msg = "WorkOrder has been updated and an email has been sent to manager.";
-             } else {
-             if (userdetail.role == 'manager') {
-             var msg = "WorkOrder assigned to " + $scope.showtechnician($scope.workOrder.workorder_technician) + " an email has been sent.";
-             } else {
-             var msg = "WorkOrder parts recived, an email has been sent to " + $scope.showtechnician($scope.workOrder.workorder_technician) + ".";
-             }
-             }
-             swal({
-             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-             text: msg,
-             width: "450px",
-             confirmButtonText: 'Ok'
-             });
-             $location.path("/search_workorder");
-             } else {
-             swal({
-             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-             text: "WorkOrder has'nt been updated",
-             width: "450px",
-             confirmButtonText: 'Ok'
-             });
-             }
-
-             }, function (error) {
-             swal({
-             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-             text: "Oop's.. Something went worng.. Try again later",
-             width: "450px",
-             confirmButtonText: 'Ok'
-             });
-             });
-             }
-             */
-
-
         }
-
         $scope.showtechnician = function (technicain) {
             var found = $filter('getByFacilityNumber')('_id', technicain, $scope.technicians);
             if (angular.isUndefined(found) || found === null) {
                 return null;
             }
             return found.firstname;
-        }
-
+        };
         $scope.showTimeChange = function () {
             if ($scope.workOrder.wo_timespent === "00:00") {
-                console.log('asd')
+                console.log('asd');
                 $scope.workOrder.wo_timespent = 'undefined';
             }
             console.log($scope.workOrder.wo_timespent);

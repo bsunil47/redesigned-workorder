@@ -79,7 +79,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             var dd = currentDt.getDate();
             var yyyy = currentDt.getFullYear();
             var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.wo_pm_date = date
+            $scope.selectedWorkOrder.wo_pm_date = date;
             console.log(workorder.workorder_facility);
             $scope.selectedWorkOrder.workorder_facility = showFacility(workorder.workorder_facility);
             $scope.selectedWorkOrder.workorder_creator = showRequestor(workorder.workorder_creator);
@@ -197,7 +197,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
         $scope.showWithzeros = showWithzeros;
         function showWithzeros(Order) {
             return $filter('setPadZeros')(Order, 8);
@@ -241,7 +241,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             } else {
                 return true;
             }
-        }
+        };
 
         function ListWorkOrders() {
             if (angular.isUndefined($scope.workOrder.workorder_priority) && angular.isUndefined($scope.workOrder.workorder_number) && angular.isUndefined($scope.workOrder.workorder_category) && angular.isUndefined($scope.workOrder.workorder_skill) && angular.isUndefined($scope.workOrder.workorder_creator) && angular.isUndefined($scope.workOrder.workorder_technician) && angular.isUndefined($scope.workOrder.workorder_equipment) && angular.isUndefined($scope.workOrder.workorder_facility) && angular.isUndefined($scope.workOrder.status) && angular.isUndefined($scope.workOrder.created_on_from) && angular.isUndefined($scope.workOrder.created_on_to) && angular.isUndefined($scope.workOrder.wo_datecomplete_from) && angular.isUndefined($scope.workOrder.wo_datecomplete_to) && angular.isUndefined($scope.workOrder.wo_pm_date_from) && angular.isUndefined($scope.workOrder.wo_pm_date_to) && angular.isUndefined($scope.workOrder.workorder_class)) {
@@ -266,7 +266,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                     }
                 }
                 qry.userrole = userdetail.user.userrole;
-                qry.user_id = userdetail.user._id
+                qry.user_id = userdetail.user._id;
                 qry.role = userdetail.role;
                 //var qry = $scope.workOrder;
                 API.GetSearchedWorkOrders.Recent(qry, function (res) {
@@ -282,7 +282,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         }
         $scope.clearForm = function () {
             $scope.workOrder = {};
-        }
+        };
 
         $scope.showtechnician = showtechnician;
         function showtechnician(technicain) {

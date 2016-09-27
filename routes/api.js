@@ -1538,7 +1538,7 @@ var SendMail = function (req, it_pm_workorder) {
             });
         });
     });
-}
+};
 var send = function (mail_to, last_message, req, facility, category, equipment, priority) {
     var mailData = {
         // Comma separated list of recipients
@@ -1578,7 +1578,7 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
         console.log('Message sent successfully!');
 
     });
-}
+};
 var updateWorkOrder = function (query, requestedArray, req, res) {
     //delete requestedArray['user_id'];
     if (requestedArray.wo_pm_frequency != "") {
@@ -1614,7 +1614,7 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
         SendMail(req, it_pm_workorder);
         res.json({Code: 200, Info: "succesfully saved"});
     });
-}
+};
 var createWorkOrderPM = function (task) {
 
     WorkOrder.findOne({workorder_PM: task.pm_number}, function (err, wkOrd) {
@@ -1747,7 +1747,7 @@ var createWorkOrderPM = function (task) {
         });
     });
 
-}
+};
 var sendMailPartRequest = function (req) {
     Users.findOne({_id: req.body.user_id}, function (err, user) {
         if (err) {
@@ -1796,7 +1796,7 @@ var sendMailPartRequest = function (req) {
     });
 
 
-}
+};
 
 function mail(mail_to, req) {
     Equipment.aggregate([
@@ -1881,7 +1881,7 @@ function mail(mail_to, req) {
 }
 
 function getNextSequence(name) {
-    counters.increment
+    counters.increment;
     var ret = counters.findAndModify(
         {
             query: {_id: name},
@@ -1900,5 +1900,5 @@ var setPadZeros = function (num, size) {
     } catch (err) {
         return null;
     }
-}
+};
 module.exports = router;

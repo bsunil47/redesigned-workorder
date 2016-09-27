@@ -159,7 +159,7 @@ router.post('/report_category', function (req, res, next) {
     var search_date = {
         'from': "",
         'to': ""
-    }
+    };
 
     if ((req.body.wo_datefrom != "") && (req.body.wo_dateto != "")) {
         /*query = {
@@ -176,7 +176,7 @@ router.post('/report_category', function (req, res, next) {
                 '$lte': req.body.wo_dateto
 
             }
-        }
+        };
         search_date = {
             'from': dateFormat(parseInt(req.body.wo_datefrom), 'shortDate'),
             'to': dateFormat(parseInt(req.body.wo_dateto), 'shortDate')
@@ -369,6 +369,6 @@ var setPadZeros = function (num, size) {
     }
 
 
-}
+};
 
 module.exports = router;

@@ -111,7 +111,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             var dd = currentDt.getDate();
             var yyyy = currentDt.getFullYear();
             var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.wo_pm_date = date
+            $scope.selectedWorkOrder.wo_pm_date = date;
             console.log(workorder.workorder_facility);
             $scope.selectedWorkOrder.workorder_facility = showFacility(workorder.workorder_facility);
             $scope.selectedWorkOrder.workorder_creator = showRequestor(workorder.workorder_creator);
@@ -125,7 +125,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.reqPMTask = true;
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_equipmentcost)) {
-                    console.log($scope.workOrder.wo_equipmentcost)
+                    console.log($scope.workOrder.wo_equipmentcost);
                     $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
                 }
 
@@ -334,7 +334,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
 
         $scope.pgWorkOrder = function () {
             console.log($scope.workOrder.wo_pm_frequency);
@@ -352,7 +352,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 $scope.workOrder.wo_pm_date = "";
             }
 
-        }
+        };
 
         function updateWorkOrder() {
             console.log($scope.workOrder.workorder_technician);
@@ -500,11 +500,11 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
         $scope.showTimeChange = function () {
             if ($scope.workOrder.wo_timespent === "00:00") {
-                console.log('asd')
+                console.log('asd');
                 $scope.workOrder.wo_timespent = 'undefined';
             }
             console.log($scope.workOrder.wo_timespent);
-        }
+        };
         $scope.showEquipment = showEquipment;
         function showEquipment(equipment) {
             var found = $filter('getByFacilityNumber')('_id', equipment, $scope.equipments);

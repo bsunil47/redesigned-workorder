@@ -57,7 +57,7 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        }
+        };
 
         $scope.$watch("datefrom", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.datefrom)) {
