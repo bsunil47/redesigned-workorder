@@ -59,6 +59,10 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
           }
           API.CreatePartsRequest.Recent(set, function (res) {
             if (res.Code == 200) {
+                $scope.p.qty[part] = "";
+                if (!angular.isUndefined($scope.p.workorder)) {
+                    $scope.p.workorder[part] = "";
+                }
               swal({
                 title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
                 text: 'Sucessfully Created',
@@ -67,7 +71,12 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
               });
               $location.path("/parts_list");
             } else {
-              
+                swal({
+                    title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                    text: res.Info,
+                    width: "450px",
+                    confirmButtonText: 'Ok'
+                });
               //$scope.CreateUserForm.email.error = true;
             }
           }, function (error) {
