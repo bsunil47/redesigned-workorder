@@ -305,11 +305,7 @@
                             <div class="text-center clearfix">
                                 <p>
                                     <button type="submit" class="btn btn-primary" ng-click="updateWorkOrder()"
-                                            ng-disabled="EditWorkOrderForm.workorder_description.$dirty
-                                            && EditWorkOrderForm.workorder_description.$invalid
-                                            && EditWorkOrderForm.workorder_skill.$invalid
-                                            && EditWorkOrderForm.workorder_class.$invalid
-                                            && EditWorkOrderForm.workorder_technician.$invalid">
+                                            ng-disabled="saveDisable">
                                         Save
                                     </button>
                                     <button type="button" class="btn btn-primary">Print</button>

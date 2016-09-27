@@ -108,6 +108,25 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.disableTimeSpent = false;
                     $scope.disableDateCompleted = false;
                 }
+                var orderDt = new Date(parseInt($scope.workOrder.created_on)).valueOf();
+                var currentDate = new Date(parseInt($scope.workOrder.created_on));
+                currentDate.setDate(currentDate.getDate() - 7);
+                var lessDate = new Date(currentDate).valueOf();
+                var currentDate = new Date(parseInt($scope.workOrder.created_on));
+                currentDate.setDate(currentDate.getDate() + 7);
+                var grtDate = new Date(currentDate).valueOf();
+                var orderDt = new Date(parseInt($scope.workOrder.created_on)).valueOf();
+                var currentDate = new Date().valueOf();
+                $scope.saveDisable = true;
+
+                console.log('compare');
+                console.log('orderDt : ' + parseInt(currentDate));
+                console.log('orderDt : ' + parseInt(lessDate));
+                console.log('orderDt : ' + parseInt(grtDate));
+                if (parseInt(currentDate) > parseInt(lessDate) && parseInt(currentDate) < parseInt(grtDate)) {
+                    console.log('compare');
+                    $scope.saveDisable = false;
+                }
 
                 var currentDt = new Date(parseInt($scope.workOrder.created_on));
                 var mm = currentDt.getMonth() + 1;
