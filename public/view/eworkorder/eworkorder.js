@@ -14,7 +14,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             $location.path('login');
         }
         $scope.updateWorkOrder = updateWorkOrder;
-        var currentId = $routeParams.id;
+        var currentId = parseInt($routeParams.id);
         var userdetail = $cookies.getObject('userDetails');
         $scope.workOrder = {
             workorder_number: currentId,
