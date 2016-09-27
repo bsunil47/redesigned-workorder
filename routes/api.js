@@ -1237,13 +1237,36 @@ router.post('/update_workorder', function (req, res, next) {
         if (requestedArray.wo_datecomplete == 'NaN') {
             delete requestedArray['wo_datecomplete'];
         }
-        PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
-            if (err) {
-                console.log(err);
+        WorkOrder.count({
+            workorder_PM: pm_task.pm_number,
+            workorder_number: parseInt(req.body.workorder_number)
+        }, function (err, count) {
+            if (count != 0) {
+                PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log(pm);
+                    updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
+                });
+            } else {
+                PM.count(where, function (er, cnt) {
+                    if (count == 0) {
+                        PM.findOneAndUpdate(where, pm_task, {upsert: true}, function (err, pm) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            console.log(pm);
+                            updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
+                        });
+                    } else {
+                        res.json({Code: 499, Info: 'PM Task already in use'});
+                    }
+                });
             }
-            console.log(pm);
-            updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
         });
+
+
     } else {
         requestedArray.workorder_number = parseInt(req.body.workorder_number);
         if (requestedArray.wo_datecomplete == 'NaN') {
@@ -1614,27 +1637,32 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
     delete requestedArray['wo_pm_previous_date'];
     delete requestedArray['__v'];
     WorkOrder.findOneAndUpdate(query, requestedArray, {upsert: false}, function (err, doc) {
-        if (err) return res.json(500, {error: err});
-        if (requestedArray.workorder_PM != "" && requestedArray.status == 2) {
-            WorkOrder.count({
-                workorder_PM: requestedArray.workorder_PM,
-                created_on: {'$gt': requestedArray.created_on}
-            }, function (err, wrkordr) {
-                if (err) {
-                    console.log(err);
-                }
-                if (wrkordr == 0) {
-                    createWorkOrderPM({
-                        pm_number: requestedArray.workorder_PM,
-                        wo_pm_date: requestedArray.wo_pm_date,
-                        pm_frequency: pm_frequency
-                    });
-                }
-            });
+        if (err) return res.json({Code: 500, Info: err});
+        if (doc != null) {
+            if (requestedArray.workorder_PM != "" && requestedArray.status == 2) {
+                WorkOrder.count({
+                    workorder_PM: requestedArray.workorder_PM,
+                    created_on: {'$gt': requestedArray.created_on}
+                }, function (err, wrkordr) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    if (wrkordr == 0) {
+                        createWorkOrderPM({
+                            pm_number: requestedArray.workorder_PM,
+                            wo_pm_date: requestedArray.wo_pm_date,
+                            pm_frequency: pm_frequency
+                        });
+                    }
+                });
 
+            }
+            SendMail(req, it_pm_workorder);
+            res.json({Code: 200, Info: "succesfully saved"});
+        } else {
+            res.json({Code: 499, Info: "Not able update"});
         }
-        SendMail(req, it_pm_workorder);
-        res.json({Code: 200, Info: "succesfully saved"});
+
     });
 };
 var createWorkOrderPM = function (task) {
@@ -1828,7 +1856,6 @@ function mail(mail_to, req) {
         {
             $match: {
                 "equipments.material_number": req.body.material_number,
-
             }
         },
         {

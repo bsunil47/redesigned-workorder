@@ -422,7 +422,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                             } else {
                                 swal({
                                     title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                                    text: "WorkOrder has'nt been updated",
+                                    text: res.Info,
                                     width: "450px",
                                     confirmButtonText: 'Ok'
                                 });
