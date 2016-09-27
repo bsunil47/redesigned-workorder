@@ -15,7 +15,6 @@ var nunjucks = require('nunjucks');
 //var dateFilter = require('nunjucks-date-filter');
 
 
-
 //html file which you want to convert into pdf.
 //var html = fs.readFileSync('view/userlist/userlist.html', 'utf8');
 //Nunjucks is a product from Mozilla and we are using it as a template engine.
@@ -65,11 +64,12 @@ router.post('/', function (req, res, next) {
             'to': dateFormat(parseInt(req.body.wo_dateto), 'shortDate')
         }
     }
+    var qr = {};
     if (req.body.facility != 0) {
         query.workorder_facility = req.body.facility;
     }
     if (req.body.equipment != 0) {
-        query.workorder_equipment = req.body.equipment;
+        qr._id = query.workorder_equipment = req.body.equipment;
     }
     if (req.body.workorder_type == 2) {
         query.workorder_PM = {$exists: true, $not: {$size: 0}};
@@ -77,78 +77,102 @@ router.post('/', function (req, res, next) {
     if (req.body.workorder_type == 1) {
         query.workorder_PM = {$exists: false};
     }
-    console.log(query);
-    WorkOrder.find(query, function (err, workorders) {
-        if (err) {
-            next()
-        }
-
-        if (workorders.length > 0) {
-            var calls = [];
-            workorders.forEach(function (work) {
-                calls.push(function (callback) {
-                    Category.findOne({_id: work.workorder_category}, function (e, r) {
-                        if (e) {
-                            return false;
+    Equipment.find(qr, function (err, equi) {
+        var equipments = [];
+        equi.forEach(function (eq) {
+            var total_hrs = 0;
+            equipments.push(function (callback) {
+                query.workorder_equipment = eq._id;
+                WorkOrder.find(query, {},
+                    {
+                        sort: {
+                            workorder_equipment: -1 //Sort by  DESC
                         }
-                        work.workorder_category = r.category_name;
+                    }, function (err, workorders) {
+                        if (err) {
+                            next()
+                        }
+                        var Wkodrs = [];
+                        workorders.forEach(function (wrkORder) {
+                            Wkodrs.push(function (callback) {
+                                var wo_timespent = 0;
+                                var details = {};
+                                var time_spent = wrkORder.wo_timespent.split(':');
+                                if (time_spent[1] == "15") {
+                                    console.log(time_spent[1]);
+                                    wo_timespent = parseFloat(time_spent[0]) + 0.25;
+                                    total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.25);
+                                    details.wo_timespent = wo_timespent;
+                                } else {
+                                    if (time_spent[1] == "30") {
+                                        wo_timespent = parseFloat(parseFloat(time_spent[0]) + parseFloat(0.5));
+                                        total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.5);
+                                        details.wo_timespent = wo_timespent;
+                                    } else {
+                                        if (time_spent[1] == "45") {
+                                            wo_timespent = parseFloat(parseFloat(time_spent[0]) + parseFloat(0.75));
+                                            total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.75);
+                                            details.wo_timespent = wo_timespent;
+                                        } else {
+                                            wo_timespent = parseFloat(time_spent[0]);
+                                            total_hrs = total_hrs + parseFloat(time_spent[0]);
+                                            details.wo_timespent = wo_timespent;
+                                        }
+                                    }
+                                }
+
+
+                                details.workorder_number = setPadZeros(parseInt(wrkORder.workorder_number), 8);
+                                Category.findOne({_id: wrkORder.workorder_category}, function (categoryErr, category) {
+                                    if (categoryErr) {
+
+                                    }
+                                    details.workorder_category = category.category_name;
+                                    console.log(details);
+                                    callback(null, details);
+                                });
+
+
+                            });
+                        });
+                        async.parallel(Wkodrs, function (err, result) {
+                            var equpment = {
+                                total_hrs: total_hrs,
+                                equipment_number: eq.equipment_number,
+                                equipment_name: eq.equipment_name,
+                                status: eq.status,
+                                equipments: eq.equipments,
+                                facilities: eq.facilities,
+                                workorders: result
+                            }
+                            callback(null, equpment);
+                        })
+
                     });
-                    Equipment.findOne({_id: work.workorder_equipment}, function (er, ra) {
-                        if (er) {
-                            return false;
-                        }
-                        var time_spent = work.wo_timespent.split(':');
-                        if (time_spent[1] == "15") {
-                            console.log(time_spent[1]);
-                            time_spent = time_spent[0] + '.25';
-                            console.log(time_spent);
-                        }
-                        if (time_spent[1] == "30") {
-                            time_spent = parseFloat(time_spent[0]) + 0.5;
-                        }
-                        if (time_spent[1] == "45") {
-                            time_spent = parseFloat(time_spent[0]) + 0.75;
-                        } else {
-                            time_spent = parseFloat(time_spent[0]);
-                        }
-                        work.wo_timespent = parseInt(time_spent);
-                        work.timespent = parseInt(time_spent);
-                        console.log(parseFloat(work.timesoent));
-                        work.workorder_number = setPadZeros(parseInt(work.workorder_number), 8);
-                        work.workorder_equipment = ra.equipment_name;
-                        callback(null, work);
-                    });
+            })
+        });
+        async.parallel(equipments, function (err, result) {
 
+            /* this code will run after all calls finished the job or
+             when any of the calls passes an error */
+
+            if (err)
+                return console.log(err);
+            var obj = {
+                url: fullUrl,
+                date: today,
+                search: search_date,
+                data: result
+            };
+            var renderedHtml = nunjucks.render('./view/ReportHourBase/report_hour.html', obj);
+            pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
+                stream.pipe(res);
             });
-
-            });
-
-            async.parallel(calls, function (err, result) {
-
-                /* this code will run after all calls finished the job or
-                 when any of the calls passes an error */
-
-                if (err)
-                    return console.log(err);
-                var obj = {
-                    url: fullUrl,
-                    date: today,
-                    search: search_date,
-                    data: result
-                };
-                var renderedHtml = nunjucks.render('./view/ReportHourBase/report_hour.html', obj);
-                pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
-                    stream.pipe(res);
-                });
-                //console.log(result);
-            });
-
-
-        } else {
-            res.redirect(fullUrl + "/#!/search_report_hour");
-        }
+        });
 
     });
+
+
     // res.render('index', { title: 'Prysmian Group - Maintenance Work Order Application' });
 });
 router.post('/report_category', function (req, res, next) {
@@ -168,7 +192,7 @@ router.post('/report_category', function (req, res, next) {
          '$gte': parseInt(req.body.wo_datefrom),
          '$lt': parseInt(req.body.wo_dateto)
          }
-     }*/
+         }*/
         query = {
             status: 2,
             wo_datecomplete: {
