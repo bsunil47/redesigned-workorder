@@ -35,127 +35,142 @@ var dateFormat = require('dateformat');
 var PartsRequest = mongoose.model('Collection_PartRequest');
 var counters = mongoose.model('counter');
 
-router.post('/', function(req, res, next) {
+router.post('/', function (req, res, next) {
 
-  Users.findOne({email: req.body.username,password: req.body.password},function(err, users) {
-    if (err) { return next(err); }
+    Users.findOne({email: req.body.username, password: req.body.password}, function (err, users) {
+        if (err) {
+            return next(err);
+        }
 
-    if (users != null) {
-      Roles.findOne({_id: users.userrole},function(err,role) {
-        if (err) { return next(err); }
-          /*Facility.find({}, function (err, facilities) {
-              if (err) {
-                  return next(err);
-              }
-              res.json({Code: 200, Info: {user: users, role: role.role_name, facilities: facilities}});
-           });*/
-          res.json({Code: 200, Info: {user: users, role: role.role_name}});
+        if (users != null) {
+            Roles.findOne({_id: users.userrole}, function (err, role) {
+                if (err) {
+                    return next(err);
+                }
+                /*Facility.find({}, function (err, facilities) {
+                 if (err) {
+                 return next(err);
+                 }
+                 res.json({Code: 200, Info: {user: users, role: role.role_name, facilities: facilities}});
+                 });*/
+                res.json({Code: 200, Info: {user: users, role: role.role_name}});
 
-      });
+            });
 
 
-    }else {
-      res.json({Code: 406,Info: 'no user'});
-    }
+        } else {
+            res.json({Code: 406, Info: 'no user'});
+        }
 
-  });
-  //Res.json('respond with asa resource');
-});
-
-router.post('/userlist', function(req, res, next) {
-  Users.find({},function(err, users) {
-    if (err) {
-      return next(err)
-
-    }
-      if (users != null) {
-      Roles.find({},function(err,role) {
-        if (err) { return next(err); }
-        res.json({Code: 200,Info: {users: users, roles: role}});
-      })
-
-    }else {
-      res.json({Code: 406,Info: 'no user'});
-    }
-
-  });
-  //Res.json('respond with asa resource');
-});
-
-router.post('/createuser', function(req, res, next) {
-  Roles.findOne({role_name: req.body.userrole},function(err,role) {
-    if (err) { return next(err); }
-    var user = new Users({
-      username: req.body.username,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      email: req.body.email,
-      userrole: role._id,
-      status: 1,
-      password: req.body.password,
     });
-    user.save(function(err,resp) {
-      if (err) {
+    //Res.json('respond with asa resource');
+});
 
-        console.log(err);
-        res.json({
-          Code: 499,
-          message: 'Already used',
+router.post('/userlist', function (req, res, next) {
+    Users.find({}, function (err, users) {
+        if (err) {
+            return next(err)
+
+        }
+        if (users != null) {
+            Roles.find({}, function (err, role) {
+                if (err) {
+                    return next(err);
+                }
+                res.json({Code: 200, Info: {users: users, roles: role}});
+            })
+
+        } else {
+            res.json({Code: 406, Info: 'no user'});
+        }
+
+    });
+    //Res.json('respond with asa resource');
+});
+
+router.post('/createuser', function (req, res, next) {
+    Roles.findOne({role_name: req.body.userrole}, function (err, role) {
+        if (err) {
+            return next(err);
+        }
+        var user = new Users({
+            username: req.body.username,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            userrole: role._id,
+            status: 1,
+            password: req.body.password,
         });
-      } else {
-          var query = {facility_number: req.body.facility};
-          if (req.body.userrole == 'manager' || req.body.userrole == 'admin') {
-              Facility.update(query, {
-                      $push: {
-                          "facility_managers": {
-                              user_id: resp._id.toString(),
-                              email: req.body.email
-                          }
-                      }
-                  },
-                  {safe: true, upsert: true},
-                  function (err, model) {
-                      console.log(err);
-                  });
-          }
-          Facility.update(query, {$push: {"facility_users": {user_id: resp._id.toString(), email: req.body.email}}},
-              {safe: true, upsert: true},
-              function (err, model) {
-                  console.log(err);
-              });
-        res.json({Code: 200,Info: 'sucessfull'});
-      }
-    });
-    //Res.json({Code:200,Info:{user:users,role:role.role_name}});
-  });
+        user.save(function (err, resp) {
+            if (err) {
 
-  //User.save();
-  //res.json({Code:200,Info:"sucessfull"});
-  //res.json('respond with asa resource');
+                console.log(err);
+                res.json({
+                    Code: 499,
+                    message: 'Already used',
+                });
+            } else {
+                var query = {facility_number: req.body.facility};
+                if (req.body.userrole == 'manager' || req.body.userrole == 'admin') {
+                    Facility.update(query, {
+                            $push: {
+                                "facility_managers": {
+                                    user_id: resp._id.toString(),
+                                    email: req.body.email
+                                }
+                            }
+                        },
+                        {safe: true, upsert: true},
+                        function (err, model) {
+                            console.log(err);
+                        });
+                }
+                Facility.update(query, {
+                        $push: {
+                            "facility_users": {
+                                user_id: resp._id.toString(),
+                                email: req.body.email
+                            }
+                        }
+                    },
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        console.log(err);
+                    });
+                res.json({Code: 200, Info: 'sucessfull'});
+            }
+        });
+        //Res.json({Code:200,Info:{user:users,role:role.role_name}});
+    });
+
+    //User.save();
+    //res.json({Code:200,Info:"sucessfull"});
+    //res.json('respond with asa resource');
 });
 
-router.post('/changepassword', function(req, res, next) {
-  //Return res.json({Code:200,Info:"sucessfull"});
-  var query = {_id: req.body.id};
-  Users.findOne(query,function(err,user) {
-    if (err) {
-      res.json({
-        Code: 499,
-        message: err,
-      });
-    }else {
-      Users.findOneAndUpdate(query, {password: req.body.password}, {upsert: true}, function(err, doc) {
-        if (err) return res.send(500, {error: err});
-        return res.json({Code: 200, Info: 'sucessfull'});
-      });
-    }
+router.post('/changepassword', function (req, res, next) {
+    //Return res.json({Code:200,Info:"sucessfull"});
+    var query = {_id: req.body.id};
+    Users.findOne(query, function (err, user) {
+        if (err) {
+            res.json({
+                Code: 499,
+                message: err,
+            });
+        } else {
+            Users.findOneAndUpdate(query, {password: req.body.password}, {upsert: true}, function (err, doc) {
+                if (err) return res.send(500, {error: err});
+                return res.json({Code: 200, Info: 'sucessfull'});
+            });
+        }
 
-  });
+    });
 
 
     //User.save();
-  //res.json({Code:200,Info:"sucessfull"});
-  //res.json('respond with asa resource');
+    //res.json({Code:200,Info:"sucessfull"});
+    //res.json('respond with asa resource');
 });
 
 router.post('/create_workorder', function (req, res, next) {
@@ -300,20 +315,20 @@ router.post('/create_category', function (req, res, next) {
             });
 
         /* var category = new Category({
-            facility_number: req.body.facility_number,
-            category_name: req.body.category_name,
-            status: 1
-        });
-        category.save(function (err, resp) {
-            if (err) {
-                console.log(err);
-                res.json({
-                    Code: 499,
-                    message: err,
-                });
-            } else {
-                res.json({Code: 200, Info: 'sucessfull'});
-            }
+         facility_number: req.body.facility_number,
+         category_name: req.body.category_name,
+         status: 1
+         });
+         category.save(function (err, resp) {
+         if (err) {
+         console.log(err);
+         res.json({
+         Code: 499,
+         message: err,
+         });
+         } else {
+         res.json({Code: 200, Info: 'sucessfull'});
+         }
          });*/
     })
 });
@@ -353,20 +368,20 @@ router.post('/create_class', function (req, res, next) {
                 }
             });
         /*var clas = new Class({
-            facility_number: req.body.facility_number,
-            class_name: req.body.class_name,
-            status: 1
-        });
-        clas.save(function (err, resp) {
-            if (err) {
-                console.log(err);
-                res.json({
-                    Code: 499,
-                    message: err,
-                });
-            } else {
-                res.json({Code: 200, Info: 'sucessfull'});
-            }
+         facility_number: req.body.facility_number,
+         class_name: req.body.class_name,
+         status: 1
+         });
+         clas.save(function (err, resp) {
+         if (err) {
+         console.log(err);
+         res.json({
+         Code: 499,
+         message: err,
+         });
+         } else {
+         res.json({Code: 200, Info: 'sucessfull'});
+         }
          });*/
     })
 });
@@ -384,28 +399,28 @@ router.post('/classes', function (req, res, next) {
 });
 
 /*router.post('/create_equipment', function (req, res, next) {
-    Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
-        if (err) {
-            return next(err);
-        }
-        var equipment = new Equipment({
-            facility_number: req.body.facility_number,
-            equipment_name: req.body.equipment_name,
-            equipment_number: req.body.equipment_number,
-            status: 1
-        });
-        equipment.save(function (err, resp) {
-            if (err) {
-                console.log(err);
-                res.json({
-                    Code: 499,
-                    message: err,
-                });
-            } else {
-                res.json({Code: 200, Info: 'sucessfull'});
-            }
-        });
-    })
+ Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
+ if (err) {
+ return next(err);
+ }
+ var equipment = new Equipment({
+ facility_number: req.body.facility_number,
+ equipment_name: req.body.equipment_name,
+ equipment_number: req.body.equipment_number,
+ status: 1
+ });
+ equipment.save(function (err, resp) {
+ if (err) {
+ console.log(err);
+ res.json({
+ Code: 499,
+ message: err,
+ });
+ } else {
+ res.json({Code: 200, Info: 'sucessfull'});
+ }
+ });
+ })
  });*/
 router.post('/create_equipment', function (req, res, next) {
     Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
@@ -524,20 +539,20 @@ router.post('/create_priority', function (req, res, next) {
             });
 
         /*var priority = new Priority({
-            facility_number: req.body.facility_number,
-            priority_name: req.body.priority_name,
-            status: 1
-        });
-        priority.save(function (err, resp) {
-            if (err) {
-                console.log(err);
-                res.json({
-                    Code: 499,
-                    message: err,
-                });
-            } else {
-                res.json({Code: 200, Info: 'sucessfull'});
-            }
+         facility_number: req.body.facility_number,
+         priority_name: req.body.priority_name,
+         status: 1
+         });
+         priority.save(function (err, resp) {
+         if (err) {
+         console.log(err);
+         res.json({
+         Code: 499,
+         message: err,
+         });
+         } else {
+         res.json({Code: 200, Info: 'sucessfull'});
+         }
          });*/
     })
 });
@@ -577,21 +592,21 @@ router.post('/create_skill', function (req, res, next) {
                 }
             });
         /*
-        var skill = new Skill({
-            facility_number: req.body.facility_number,
-            skill_name: req.body.skill_name,
-            status: 1
-        });
-        skill.save(function (err, resp) {
-            if (err) {
-                console.log(err);
-                res.json({
-                    Code: 499,
-                    message: err,
-                });
-            } else {
-                res.json({Code: 200, Info: 'sucessfull'});
-            }
+         var skill = new Skill({
+         facility_number: req.body.facility_number,
+         skill_name: req.body.skill_name,
+         status: 1
+         });
+         skill.save(function (err, resp) {
+         if (err) {
+         console.log(err);
+         res.json({
+         Code: 499,
+         message: err,
+         });
+         } else {
+         res.json({Code: 200, Info: 'sucessfull'});
+         }
          });*/
     })
 });
@@ -1013,6 +1028,7 @@ router.post('/manager_workorder', function (req, res, next) {
                                 query = {
                                     workorder_number: {$in: list_workorders}
                                 };
+                                query.status = 1;
                                 console.log(query);
                                 WorkOrder.find(query, {}, {
                                     sort: {
@@ -1031,6 +1047,7 @@ router.post('/manager_workorder', function (req, res, next) {
                             }
                         });
                     } else {
+                        query.status = 1;
                         WorkOrder.find(query, {}, {
                             sort: {
                                 _id: -1 //Sort by Date Added DESC
@@ -1047,11 +1064,7 @@ router.post('/manager_workorder', function (req, res, next) {
 
                         });
                     }
-
-
                 });
-
-
             } else {
                 res.json({Code: 406, Info: 'no facilities'});
             }
@@ -1490,7 +1503,7 @@ var SendMail = function (req, it_pm_workorder) {
                                     var last_message = ' parts received';
                                     send(mail_to, last_message, req, facility, category, equipment, priority);
                                 });
-                                
+
                             } else {
                                 if (role.role_name == 'technician') {
                                     var mail_to = manager_email;
@@ -1513,7 +1526,7 @@ var SendMail = function (req, it_pm_workorder) {
                                         });
                                     }
 
-                                    
+
                                 }
 
                             }
@@ -1615,7 +1628,7 @@ var createWorkOrderPM = function (task) {
             }
             var pm_date = new Date(parseInt(task.wo_pm_date));
             pm_date.setDate(pm_date.getDate() + parseInt(task.pm_frequency));
-            
+
             var insert_query = {
                 workorder_number: result.seq,
                 workorder_creator: wkOrd.workorder_creator,

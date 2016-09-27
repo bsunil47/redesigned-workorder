@@ -108,7 +108,20 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.disableTimeSpent = false;
                     $scope.disableDateCompleted = false;
                 }
-
+                var orderDt = new Date(parseInt($scope.workOrder.created_on)).valueOf();
+                var currentDate = new Date(parseInt($scope.workOrder.created_on));
+                currentDate.setDate(currentDate.getDate() - 7);
+                var lessDate = new Date(currentDate).valueOf();
+                var currentDate = new Date(parseInt($scope.workOrder.created_on));
+                currentDate.setDate(currentDate.getDate() + 7);
+                var grtDate = new Date(currentDate).valueOf();
+                var orderDt = new Date(parseInt($scope.workOrder.created_on)).valueOf();
+                var currentDate = new Date().valueOf();
+                $scope.saveDisable = true;
+                if (parseInt(currentDate) > parseInt(lessDate) && parseInt(currentDate) < parseInt(grtDate)) {
+                    console.log('compare');
+                    $scope.saveDisable = false;
+                }
                 var currentDt = new Date(parseInt($scope.workOrder.created_on));
                 var mm = currentDt.getMonth() + 1;
                 mm = (mm < 10) ? '0' + mm : mm;
@@ -154,9 +167,6 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.workOrder.wo_pm_date = date;
                     console.log($scope.workOrder.wo_pm_date);
                 }
-               
-
-
                 $scope.selected_facility = $scope.workOrder.workorder_facility;
                 API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
@@ -309,12 +319,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         $scope.myDate = new Date();
 
         $scope.facilities = $cookies.getObject('facilities');
-        //$scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
-
-        //$scope.workOrder= $scope.facilities[0].facility_number;
-        //console.log($scope.facilities);
-
-
+        
         $scope.Logout = function () {
             $cookies.remove('userDetails');
             $location.path("/");

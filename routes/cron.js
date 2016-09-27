@@ -18,7 +18,6 @@ var transporter = nodemailer.createTransport(smtpTransport({
     debug: true // include SMTP traffic in the logs
 }, {
     // default message fields
-
     // sender info
     from: 'Prysmian WOA <pgworkorder@gmail.com>'
 }));

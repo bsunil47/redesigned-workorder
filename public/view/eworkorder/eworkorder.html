@@ -75,7 +75,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
@@ -128,7 +127,7 @@
                                         <div class="col-sm-6" ng-hide="showTechnician">
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <div class="checkbox" >
+                                                    <div class="checkbox">
                                                         <label ng-show="showClerk">
                                                             <input type="checkbox" ng-show="showClerk"
                                                                    ng-model="workOrder.wo_goodsreceipt"
@@ -305,11 +304,7 @@
                             <div class="text-center clearfix">
                                 <p>
                                     <button type="submit" class="btn btn-primary" ng-click="updateWorkOrder()"
-                                            ng-disabled="EditWorkOrderForm.workorder_description.$dirty
-                                            && EditWorkOrderForm.workorder_description.$invalid
-                                            && EditWorkOrderForm.workorder_skill.$invalid
-                                            && EditWorkOrderForm.workorder_class.$invalid
-                                            && EditWorkOrderForm.workorder_technician.$invalid">
+                                            ng-disabled="saveDisable">
                                         Save
                                     </button>
                                     <button type="button" class="btn btn-primary">Print</button>
@@ -329,7 +324,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="site-copy-rights clearfix">&copy; <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All Rights Reserved.</div>
+                    <div class="site-copy-rights clearfix">&copy;
+                        <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All
+                        Rights Reserved.
+                    </div>
                 </div>
             </div>
         </div>
