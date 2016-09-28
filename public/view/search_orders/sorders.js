@@ -45,45 +45,65 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         }, function (error) {
             alert(error);
         });
-        $scope.clickToOpen = function (workorder) {
-            $scope.selectedWorkOrder = $scope.WorkOrder = workorder;
+        $scope.clickToOpen = function (wokorder) {
+            $scope.selectedWorkOrder = wokorder;
             $scope.selectedWorkOrder.workorder_number = showWithzeros($scope.selectedWorkOrder.workorder_number);
-            $scope.selectedWorkOrder.workorder_equipment = showEquipment(workorder.workorder_equipment);
-            $scope.selectedWorkOrder.status = showStatus(workorder.status);
-            $scope.selectedWorkOrder.workorder_technician = showtechnician(workorder.workorder_technician);
-            console.log(workorder.created_on);
-            var currentDt = new Date(parseInt(workorder.created_on));
-            console.log(currentDt);
+            $scope.selectedWorkOrder.workorder_equipment = showEquipment($scope.selectedWorkOrder.workorder_equipment);
+            $scope.selectedWorkOrder.status = showStatus($scope.selectedWorkOrder.status);
+            $scope.selectedWorkOrder.workorder_technician = showtechnician($scope.selectedWorkOrder.workorder_technician);
+            console.log($scope.selectedWorkOrder.created_on);
+            if (isNaN(parseInt($scope.selectedWorkOrder.created_on))) {
+                var currentDt = $scope.selectedWorkOrder.created_on;
+            } else {
+                var currentDt = new Date(parseInt($scope.selectedWorkOrder.created_on));
+            }
             var mm = currentDt.getMonth() + 1;
             mm = (mm < 10) ? '0' + mm : mm;
             var dd = currentDt.getDate();
             var yyyy = currentDt.getFullYear();
             var date_on = mm + '/' + dd + '/' + yyyy;
             $scope.selectedWorkOrder.created_on = date_on;
-            var currentDt = new Date(parseInt(workorder.wo_datecomplete));
-            var mm = currentDt.getMonth() + 1;
-            mm = (mm < 10) ? '0' + mm : mm;
-            var dd = currentDt.getDate();
-            var yyyy = currentDt.getFullYear();
-            var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.wo_datecomplete = date;
-            $scope.selectedWorkOrder.workorder_skill = showSkill(workorder.workorder_skill);
-            $scope.selectedWorkOrder.workorder_category = showCategory(workorder.workorder_category);
-            $scope.selectedWorkOrder.workorder_priority = showPriority(workorder.workorder_priority);
-            $scope.selectedWorkOrder.workorder_class = showClass(workorder.workorder_class);
-            var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.created_on = date;
-            var currentDt = new Date(parseInt(workorder.wo_pm_date));
-            var mm = currentDt.getMonth() + 1;
-            mm = (mm < 10) ? '0' + mm : mm;
-            var dd = currentDt.getDate();
-            var yyyy = currentDt.getFullYear();
-            var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.wo_pm_date = date;
-            console.log(workorder.workorder_facility);
-            $scope.selectedWorkOrder.workorder_facility = showFacility(workorder.workorder_facility);
-            $scope.selectedWorkOrder.workorder_creator = showRequestor(workorder.workorder_creator);
-            ngDialog.open({template: 'view/popup/popupTmpl.html', className: 'ngdialog-theme-default', scope: $scope});
+            if (!angular.isUndefined($scope.selectedWorkOrder.wo_datecomplete)) {
+                var currentDt = new Date(parseInt($scope.selectedWorkOrder.wo_datecomplete));
+                console.log(currentDt);
+                var mm = currentDt.getMonth() + 1;
+                mm = (mm < 10) ? '0' + mm : mm;
+                var dd = currentDt.getDate();
+                var yyyy = currentDt.getFullYear();
+                var date = mm + '/' + dd + '/' + yyyy;
+                $scope.selectedWorkOrder.wo_datecomplete = date;
+            }
+
+            $scope.selectedWorkOrder.workorder_skill = showSkill($scope.selectedWorkOrder.workorder_skill);
+            $scope.selectedWorkOrder.workorder_category = showCategory($scope.selectedWorkOrder.workorder_category);
+            $scope.selectedWorkOrder.workorder_priority = showPriority($scope.selectedWorkOrder.workorder_priority);
+            $scope.selectedWorkOrder.workorder_class = showClass($scope.selectedWorkOrder.workorder_class);
+            if (!angular.isUndefined($scope.selectedWorkOrder.wo_pm_date)) {
+                var currentDt = new Date(parseInt($scope.selectedWorkOrder.wo_pm_date));
+                var mm = currentDt.getMonth() + 1;
+                mm = (mm < 10) ? '0' + mm : mm;
+                var dd = currentDt.getDate();
+                var yyyy = currentDt.getFullYear();
+                var date = mm + '/' + dd + '/' + yyyy;
+                $scope.selectedWorkOrder.wo_pm_date = date;
+            }
+            $scope.selectedWorkOrder.workorder_facility = showFacility($scope.selectedWorkOrder.workorder_facility);
+            $scope.selectedWorkOrder.workorder_creator = showRequestor($scope.selectedWorkOrder.workorder_creator);
+            console.log($scope.selectedWorkOrder.created_on);
+            console.log($scope.workOrder.workorder_number);
+            console.log(wokorder);
+            console.log($scope.selectedWorkOrder);
+            ngDialog.open({
+                template: 'view/popup/popupTmpl.html',
+                className: 'ngdialog-theme-default',
+                controller: ['$scope', 'API', function ($scope, API) {
+                    // controller logic
+                }]
+            });
+            //ngDialog.open({template: 'view/popup/popupTmpl.html', className: 'ngdialog-theme-default', scope: $scope.selectedWorkOrder});
+            console.log($scope.workOrder.workorder_number);
+            console.log(wokorder);
+            console.log($scope.selectedWorkOrder);
         };
         $scope.ListWorkOrders = ListWorkOrders;
         ListWorkOrders();
@@ -351,5 +371,9 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         function isNullOrEmptyOrUndefined(value) {
             return !value;
         }
+
+        $scope.goPrint = function (workorder_id) {
+            $location.path('print_workorder/' + workorder_id);
+        };
 
     }]);

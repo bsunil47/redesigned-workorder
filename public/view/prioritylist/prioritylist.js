@@ -43,7 +43,7 @@ angular.module('PGapp.prioritylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 if (angular.isUndefined(found) || found === null) {
                     facilities_numbers = facilities_numbers
                 } else {
-                    if (facility_length - 1 < faci) {
+                    if (facility_length - 1 <= faci) {
                         facilities_numbers = facilities_numbers + found.facility_name;
                     } else {
                         facilities_numbers = facilities_numbers + found.facility_name + ", ";

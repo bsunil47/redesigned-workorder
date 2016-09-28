@@ -4,7 +4,7 @@
 
 var mongoose = require('mongoose');
 var Collection_UsersSchema = new mongoose.Schema({
-    username: String,
+    username: {type: String, unique: true, required: true},
     firstname: String,
     lastname: String,
     email: {type: String, unique: true, required: true},

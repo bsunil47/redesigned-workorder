@@ -40,6 +40,13 @@
                             <div class="row">
                                 <div class="col-sm-4 col-sm-offset-4">
                                     <div class="form-group">
+                                        <label class="col-sm-6 control-label">User Name:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="user.username" type="text" class="form-control"
+                                                   name="username" ng-pattern="/^[a-zA-Z0-9\.]*$/" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-sm-6 control-label">First Name:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="user.firstname" type="text" class="form-control" name="firstname" required>
@@ -94,12 +101,13 @@
                                 <p>
                                     <button type="submit" ng-click="CreateUser()" class="btn btn-primary" ng-disabled="CreateUserForm.firstname.$dirty && CreateUserForm.firstname.$invalid ||
                                     CreateUserForm.lastname.$dirty && CreateUserForm.lastname.$invalid ||
+                                    CreateUserForm.username.$dirty && CreateUserForm.username.$invalid ||
                                     CreateUserForm.email.$dirty && CreateUserForm.email.$invalid ||
                                     CreateUserForm.password.$dirty && CreateUserForm.password.$invalid ||
                                     CreateUserForm.userrole.$dirty && CreateUserForm.userrole.$invalid ||
                                     CreateUserForm.facility.$dirty && CreateUserForm.facility.$invalid">Save
                                     </button>
-                                    <button type="reset" class="btn btn-primary">Clear</button>
+                                    <button class="btn btn-primary" ng-click="clearForm()">Clear</button>
                                 </p>
                             </div>
                         </form>

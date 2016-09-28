@@ -44,20 +44,39 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
   };
 
   function CreateUser(){
-    $scope.user.username = $scope.user.firstname + ' '+$scope.user.lastname;
     $scope.user._v = 0;
     if($scope.CreateUserForm.firstname.$valid && $scope.CreateUserForm.lastname.$valid){
       $scope.user_id = API.Create.User($scope.user,function(res){
         if(res.Code == 200){
+            swal({
+                title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                text: res.Info,
+                width: "450px",
+                confirmButtonText: 'Ok'
+            });
           $location.path("/users");
         }else {
-          $scope.CreateUserForm.email.error = true;
+          swal({
+            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+            text: res.Info,
+            width: "450px",
+            confirmButtonText: 'Ok'
+          });
         }
       },function (error) {
-        alert(error);
+          swal({
+              title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+              text: 'Opps try sometime later',
+              width: "450px",
+              confirmButtonText: 'Ok'
+          });
       });
     }
   }
+
+    $scope.clearForm = function () {
+        $scope.user = {};
+    };
 
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);

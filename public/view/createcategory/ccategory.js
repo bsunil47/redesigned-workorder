@@ -72,4 +72,8 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
             }
         }
 
+        $scope.clearForm = function () {
+            $scope.category = {};
+        };
+
     }]);

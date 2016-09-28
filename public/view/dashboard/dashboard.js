@@ -37,12 +37,15 @@ angular.module('PGapp.dashboard', ['ngRoute','ngAnimate', 'ngCookies'])
 
   if(userdetail.role == 'admin'){
     $scope.showAdmin= true;
+      $scope.hideCreateworkorder = true;
+      $scope.hidePartList = true;
 
   }
   if(userdetail.role == 'admin' || userdetail.role == 'manager'){
     $scope.showManager= true;
     if (userdetail.role == 'manager') {
       $scope.hideCreateworkorder = true;
+        $scope.hidePartList = true;
     }
   }
 

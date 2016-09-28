@@ -47,13 +47,34 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
             if ($scope.CreateEquipmentForm.equipment_name.$valid && $scope.CreateEquipmentForm.facility_number.$valid) {
                 $scope.equipment_id = API.CreateEquipment.Equipment($scope.equipment, function (res) {
                     if (res.Code == 200) {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         $location.path("/equipments");
                     } else {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
-                    alert(error);
+                    swal({
+                        title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                        text: 'Oops try after sometime',
+                        width: "450px",
+                        confirmButtonText: 'Ok'
+                    });
                 });
             }
         }
+
+        $scope.clearForm = function () {
+            $scope.equipment = {};
+        };
     }]);

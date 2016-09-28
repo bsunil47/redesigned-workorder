@@ -43,13 +43,34 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
             if ($scope.CreateSkillForm.skill_name.$valid && $scope.CreateSkillForm.facility_number.$valid) {
                 $scope.skill_id = API.CreateSkill.Skill($scope.skill, function (res) {
                     if (res.Code == 200) {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         $location.path("/skills");
                     } else {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
-                    alert(error);
+                    swal({
+                        title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                        text: "Oops try after sometime",
+                        width: "450px",
+                        confirmButtonText: 'Ok'
+                    });
                 });
             }
         }
+
+        $scope.clearForm = function () {
+            $scope.skill = {};
+        };
     }]);

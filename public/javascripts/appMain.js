@@ -36,8 +36,8 @@ var PGapp = angular.module('PGapp', [
   'PGapp.editfacility',
   'PGapp.edituser',
   'PGapp.editparts',
-  'PGapp.editequipment'
-
+    'PGapp.editequipment',
+    'PGapp.workorder'
 ]);
 PGapp.
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

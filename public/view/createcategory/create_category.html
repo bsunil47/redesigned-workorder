@@ -75,7 +75,7 @@
                                             ng-disabled="CreateCategoryForm.category_name.$dirty && CreateCategoryForm.category_name.$invalid ||
  CreateCategoryForm.facility_number.$dirty && CreateCategoryForm.facility_number.$invalid">Save
                                     </button>
-                                    <button type="reset" class="btn btn-primary">Clear</button>
+                                    <button ng-click="clearForm()" class="btn btn-primary">Clear</button>
                                 </p>
                             </div>
                         </form>

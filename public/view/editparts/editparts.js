@@ -43,11 +43,12 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }, function (error) {
             alert(error);
         });
-
+        $scope.disVendorName = true;
         API.GetParts.Recent({part_number: edit_part_number}, function (res) {
             if (res.Code == 200) {
                 console.log("Get Parts: " + JSON.stringify(res.Info.equipment));
                 $scope.ep = res.Info.equipment;
+
             }
         }, function (error) {
             alert(error);

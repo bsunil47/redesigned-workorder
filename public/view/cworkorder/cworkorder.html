@@ -232,7 +232,7 @@
                                             ng-disabled="CreateWorkOrderForm.workorder_description.$dirty && CreateWorkOrderForm.workorder_description.$invalid && CreateWorkOrderForm.workorder_category.$invalid && CreateWorkOrderForm.workorder_priority.$invalid && CreateWorkOrderForm.workorder_equipment.$invalid">
                                         Save
                                     </button>
-                                    <button type="button" class="btn btn-primary">Print</button>
+                                    <button type="button" class="btn btn-primary" ng-click="clearForm()">Clear</button>
                                 </p>
                             </div>
                         </form>
