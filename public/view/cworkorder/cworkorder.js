@@ -175,4 +175,8 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
       });
     }
   }
+
+      $scope.clearForm = function () {
+        $scope.workOrder = {};
+      };
 }]);

@@ -65,12 +65,29 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
             if ($scope.CreatePartsForm.equipment_name.$valid && $scope.CreatePartsForm.equipment_number.$valid) {
                 $scope.equipment_id = API.CreateParts.Equipment($scope.pe, function (res) {
                     if (res.Code == 200) {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         $location.path("/partsequipmentlist");
                     } else {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
-                    alert(error);
+                    swal({
+                        title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                        text: 'Oops try after sometime',
+                        width: "450px",
+                        confirmButtonText: 'Ok'
+                    });
                 });
             }
         }
@@ -102,5 +119,9 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 $scope.pe.equipment_name = found.equipment_name;
             }
         });
+
+        $scope.clearForm = function () {
+            $scope.pe = {};
+        };
 
     }]);

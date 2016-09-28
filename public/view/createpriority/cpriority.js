@@ -43,13 +43,34 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
             if ($scope.CreatePriorityForm.priority_name.$valid && $scope.CreatePriorityForm.facility_number.$valid) {
                 $scope.priority_id = API.CreatePriority.Priority($scope.priority, function (res) {
                     if (res.Code == 200) {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         $location.path("/priorities");
                     } else {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
-                    alert(error);
+                    swal({
+                        title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                        text: 'Oops try after sometime',
+                        width: "450px",
+                        confirmButtonText: 'Ok'
+                    });
                 });
             }
         }
+
+        $scope.clearForm = function () {
+            $scope.priority = {};
+        };
     }]);
