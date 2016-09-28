@@ -14,10 +14,11 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
             wo_datefrom: ""
         };
         var currentDt = new Date();
-        $scope.maxDate = new Date(
+        /*$scope.maxDate = new Date(
             currentDt.getFullYear(),
             currentDt.getMonth(),
-            currentDt.getDate());
+         currentDt.getDate());*/
+        $scope.maxDate = new Date();
         $scope.datefrom;
         if (!$cookies.get('userDetails')) {
             $location.path('login');

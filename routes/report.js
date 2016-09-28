@@ -219,8 +219,6 @@ router.post('/report_category', function (req, res, next) {
             var calls = [];
             workorders.forEach(function (work) {
                 calls.push(function (callback) {
-
-                    console.log(dateFormat(new Date(parseInt(work.wo_datecomplete)), 'isoDate'));
                     Category.findOne({_id: work.workorder_category}, function (e, r) {
                         if (e) {
                             return false;
