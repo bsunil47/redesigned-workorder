@@ -21,13 +21,11 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                 //$cookies.put('userDetails',res)
                 API.SEquipment.Recent({facility_number: $scope.user_facility}, function (res) {
                     if (res.Code == 200) {
-
                         $scope.equipments = res.Info.equipments;
                         //$cookies.put('userDetails',res)
                     } else {
 
                     }
-
                 }, function (error) {
                     alert(error);
                 });
