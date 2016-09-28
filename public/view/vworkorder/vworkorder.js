@@ -591,4 +591,9 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         function showWithzeros(Order) {
             return $filter('setPadZeros')(Order, 8);
         }
+
+        $scope.goPrint = function (workorder_id) {
+            workorder_id = parseInt(workorder_id);
+            $location.path('print_workorder/' + workorder_id);
+        };
     }]);

@@ -316,7 +316,7 @@
                                     <td>{{showStatus(workorder.status)}}</td>
                                     <td><i class="fa fa-eye" ng-click="viewWorkOrder(workorder.workorder_number)"></i>
                                     </td>
-                                    <td><i class="fa fa-print" ng-click="clickToOpen(workorder)"></i>
+                                    <td><i class="fa fa-print" ng-click="goPrint(workorder.workorder_number)"></i>
                                     </td>
                                     <td><i class="fa fa-edit" ng-click="editWorkOrder(workorder.workorder_number)"
                                            ng-show="showEdit(workorder.status)"></i>
