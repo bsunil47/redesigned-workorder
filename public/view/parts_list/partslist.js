@@ -14,18 +14,31 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
     $location.path('login');
   }
       var userdetail = $cookies.getObject('userDetails');
-      API.Equipments.Recent(userdetail.user, function (res) {
-        if (res.Code == 200) {
+        API.SFacilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
 
-          $scope.equipments = res.Info.equipments;
-          //$cookies.put('userDetails',res)
-        } else {
+                $scope.user_facility = res.Info.facilities[0].facility_number;
+                //$cookies.put('userDetails',res)
+                API.SEquipment.Recent({facility_number: $scope.user_facility}, function (res) {
+                    if (res.Code == 200) {
 
-        }
+                        $scope.equipments = res.Info.equipments;
+                        //$cookies.put('userDetails',res)
+                    } else {
 
-      }, function (error) {
-        alert(error);
-      });
+                    }
+
+                }, function (error) {
+                    alert(error);
+                });
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
+
   $scope.Logout = function () {
       $cookies.remove('userDetails');
     $location.path("/");
