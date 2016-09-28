@@ -229,8 +229,12 @@ router.post('/report_category', function (req, res, next) {
                         if (er) {
                             return false;
                         }
+                        if (isNaN(parseInt(work.wo_datecomplete))) {
+                            var date = dateFormat(new Date(work.wo_datecomplete), 'isoDate');
+                        } else {
+                            var date = dateFormat(new Date(parseInt(work.wo_datecomplete)), 'isoDate');
+                        }
 
-                        var date = dateFormat(new Date(parseInt(work.wo_datecomplete)), 'isoDate');
                         work.workorder_number = setPadZeros(parseInt(work.workorder_number), 8);
                         work.wo_datecomplete = date;
                         work.workorder_equipment = ra.equipment_name;
