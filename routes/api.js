@@ -141,7 +141,7 @@ router.post('/createuser', function (req, res, next) {
                             function (err, model) {
                                 console.log(err);
                             });
-                        res.json({Code: 200, Info: 'sucessfull'});
+                        res.json({Code: 200, Info: 'User Created successfully'});
                     }
                 });
             } else {
@@ -167,12 +167,15 @@ router.post('/changepassword', function (req, res, next) {
         if (err) {
             res.json({
                 Code: 499,
-                message: err,
+                Info: 'Error changing password',
             });
         } else {
             Users.findOneAndUpdate(query, {password: req.body.password}, {upsert: true}, function (err, doc) {
-                if (err) return res.send(500, {error: err});
-                return res.json({Code: 200, Info: 'sucessfull'});
+                if (err) return res.json({
+                    Code: 499,
+                    Info: 'Error changing password',
+                });
+                return res.json({Code: 200, Info: 'Password Changed Successfully'});
             });
         }
 
@@ -216,7 +219,7 @@ router.post('/create_workorder', function (req, res, next) {
                     console.log(err);
                     res.json({
                         Code: 499,
-                        message: err,
+                        Info: 'Error Creating workorder',
                     });
                 } else {
                     var facility, category, equipment, priority;
@@ -304,44 +307,53 @@ router.post('/create_category', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var query = {
-            category_name: req.body.category_name
-        };
-        Category.update(query, {
-                operator_available: Boolean(req.body.operator_available),
-                status: 1,
-                $push: {"facilities": {facility_number: req.body.facility_number}}
-            },
-            {safe: true, upsert: true},
-            function (err, model) {
-                if (err) {
-                    console.log(err);
-                    res.json({
-                        Code: 499,
-                        message: err,
-                    });
-                } else {
-                    res.json({Code: 200, Info: 'sucessfull'});
-                }
-            });
+        if (Boolean(req.body.operator_available)) {
+            var query_count = {
+                category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+                "facilities.facility_number": req.body.facility_number,
+                operator_available: "true"
+            };
+        }
+        else {
+            var query_count = {
+                category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+                "facilities.facility_number": req.body.facility_number
+            };
+        }
 
-        /* var category = new Category({
-         facility_number: req.body.facility_number,
-         category_name: req.body.category_name,
-         status: 1
-         });
-         category.save(function (err, resp) {
-         if (err) {
-         console.log(err);
-         res.json({
-         Code: 499,
-         message: err,
-         });
-         } else {
-         res.json({Code: 200, Info: 'sucessfull'});
-         }
-         });*/
-    })
+
+        Category.count(query_count, function (err, categorycount) {
+            if (err) {
+                return next(err);
+            }
+            console.log("query_count" + JSON.stringify(query_count));
+            if (categorycount) {
+                return res.json({Code: 498, Info: 'Category for the Facility already exists'});
+                next();
+            }
+            var query = {
+                category_name: req.body.category_name
+            };
+            Category.update(query, {
+                    operator_available: Boolean(req.body.operator_available),
+                    status: 1,
+                    $push: {"facilities": {facility_number: req.body.facility_number}}
+                },
+                {safe: true, upsert: true},
+                function (err, model) {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                            Code: 499,
+                            Info: 'Error creating category',
+                        });
+                    } else {
+                        res.json({Code: 200, Info: 'Category created sucessfully'});
+                    }
+                });
+
+        });
+    });
 });
 router.post('/categories', function (req, res, next) {
     Category.find({}, function (err, categories) {
@@ -362,39 +374,42 @@ router.post('/create_class', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var query = {
-            class_name: req.body.class_name
+        // validations ** start
+
+        var query_count_class = {
+            class_name: {$regex: new RegExp('^' + req.body.class_name + '$', "i")},
+            "facilities.facility_number": req.body.facility_number
         };
-        Class.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-            {safe: true, upsert: true},
-            function (err, model) {
-                if (err) {
-                    console.log(err);
-                    res.json({
-                        Code: 499,
-                        message: err,
-                    });
-                } else {
-                    res.json({Code: 200, Info: 'sucessfull'});
-                }
-            });
-        /*var clas = new Class({
-         facility_number: req.body.facility_number,
-         class_name: req.body.class_name,
-         status: 1
-         });
-         clas.save(function (err, resp) {
-         if (err) {
-         console.log(err);
-         res.json({
-         Code: 499,
-         message: err,
-         });
-         } else {
-         res.json({Code: 200, Info: 'sucessfull'});
-         }
-         });*/
-    })
+
+        Class.count(query_count_class, function (err, classcount) {
+            if (err) {
+                return next(err);
+            }
+            console.log("query_count_class" + JSON.stringify(query_count_class));
+            if (classcount) {
+                return res.json({Code: 498, Info: 'Class for the Facility already exists'});
+                next();
+            }
+            // validations ** end
+            var query = {
+                class_name: req.body.class_name
+            };
+            Class.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                {safe: true, upsert: true},
+                function (err, model) {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                            Code: 499,
+                            Info: 'Error creating Class',
+                        });
+                    } else {
+                        res.json({Code: 200, Info: 'Class Created Sucessfully'});
+                    }
+                });
+        });
+
+    });
 });
 router.post('/classes', function (req, res, next) {
     Class.find({}, function (err, classes) {
@@ -449,12 +464,12 @@ router.post('/create_equipment', function (req, res, next) {
         var upsertData = equipment.toObject();
 
         Equipment.count({
-            equipment_number: req.body.equipment_number,
+            equipment_number: {$regex: new RegExp('^' + req.body.equipment_number + '$', "i")},
             equipment_name: req.body.equipment_name,
             facilities: {facility_number: req.body.facility_number}
         }, function (err, count) {
             if (count) {
-                res.json({Code: 200, Info: 'Document already exists'});
+                res.json({Code: 200, Info: 'Equipment number already exists'});
             }
             else {
                 Equipment.update({equipment_number: req.body.equipment_number}, equipment, {upsert: true}, function (err, resp) {
@@ -466,14 +481,14 @@ router.post('/create_equipment', function (req, res, next) {
 
                                 res.json({
                                     Code: 499,
-                                    message: err,
+                                    Info: "Error creating equipment",
                                 });
                             } else {
-                                res.json({Code: 200, Info: 'sucessfull in if'});
+                                res.json({Code: 200, Info: 'Equipment added to facility'});
                             }
                         });
                     } else {
-                        res.json({Code: 200, Info: 'sucessfull'});
+                        res.json({Code: 200, Info: 'Equipment created successfully'});
                     }
                 });
             }
@@ -495,21 +510,35 @@ router.post('/equipments', function (req, res, next) {
 });
 
 router.post('/create_facility', function (req, res, next) {
-    var facility = new Facility({
-        facility_number: req.body.facility_number,
-        facility_name: req.body.facility_name,
-        status: 1
-    });
-    facility.save(function (err, resp) {
+    // validations ** start
+
+    var query_count_facility = {facility_number: {$regex: new RegExp('^' + req.body.facility_number + '$', "i")}};
+
+    Facility.count(query_count_facility, function (err, facilitycount) {
         if (err) {
-            console.log(err);
-            res.json({
-                Code: 499,
-                message: err,
-            });
-        } else {
-            res.json({Code: 200, Info: 'sucessfull'});
+            return next(err);
         }
+        console.log("query_count_facility" + JSON.stringify(query_count_facility));
+        if (facilitycount) {
+            return res.json({Code: 498, Info: 'Facility Number already exists'});
+        }
+        // validations ** end
+        var facility = new Facility({
+            facility_number: req.body.facility_number,
+            facility_name: req.body.facility_name,
+            status: 1
+        });
+        facility.save(function (err, resp) {
+            if (err) {
+                console.log(err);
+                res.json({
+                    Code: 499,
+                    Info: 'Error creating Facility',
+                });
+            } else {
+                res.json({Code: 200, Info: 'Facility Created sucessfully'});
+            }
+        });
     });
 
 });
@@ -532,39 +561,41 @@ router.post('/create_priority', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var query = {
-            priority_name: req.body.priority_name
-        };
-        Priority.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-            {safe: true, upsert: false},
-            function (err, model) {
-                if (err) {
-                    console.log(err);
-                    res.json({
-                        Code: 499,
-                        message: err,
-                    });
-                } else {
-                    res.json({Code: 200, Info: 'sucessfull'});
-                }
-            });
+        // validations ** start
 
-        /*var priority = new Priority({
-         facility_number: req.body.facility_number,
-         priority_name: req.body.priority_name,
-         status: 1
-         });
-         priority.save(function (err, resp) {
-         if (err) {
-         console.log(err);
-         res.json({
-         Code: 499,
-         message: err,
-         });
-         } else {
-         res.json({Code: 200, Info: 'sucessfull'});
-         }
-         });*/
+        var query_count_class = {
+            priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")},
+            "facilities.facility_number": req.body.facility_number
+        };
+
+        Priority.count(query_count_priority, function (err, prioritycount) {
+            if (err) {
+                return next(err);
+            }
+            console.log("query_count_priority" + JSON.stringify(query_count_priority));
+            if (prioritycount) {
+                return res.json({Code: 498, Info: 'Priority for the Facility already exists'});
+                next();
+            }
+            // validations ** end
+            var query = {
+                priority_name: req.body.priority_name
+            };
+            Priority.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                {safe: true, upsert: false},
+                function (err, model) {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                            Code: 499,
+                            Info: 'Error creating Priority',
+                        });
+                    } else {
+                        res.json({Code: 200, Info: 'Priority created sucessfull'});
+                    }
+                });
+        });
+
     })
 });
 router.post('/priorities', function (req, res, next) {
@@ -586,39 +617,42 @@ router.post('/create_skill', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var query = {
-            skill_name: req.body.skill_name,
+
+        // validations ** start
+
+        var query_count_skill = {
+            skill_name: {$regex: new RegExp('^' + req.body.skill_name + '$', "i")},
+            "facilities.facility_number": req.body.facility_number
         };
-        Skill.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-            {safe: true, upsert: true},
-            function (err, model) {
-                if (err) {
-                    console.log(err);
-                    res.json({
-                        Code: 499,
-                        message: err,
-                    });
-                } else {
-                    res.json({Code: 200, Info: 'sucessfull'});
-                }
-            });
-        /*
-         var skill = new Skill({
-         facility_number: req.body.facility_number,
-         skill_name: req.body.skill_name,
-         status: 1
-         });
-         skill.save(function (err, resp) {
-         if (err) {
-         console.log(err);
-         res.json({
-         Code: 499,
-         message: err,
-         });
-         } else {
-         res.json({Code: 200, Info: 'sucessfull'});
-         }
-         });*/
+
+        Skill.count(query_count_class, function (err, skillcount) {
+            if (err) {
+                return next(err);
+            }
+            console.log("query_count_skill" + JSON.stringify(query_count_skill));
+            if (skillcount) {
+                return res.json({Code: 498, Info: 'Skill for the Facility already exists'});
+                next();
+            }
+            var query = {
+                skill_name: req.body.skill_name,
+            };
+            // validations ** end
+            Skill.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                {safe: true, upsert: true},
+                function (err, model) {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                            Code: 499,
+                            Info: 'Error creating skill',
+                        });
+                    } else {
+                        res.json({Code: 200, Info: 'Skill Sucessfully created'});
+                    }
+                });
+        });
+
     })
 });
 router.post('/skills', function (req, res, next) {
@@ -671,7 +705,7 @@ router.post('/createparts', function (req, res, next) {
 
         Equipment.count({
             equipment_number: req.body.equipment_number, equipment_name: req.body.equipment_name, equipments: {
-                material_number: req.body.part_number,
+                material_number: {$regex: new RegExp('^' + req.body.part_number + '$', "i")},
                 material_description: req.body.part_name,
                 vendor_number: req.body.vendor_number,
                 vendor_name: req.body.vendor_name,
@@ -680,7 +714,7 @@ router.post('/createparts', function (req, res, next) {
             }
         }, function (err, count) {
             if (count) {
-                res.json({Code: 200, Info: 'Document already exists'});
+                res.json({Code: 200, Info: 'Part Number already exists'});
             }
             else {
                 Equipment.update({equipment_number: req.body.equipment_number}, pequipments, {upsert: true}, function (err, resp) {
@@ -703,14 +737,14 @@ router.post('/createparts', function (req, res, next) {
 
                                 res.json({
                                     Code: 499,
-                                    message: err,
+                                    Info: 'Error creating Part',
                                 });
                             } else {
-                                res.json({Code: 200, Info: 'sucessfull in if'});
+                                res.json({Code: 200, Info: 'Part added to facility'});
                             }
                         });
                     } else {
-                        res.json({Code: 200, Info: 'sucessfull'});
+                        res.json({Code: 200, Info: 'Part created successfully'});
                     }
                 });
             }
@@ -731,11 +765,11 @@ router.post('/create_part_request', function (req, res, next) {
                     if (er) {
                         res.json({
                             Code: 499,
-                            message: 'Issue with content'
+                            Info: 'Error creating part request'
                         });
                     }
                     sendMailPartRequest(req);
-                    res.json({Code: 200, Info: 'sucessfull'});
+                    res.json({Code: 200, Info: 'Part request created successfully'});
                 });
             } else {
                 res.json({Code: 499, Info: 'This WorkOrder dont exist or already Closed'});
@@ -746,11 +780,11 @@ router.post('/create_part_request', function (req, res, next) {
             if (er) {
                 res.json({
                     Code: 499,
-                    message: 'Issue with content'
+                    Info: 'Error creating part request'
                 });
             }
             sendMailPartRequest(req);
-            res.json({Code: 200, Info: 'sucessfull'});
+            res.json({Code: 200, Info: 'Part request created successfully'});
         });
     }
 
@@ -1712,7 +1746,7 @@ var createWorkOrderPM = function (task) {
                     console.log(err);
                     res.json({
                         Code: 499,
-                        message: err,
+                        Info: 'Error creating workorder',
                     });
                 } else {
                     var currentDt = new Date();
