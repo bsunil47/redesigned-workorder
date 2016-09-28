@@ -38,7 +38,7 @@ var counters = mongoose.model('counter');
 router.post('/', function (req, res, next) {
 
     Users.findOne({
-        $text: {$search: req.body.username, $caseSensitive: true},
+        $text: {$search: req.body.username},
         password: req.body.password
     }, function (err, users) {
         if (err) {
