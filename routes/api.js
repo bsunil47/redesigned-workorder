@@ -251,7 +251,7 @@ router.post('/create_workorder', function (req, res, next) {
                                         +
                                         '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
                                         +
-                                        '<p><b>Work Order Date</b>: ' + date + '</p>'
+                                        '<p><b>Work Order Date</b>: ' + dateFormat(date, 'shortDate') + '</p>'
                                         +
                                         '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
                                         +
@@ -1762,7 +1762,7 @@ var createWorkOrderPM = function (task) {
                                         +
                                         '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
                                         +
-                                        '<p><b>Work Order Date</b>: ' + new Date() + '</p>'
+                                        '<p><b>Work Order Date</b>: ' + dateFormat(new Date(parseInt(task.wo_pm_date)), 'shortDate') + '</p>'
                                         +
                                         '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
                                         +
