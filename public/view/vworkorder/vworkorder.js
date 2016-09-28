@@ -91,6 +91,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         if (userdetail.role == 'clerk') {
             $scope.showClerk = true;
         }
+
         $scope.clickToOpen = function (workorder) {
             $scope.selectedWorkOrder = workorder;
             $scope.selectedWorkOrder.workorder_number = showWithzeros($scope.selectedWorkOrder.workorder_number);
@@ -273,13 +274,20 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                             var yyyy = currentDt.getFullYear();
                             var date = mm + '/' + dd + '/' + yyyy;
                             $scope.workOrder.wo_pm_previous_date = date;
-                            var wo_pm_date = new Date(parseInt(res.Info.pm_task.pm_next_date));
+                            var currentDt = new Date(parseInt($scope.workOrder.wo_pm_date));
+                            var mm = currentDt.getMonth() + 1;
+                            mm = (mm < 10) ? '0' + mm : mm;
+                            var dd = currentDt.getDate();
+                            var yyyy = currentDt.getFullYear();
+                            var date = mm + '/' + dd + '/' + yyyy;
+                            $scope.selectedWorkOrder.wo_pm_date = date;
+                            /*var wo_pm_date = new Date(parseInt(res.Info.pm_task.pm_next_date));
                             var mm = wo_pm_date.getMonth() + 1;
                             mm = (mm < 10) ? '0' + mm : mm;
                             var dd = wo_pm_date.getDate();
                             var yyyy = wo_pm_date.getFullYear();
                             var date = mm + '/' + dd + '/' + yyyy;
-                            $scope.workOrder.wo_pm_date = date;
+                             $scope.workOrder.wo_pm_date = date;*/
                             $scope.workOrder.wo_pm_frequency = res.Info.pm_task.pm_frequency;
                             $scope.workOrder.wo_pm_number = res.Info.pm_task.pm_number;
                             $scope.workOrder.pm_task = 1;
