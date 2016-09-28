@@ -280,7 +280,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                             var dd = currentDt.getDate();
                             var yyyy = currentDt.getFullYear();
                             var date = mm + '/' + dd + '/' + yyyy;
-                            $scope.selectedWorkOrder.wo_pm_date = date;
+                            $scope.workOrder.wo_pm_date = date;
                             /*var wo_pm_date = new Date(parseInt(res.Info.pm_task.pm_next_date));
                             var mm = wo_pm_date.getMonth() + 1;
                             mm = (mm < 10) ? '0' + mm : mm;
