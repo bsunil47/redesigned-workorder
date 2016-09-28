@@ -65,7 +65,6 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
         } else {
 
         }
-
     }, function (error) {
         alert(error);
     });
