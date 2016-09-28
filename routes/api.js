@@ -365,8 +365,8 @@ router.post('/create_class', function (req, res, next) {
         var query = {
             class_name: req.body.class_name
         };
-        Category.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-            {safe: true, upsert: false},
+        Class.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+            {safe: true, upsert: true},
             function (err, model) {
                 if (err) {
                     console.log(err);
@@ -590,7 +590,7 @@ router.post('/create_skill', function (req, res, next) {
             skill_name: req.body.skill_name,
         };
         Skill.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-            {safe: true, upsert: false},
+            {safe: true, upsert: true},
             function (err, model) {
                 if (err) {
                     console.log(err);

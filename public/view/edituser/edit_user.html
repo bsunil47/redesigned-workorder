@@ -54,6 +54,14 @@ Page wrapper start -->
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-sm-6 control-label">User Name:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="user.username" ng-disabled="true" type="text"
+                                                   class="form-control"
+                                                   name="username" value={{user.username}} required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-sm-6 control-label">Email :</label>
                                         <div class="col-sm-6">
                                             <input ng-model="user.email" ng-disabled="user.email" type="email"
