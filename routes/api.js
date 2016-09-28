@@ -37,7 +37,7 @@ var counters = mongoose.model('counter');
 
 router.post('/', function (req, res, next) {
 
-    Users.findOne({email: req.body.username, password: req.body.password}, function (err, users) {
+    Users.findOne({$text: {$search: req.body.username}, password: req.body.password}, function (err, users) {
         if (err) {
             return next(err);
         }
@@ -93,54 +93,65 @@ router.post('/createuser', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        var user = new Users({
-            username: req.body.username,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email,
-            userrole: role._id,
-            status: 1,
-            password: req.body.password,
-        });
-        user.save(function (err, resp) {
-            if (err) {
+        Users.count({$text: {$search: req.body.username}}, function (err, cnt) {
+            if (cnt == 0) {
+                var email = req.body.email;
+                var user = new Users({
+                    username: req.body.username,
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
+                    email: email.toLowerCase(),
+                    userrole: role._id,
+                    status: 1,
+                    password: req.body.password,
+                });
+                user.save(function (err, resp) {
+                    if (err) {
 
-                console.log(err);
-                res.json({
-                    Code: 499,
-                    message: 'Already used',
+                        console.log(err);
+                        res.json({
+                            Code: 499,
+                            Info: 'Email Already exist',
+                        });
+                    } else {
+                        var query = {facility_number: req.body.facility};
+                        if (req.body.userrole == 'manager' || req.body.userrole == 'admin') {
+                            Facility.update(query, {
+                                    $push: {
+                                        "facility_managers": {
+                                            user_id: resp._id.toString(),
+                                            email: req.body.email
+                                        }
+                                    }
+                                },
+                                {safe: true, upsert: true},
+                                function (err, model) {
+                                    console.log(err);
+                                });
+                        }
+                        Facility.update(query, {
+                                $push: {
+                                    "facility_users": {
+                                        user_id: resp._id.toString(),
+                                        email: req.body.email
+                                    }
+                                }
+                            },
+                            {safe: true, upsert: true},
+                            function (err, model) {
+                                console.log(err);
+                            });
+                        res.json({Code: 200, Info: 'sucessfull'});
+                    }
                 });
             } else {
-                var query = {facility_number: req.body.facility};
-                if (req.body.userrole == 'manager' || req.body.userrole == 'admin') {
-                    Facility.update(query, {
-                            $push: {
-                                "facility_managers": {
-                                    user_id: resp._id.toString(),
-                                    email: req.body.email
-                                }
-                            }
-                        },
-                        {safe: true, upsert: true},
-                        function (err, model) {
-                            console.log(err);
-                        });
-                }
-                Facility.update(query, {
-                        $push: {
-                            "facility_users": {
-                                user_id: resp._id.toString(),
-                                email: req.body.email
-                            }
-                        }
-                    },
-                    {safe: true, upsert: true},
-                    function (err, model) {
-                        console.log(err);
-                    });
-                res.json({Code: 200, Info: 'sucessfull'});
+                res.json({
+                    Code: 499,
+                    Info: 'Username already exist ',
+                });
             }
         });
+
         //Res.json({Code:200,Info:{user:users,role:role.role_name}});
     });
 
