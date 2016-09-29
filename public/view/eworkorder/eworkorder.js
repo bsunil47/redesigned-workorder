@@ -529,12 +529,15 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 $scope.reqPMTask = true;
             }
             if ($scope.workOrder.wo_pm_frequency <= 0) {
+                $scope.reqPMTask = false;
                 $scope.workOrder.wo_pm_frequency = "";
             }
             if (!isInt($scope.workOrder.wo_pm_frequency)) {
+                $scope.reqPMTask = false;
                 $scope.workOrder.wo_pm_frequency = "";
             }
             if (angular.isUndefined($scope.workOrder.wo_pm_frequency)) {
+                $scope.reqPMTask = false;
                 $scope.workOrder.wo_pm_frequency = "";
             }
         });

@@ -92,6 +92,9 @@ router.post('/userlist', function (req, res, next) {
 });
 
 router.post('/createuser', function (req, res, next) {
+    if (!req.body.username || !req.body.email || !req.body.firstname || !req.body.lastname || !req.body.userrole || !req.body.facility) {
+        return res.json({Code: 496, Info: 'All fields are required'});
+    }
     Roles.findOne({role_name: req.body.userrole}, function (err, role) {
         if (err) {
             return next(err);
@@ -306,6 +309,9 @@ router.post('/create_workorder', function (req, res, next) {
 });
 
 router.post('/create_category', function (req, res, next) {
+    if (!req.body.facility_number || !req.body.category_name) {
+        return res.json({Code: 496, Info: 'All fields are required'});
+    }
     Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
         if (err) {
             return next(err);
@@ -513,6 +519,9 @@ router.post('/equipments', function (req, res, next) {
 });
 
 router.post('/create_facility', function (req, res, next) {
+    if (!req.body.facility_number || !req.body.facility_name) {
+        return res.json({Code: 496, Info: 'All fields are required'});
+    }
     // validations ** start
 
     var query_count_facility = {facility_number: {$regex: new RegExp('^' + req.body.facility_number + '$', "i")}};
@@ -560,13 +569,17 @@ router.post('/facilities', function (req, res, next) {
 
 
 router.post('/create_priority', function (req, res, next) {
+    if (!req.body.priority_name || !req.body.facility_number) {
+        return res.json({Code: 496, Info: 'All fields are required'});
+    }
+    return res.json({Code: 496, Info: 'All fields are required'});
     Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
         if (err) {
             return next(err);
         }
         // validations ** start
 
-        var query_count_class = {
+        var query_count_priority = {
             priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")},
             "facilities.facility_number": req.body.facility_number
         };
@@ -616,6 +629,9 @@ router.post('/priorities', function (req, res, next) {
 
 
 router.post('/create_skill', function (req, res, next) {
+    if (!req.body.facility_number || !req.body.skill_name) {
+        return res.json({Code: 496, Info: 'All fields are required'});
+    }
     Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
         if (err) {
             return next(err);
@@ -628,7 +644,7 @@ router.post('/create_skill', function (req, res, next) {
             "facilities.facility_number": req.body.facility_number
         };
 
-        Skill.count(query_count_class, function (err, skillcount) {
+        Skill.count(query_count_skill, function (err, skillcount) {
             if (err) {
                 return next(err);
             }
@@ -684,6 +700,9 @@ router.post('/status_list', function (req, res, next) {
 });
 
 router.post('/createparts', function (req, res, next) {
+    if (!req.body.equipment_name || !req.body.equipment_number || !req.body.part_number || !req.body.part_name || !req.body.vendor_number || !req.body.vendor_name || !req.body.min_qty || !req.body.max_qty) {
+        return res.json({Code: 496, Info: 'All fields are required'});
+    }
     Equipment.findOne({
         equipment_name: req.body.equipment_name,
         equipment_number: req.body.equipment_number
