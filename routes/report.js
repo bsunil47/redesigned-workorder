@@ -130,6 +130,8 @@ router.post('/', function (req, res, next) {
                                     callback(null, details);
                                 });
 
+                                console.log(wrkORder);
+                                console.log('workorder issue');
 
                             });
                         });
