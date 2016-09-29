@@ -135,7 +135,7 @@ router.post('/', function (req, res, next) {
                         });
                         async.parallel(Wkodrs, function (err, result) {
                             var category = {};
-
+                            console.log(result);
                             function callback1() {
                                 var caty = [];
                                 var equpment = {
