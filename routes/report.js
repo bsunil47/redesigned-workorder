@@ -80,6 +80,7 @@ router.post('/', function (req, res, next) {
     Equipment.find(qr, function (err, equi) {
         var equipments = [];
         equi.forEach(function (eq) {
+            console.log(eq.equipment_name);
             var total_hrs = 0;
             equipments.push(function (callback) {
                 query.workorder_equipment = eq._id;
@@ -166,6 +167,8 @@ router.post('/', function (req, res, next) {
                                         category[cat.workorder_category].wo_timespent = category[cat.workorder_category].wo_timespent + cat.wo_timespent;
                                     }
                                     itemsProcessed++;
+                                    console.log(itemsProcessed);
+                                    console.log(array.length);
                                     if (itemsProcessed === array.length) {
                                         callback1();
                                     }
@@ -173,7 +176,7 @@ router.post('/', function (req, res, next) {
                             });
                             function asyncFunction(item, cb) {
                                 setTimeout(() => {
-                                    //console.log('done with', item);
+                                    console.log('done with', item);
                                     cb();
                                 }, 1000);
                             }
@@ -199,7 +202,6 @@ router.post('/', function (req, res, next) {
 
             /* this code will run after all calls finished the job or
              when any of the calls passes an error */
-            console.log(result);
             if (err)
                 return console.log(err);
             var obj = {
