@@ -138,6 +138,7 @@ router.post('/', function (req, res, next) {
                         });
                         async.parallel(Wkodrs, function (err, result) {
                             var category = {};
+                            var itemsProcessed = 0;
                             console.log(result);
                             function callback1() {
                                 var caty = [];
@@ -150,10 +151,10 @@ router.post('/', function (req, res, next) {
                                     facilities: eq.facilities,
                                     workorders: category
                                 };
+                                console.log(itemsProcessed);
                                 callback(null, equpment);
                             }
 
-                            var itemsProcessed = 0;
 
                             result.forEach((cat, index, array) => {
                                 asyncFunction(cat, () => {
