@@ -22,7 +22,7 @@
     <table width="100%" cellspacing="0" cellpadding="10" style="margin: 0 0 15px 0; border: 1px solid #D4D4D4;">
         <thead>
         <tr style="background-color: #E5E5E5">
-            <th style="border: 1px solid #D4D4D4; text-align: left;">WorkOrder</th>
+            <!--<th style="border: 1px solid #D4D4D4; text-align: left;">WorkOrder</th>-->
             <th style="border: 1px solid #D4D4D4; text-align: left;">Equipment</th>
             <th style="border: 1px solid #D4D4D4; text-align: left;">Category</th>
             <th style="border: 1px solid #D4D4D4; text-align: left;">Hours</th>
@@ -31,22 +31,22 @@
         <tbody>
         {% for item in data %}
         <tr style="background-color: #F6F6F6">
-            <td style="border: 1px solid #D4D4D4; text-align: left; word-wrap: break-word">
-            </td>
+            <!--<td style="border: 1px solid #D4D4D4; text-align: left; word-wrap: break-word">
+            </td>-->
             <td style="border: 1px solid #D4D4D4; text-align: left;word-wrap: break-word">{{item.equipment_name}}
             </td>
             <td style="border: 1px solid #D4D4D4; text-align: left; word-wrap: break-word">
             </td>
             <td style="border: 1px solid #D4D4D4; text-align: left; word-wrap: break-word">{{item.total_hrs}}</td>
         </tr>
-        {% for wkr in item.workorders %}
+        {% for someId, wkr in item.workorders %}
         <tr style="background-color: #FFF">
-            <td style="text-align: left; word-wrap: break-word; border-right:1px solid #D4D4D4">{{wkr.workorder_number}}
-            </td>
+            <!-- <td style="text-align: left; word-wrap: break-word; border-right:1px solid #D4D4D4">{{wkr.workorder_number}}
+             </td>-->
             <td style="text-align: left;word-wrap: break-word; border-right:1px solid #D4D4D4">
             </td>
             <td style="text-align: left; word-wrap: break-word; border-right:1px solid #D4D4D4">
-                {{wkr.workorder_category}}
+                {{someId}}
             </td>
             <td style="text-align: left; word-wrap: break-word">{{wkr.wo_timespent}}</td>
         </tr>
