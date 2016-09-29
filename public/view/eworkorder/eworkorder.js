@@ -520,6 +520,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             if (angular.isUndefined($scope.workOrder.wo_pm_number)) {
                 $scope.workOrder.wo_pm_frequency = "";
                 $scope.workOrder.wo_pm_date = "";
+                $scope.reqPMFreq = false;
             } else {
                 $scope.reqPMFreq = true;
             }
