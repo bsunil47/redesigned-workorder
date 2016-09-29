@@ -99,7 +99,6 @@ router.post('/', function (req, res, next) {
                                 var details = {};
                                 var time_spent = wrkORder.wo_timespent.split(':');
                                 if (time_spent[1] == "15") {
-                                    console.log(time_spent[1]);
                                     wo_timespent = parseFloat(time_spent[0]) + 0.25;
                                     total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.25);
                                     details.wo_timespent = wo_timespent;
@@ -128,7 +127,6 @@ router.post('/', function (req, res, next) {
 
                                     }
                                     details.workorder_category = category.category_name;
-                                    console.log(details);
                                     callback(null, details);
                                 });
 
@@ -136,16 +134,74 @@ router.post('/', function (req, res, next) {
                             });
                         });
                         async.parallel(Wkodrs, function (err, result) {
-                            var equpment = {
-                                total_hrs: total_hrs,
-                                equipment_number: eq.equipment_number,
-                                equipment_name: eq.equipment_name,
-                                status: eq.status,
-                                equipments: eq.equipments,
-                                facilities: eq.facilities,
-                                workorders: result
+                            var category = {};
+
+                            function callback1() {
+                                var caty = [];
+                                /*category.forEach(function (cate,index,array) {
+
+                                 caty.push(function(callback){
+                                 console.log('cat');
+                                 cosole.log(cate);
+                                 callback(null,cate);
+                                 });
+                                 });
+                                 async.parallel(caty,function(err,res){
+
+                                 });*/
+                                console.log(JSON.stringify(category));
+                                var equpment = {
+                                    total_hrs: total_hrs,
+                                    equipment_number: eq.equipment_number,
+                                    equipment_name: eq.equipment_name,
+                                    status: eq.status,
+                                    equipments: eq.equipments,
+                                    facilities: eq.facilities,
+                                    workorders: category
+                                };
+                                callback(null, equpment);
+                                console.log('all done');
+
                             }
-                            callback(null, equpment);
+
+                            var itemsProcessed = 0;
+
+                            result.forEach((cat, index, array) => {
+                                asyncFunction(cat, () => {
+                                    if (typeof category[cat.workorder_category] === 'undefined') {
+                                        category[cat.workorder_category] = [];
+                                        category[cat.workorder_category] = {
+                                            workorder_category: cat.workorder_category,
+                                            wo_timespent: cat.wo_timespent
+                                        };
+                                    } else {
+                                        category[cat.workorder_category].wo_timespent = category[cat.workorder_category].wo_timespent + cat.wo_timespent;
+                                    }
+                                    itemsProcessed++;
+                                    if (itemsProcessed === array.length) {
+                                        callback1();
+                                    }
+                                });
+                            });
+                            function asyncFunction(item, cb) {
+                                setTimeout(() => {
+                                    //console.log('done with', item);
+                                    cb();
+                                }, 100);
+                            }
+
+                            /*result.forEach(function (cat) {
+                             console.log(category[cat.workorder_category]);
+                             if(typeof category[cat.workorder_category] === 'undefined'){
+                             category[cat.workorder_category] =[];
+                             category[cat.workorder_category].push(cat);
+                             }else{
+                             category[cat.workorder_category].push(cat);
+                             }
+                             console.log(category);
+                             });*/
+
+
                         })
 
                     });
@@ -155,7 +211,7 @@ router.post('/', function (req, res, next) {
 
             /* this code will run after all calls finished the job or
              when any of the calls passes an error */
-
+            console.log(result);
             if (err)
                 return console.log(err);
             var obj = {
