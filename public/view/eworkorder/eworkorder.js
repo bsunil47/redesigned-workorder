@@ -158,16 +158,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
                 }
                 console.log($scope.workOrder.wo_pm_date);
-                if (!angular.isUndefined($scope.workOrder.wo_pm_date)) {
-                    var currentDt = new Date(parseInt($scope.workOrder.wo_pm_date));
-                    var mm = currentDt.getMonth() + 1;
-                    mm = (mm < 10) ? '0' + mm : mm;
-                    var dd = currentDt.getDate();
-                    var yyyy = currentDt.getFullYear();
-                    var date = mm + '/' + dd + '/' + yyyy;
-                    $scope.workOrder.wo_pm_date = date;
-                    console.log($scope.workOrder.wo_pm_date);
-                }
+
                 $scope.selected_facility = $scope.workOrder.workorder_facility;
                 API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
@@ -309,6 +300,16 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     alert(error);
                 });
                 $scope.pmTaskAlreadySet = true;
+                if (!angular.isUndefined($scope.workOrder.wo_pm_date)) {
+                    var currentDt = new Date(parseInt($scope.workOrder.wo_pm_date));
+                    var mm = currentDt.getMonth() + 1;
+                    mm = (mm < 10) ? '0' + mm : mm;
+                    var dd = currentDt.getDate();
+                    var yyyy = currentDt.getFullYear();
+                    var date = mm + '/' + dd + '/' + yyyy;
+                    $scope.workOrder.wo_pm_date = date;
+                    console.log($scope.workOrder.wo_pm_date);
+                }
 
 
                 //$cookies.put('userDetails',res)
@@ -332,24 +333,6 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             $location.path(reloc);
         };
 
-        $scope.pgWorkOrder = function () {
-            console.log($scope.workOrder.wo_pm_frequency);
-
-            if ($scope.workOrder.wo_pm_frequency > 0) {
-                var currentDt = new Date();
-                currentDt.setDate(currentDt.getDate() + parseInt($scope.workOrder.wo_pm_frequency));
-                var mm = currentDt.getMonth() + 1;
-                mm = (mm < 10) ? '0' + mm : mm;
-                var dd = currentDt.getDate();
-                var yyyy = currentDt.getFullYear();
-                var date = mm + '/' + dd + '/' + yyyy;
-                $scope.workOrder.wo_pm_date = date;
-            } else {
-                $scope.workOrder.wo_pm_date = "";
-            }
-
-        };
-
         function updateWorkOrder() {
             console.log($scope.workOrder.workorder_technician);
             console.log($scope.workOrder.workorder_skill);
@@ -368,14 +351,31 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             }
             console.log($scope.workOrder.wo_pm_date);
             if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
+                $scope.workOrder.wo_pm_date = new Date($scope.workOrder.wo_pm_date).valueOf();
                 if (!angular.isUndefined($scope.workOrder.wo_pm_date)) {
                     if (isNaN(parseInt($scope.workOrder.wo_pm_date))) {
                         $scope.workOrder.wo_pm_date = new Date($scope.workOrder.wo_pm_date).valueOf();
+                    } else {
+                        $scope.workOrder.wo_pm_date = new Date($scope.workOrder.wo_pm_date).valueOf();
+                    }
+                } else {
+                    if ($scope.workOrder.wo_pm_date == "" || angular.isUndefined($scope.workOrder.wo_pm_date)) {
+                        $scope.workOrder.wo_pm_date = "";
+                    } else {
+                        $scope.workOrder.wo_pm_date = new Date($scope.workOrder.wo_pm_date).valueOf();
                     }
                 }
-                if ($scope.workOrder.wo_pm_date != "") {
-                    $scope.workOrder.wo_pm_date = new Date($scope.workOrder.wo_pm_date).valueOf();
+                if (angular.isUndefined($scope.workOrder.wo_pm_number)) {
+                    $scope.workOrder.workorder_PM = "";
+                } else {
+                    if ($scope.workOrder.wo_pm_number == "") {
+                        $scope.workOrder.workorder_PM = "";
+                    } else {
+                        $scope.workOrder.workorder_PM = $scope.workOrder.wo_pm_number;
+                    }
                 }
+
+
                 var data_post = $scope.workOrder;
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                     data_post.wo_datecomplete = new Date($scope.workOrder.wo_datecomplete).valueOf();
@@ -520,24 +520,45 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             if (angular.isUndefined($scope.workOrder.wo_pm_number)) {
                 $scope.workOrder.wo_pm_frequency = "";
                 $scope.workOrder.wo_pm_date = "";
+                $scope.workOrder.wo_pm_number = "";
                 $scope.reqPMFreq = false;
             } else {
                 $scope.reqPMFreq = true;
             }
+
+            if ($scope.workOrder.wo_pm_number == "") {
+                $scope.workOrder.wo_pm_frequency = "";
+                $scope.workOrder.wo_pm_number = "";
+                $scope.workOrder.wo_pm_date = "";
+                $scope.reqPMFreq = false;
+            }
+            console.log($scope.reqPMFreq);
         });
         $scope.$watch("workOrder.wo_pm_frequency", function (newValue, oldValue) {
             if ($scope.workOrder.wo_pm_frequency > 0) {
+                var currentDt = new Date();
+                currentDt.setDate(currentDt.getDate() + parseInt($scope.workOrder.wo_pm_frequency));
+                var mm = currentDt.getMonth() + 1;
+                mm = (mm < 10) ? '0' + mm : mm;
+                var dd = currentDt.getDate();
+                var yyyy = currentDt.getFullYear();
+                var date = mm + '/' + dd + '/' + yyyy;
+                $scope.workOrder.wo_pm_date = date;
                 $scope.reqPMTask = true;
             }
+
             if ($scope.workOrder.wo_pm_frequency <= 0) {
+                $scope.workOrder.wo_pm_date = "";
                 $scope.reqPMTask = false;
                 $scope.workOrder.wo_pm_frequency = "";
             }
             if (!isInt($scope.workOrder.wo_pm_frequency)) {
+                $scope.workOrder.wo_pm_date = "";
                 $scope.reqPMTask = false;
                 $scope.workOrder.wo_pm_frequency = "";
             }
             if (angular.isUndefined($scope.workOrder.wo_pm_frequency)) {
+                $scope.workOrder.wo_pm_date = "";
                 $scope.reqPMTask = false;
                 $scope.workOrder.wo_pm_frequency = "";
             }
