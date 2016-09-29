@@ -138,18 +138,6 @@ router.post('/', function (req, res, next) {
 
                             function callback1() {
                                 var caty = [];
-                                /*category.forEach(function (cate,index,array) {
-
-                                 caty.push(function(callback){
-                                 console.log('cat');
-                                 cosole.log(cate);
-                                 callback(null,cate);
-                                 });
-                                 });
-                                 async.parallel(caty,function(err,res){
-
-                                 });*/
-                                console.log(JSON.stringify(category));
                                 var equpment = {
                                     total_hrs: total_hrs,
                                     equipment_number: eq.equipment_number,
@@ -160,8 +148,6 @@ router.post('/', function (req, res, next) {
                                     workorders: category
                                 };
                                 callback(null, equpment);
-                                console.log('all done');
-
                             }
 
                             var itemsProcessed = 0;
@@ -187,7 +173,7 @@ router.post('/', function (req, res, next) {
                                 setTimeout(() => {
                                     //console.log('done with', item);
                                     cb();
-                                }, 100);
+                                }, 1000);
                             }
 
                             /*result.forEach(function (cat) {
