@@ -200,7 +200,7 @@ router.post('/', function (req, res, next) {
             })
         });
         async.parallel(equipments, function (err, result) {
-
+            console.log(result);
             /* this code will run after all calls finished the job or
              when any of the calls passes an error */
             if (err)
