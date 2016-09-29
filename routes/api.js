@@ -1505,7 +1505,8 @@ router.post('/get_search_wo', function (req, res, next) {
             var created_on = new Date(req.body.wo_datecomplete_to).valueOf();
             delete query['wo_datecomplete_to'];
         }
-        query.created_on = {
+        query.wo_datecomplete = {
+            $exists: true,
             '$gte': new Date(req.body.wo_datecomplete_from).valueOf(),
             '$lte': parseInt(created_on)
         };
