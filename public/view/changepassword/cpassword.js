@@ -9,12 +9,15 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
   });
 }])
 
-.controller('ChangePasswordCtrl', ["$scope","$cookies","$location",'API',function($scope,$cookies,$location,API) {
+    .controller('ChangePasswordCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
   $scope.ChangePassword = ChangePassword;
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
   userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
   $scope.user = {
     id:userdetail.user._id,
     p_password:'',

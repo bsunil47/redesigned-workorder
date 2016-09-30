@@ -9,12 +9,15 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
         });
     }])
 
-    .controller('PworkorderCtrl', ["$scope", "$cookies", "$location", 'API', '$filter', '$routeParams', 'ngDialog', function ($scope, $cookies, $location, API, $filter, $routeParams, ngDialog) {
+    .controller('PworkorderCtrl', ["$scope", "$cookies", "$location", 'API', '$filter', '$routeParams', 'ngDialog', '$window', function ($scope, $cookies, $location, API, $filter, $routeParams, ngDialog, $window) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var currentId = $routeParams.id;
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         $scope.facilities = $cookies.getObject('facilities');
         //$scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
 

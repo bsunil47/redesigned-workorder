@@ -9,7 +9,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         });
     }])
 
-    .controller('SordersCtrl', ["$scope", "$cookies", "$location", '$filter', 'API', 'ngDialog', function ($scope, $cookies, $location, $filter, API, ngDialog) {
+    .controller('SordersCtrl', ["$scope", "$cookies", "$location", '$filter', '$window', 'API', 'ngDialog', function ($scope, $cookies, $location, $filter, $window, API, ngDialog) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
@@ -33,6 +33,9 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             wo_pm_number: "",
          };*/
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         $scope.facilities = $cookies.getObject('facilities');
         $scope.selected_facility = $scope.facilities[0].facility_number;
         API.Equipments.Recent(userdetail.user, function (res) {

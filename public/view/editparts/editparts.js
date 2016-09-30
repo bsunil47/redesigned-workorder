@@ -9,7 +9,7 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('EditPartsCtrl', ["$scope", "$cookies", "$location", "$filter", "$routeParams", 'API', function ($scope, $cookies, $location, $filter, $routeParams, API) {
+    .controller('EditPartsCtrl', ["$scope", "$cookies", "$location", "$filter", "$routeParams", "$window", 'API', function ($scope, $cookies, $location, $filter, $routeParams, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
@@ -26,6 +26,9 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
             max_qty: ""
         };
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
 
         $scope.Logout = function () {
             $cookies.remove('userDetails');

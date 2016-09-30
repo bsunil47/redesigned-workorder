@@ -9,7 +9,7 @@ angular.module('PGapp.edituser', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('EditUserCtrl', ["$scope", "$cookies", "$location", '$routeParams', 'API', function ($scope, $cookies, $location, $routeParams, API) {
+    .controller('EditUserCtrl', ["$scope", "$cookies", "$location", '$routeParams', '$window', 'API', function ($scope, $cookies, $location, $routeParams, $window, API) {
 
         var edit_user_email = $routeParams.id;
         console.log("routeParams in edituserjs: " + $routeParams.id);
@@ -28,6 +28,9 @@ angular.module('PGapp.edituser', ['ngRoute', 'ngAnimate', 'ngCookies'])
         //   $location.path('login');
         // }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         console.log("User Details: " + JSON.stringify(userdetail));
         API.Facilities.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {

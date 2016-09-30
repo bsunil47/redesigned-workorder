@@ -9,7 +9,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('CreateCategoryCtrl', ["$scope", "$cookies", "$location", 'API', function ($scope, $cookies, $location, API) {
+    .controller('CreateCategoryCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
         $scope.CreateCategory = CreateCategory;
         $scope.category = {
             category_name: "",
@@ -20,7 +20,9 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
-
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         $scope.Logout = function () {
             $cookies.remove('userDetails');
             $location.path("/");

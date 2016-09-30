@@ -9,11 +9,14 @@ angular.module('PGapp.skilllist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('SkillListCtrl', ["$scope", "$cookies", "$location", "$filter", 'API', function ($scope, $cookies, $location, $filter, API) {
+    .controller('SkillListCtrl', ["$scope", "$cookies", "$location", "$filter", "$window", 'API', function ($scope, $cookies, $location, $filter, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         API.Skills.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
 

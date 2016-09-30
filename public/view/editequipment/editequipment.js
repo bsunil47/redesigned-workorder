@@ -9,11 +9,14 @@ angular.module('PGapp.editequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('EditEquipmentCtrl', ["$scope", "$cookies", "$location", "$routeParams", "$filter", 'API', function ($scope, $cookies, $location, $routeParams, $filter, API) {
+    .controller('EditEquipmentCtrl', ["$scope", "$cookies", "$location", "$routeParams", "$filter", "$window", 'API', function ($scope, $cookies, $location, $routeParams, $filter, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         var edit_equipment_number = $routeParams.id;
         $scope.Logout = function () {
             $cookies.remove('userDetails');
