@@ -95,35 +95,6 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             $scope.showClerk = true;
         }
 
-        $scope.clickToOpen = function (workorder) {
-            $scope.selectedWorkOrder = workorder;
-            $scope.selectedWorkOrder.workorder_number = showWithzeros($scope.selectedWorkOrder.workorder_number);
-            $scope.selectedWorkOrder.workorder_equipment = showEquipment(workorder.workorder_equipment);
-            $scope.selectedWorkOrder.status = showStatus(workorder.status);
-            $scope.selectedWorkOrder.workorder_technician = showtechnician(workorder.workorder_technician);
-            $scope.selectedWorkOrder.created_on = workorder.created_on;
-            $scope.selectedWorkOrder.wo_datecomplete = workorder.wo_datecomplete;
-            $scope.selectedWorkOrder.workorder_skill = showSkill(workorder.workorder_skill);
-            $scope.selectedWorkOrder.workorder_category = showCategory(workorder.workorder_category);
-            $scope.selectedWorkOrder.workorder_priority = showPriority(workorder.workorder_priority);
-            $scope.selectedWorkOrder.workorder_class = showClass(workorder.workorder_class);
-            var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.created_on = date
-            if (!angular.isUndefined(workorder.wo_pm_date)) {
-                var currentDt = new Date(parseInt(workorder.wo_pm_date));
-                var mm = currentDt.getMonth() + 1;
-                mm = (mm < 10) ? '0' + mm : mm;
-                var dd = currentDt.getDate();
-                var yyyy = currentDt.getFullYear();
-                var date = mm + '/' + dd + '/' + yyyy;
-                $scope.selectedWorkOrder.wo_pm_date = date;
-            }
-
-            console.log(workorder.workorder_facility);
-            $scope.selectedWorkOrder.workorder_facility = showFacility(workorder.workorder_facility);
-            $scope.selectedWorkOrder.workorder_creator = showRequestor(workorder.workorder_creator);
-            ngDialog.open({template: 'view/popup/popupTmpl.html', className: 'ngdialog-theme-default', scope: $scope});
-        };
         API.GetWorkOrder.Recent({workorder_number: currentId}, function (res) {
             if (res.Code == 200) {
 
@@ -301,6 +272,8 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     }, function (error) {
                         alert(error);
                     });
+                } else {
+                    $scope.workOrder.wo_pm_date = "";
                 }
 
                 //$cookies.put('userDetails',res)
@@ -348,24 +321,6 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        };
-
-        $scope.pgWorkOrder = function () {
-            console.log($scope.workOrder.wo_pm_frequency);
-
-            if ($scope.workOrder.wo_pm_frequency > 0) {
-                var currentDt = new Date();
-                currentDt.setDate(currentDt.getDate() + parseInt($scope.workOrder.wo_pm_frequency));
-                var mm = currentDt.getMonth() + 1;
-                mm = (mm < 10) ? '0' + mm : mm;
-                var dd = currentDt.getDate();
-                var yyyy = currentDt.getFullYear();
-                var date = mm + '/' + dd + '/' + yyyy;
-                $scope.workOrder.wo_pm_date = date;
-            } else {
-                $scope.workOrder.wo_pm_date = "";
-            }
-
         };
 
         function updateWorkOrder() {
