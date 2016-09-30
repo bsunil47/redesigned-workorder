@@ -597,7 +597,7 @@ router.post('/create_priority', function (req, res, next) {
                 priority_name: req.body.priority_name
             };
             Priority.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-                {safe: true, upsert: false},
+                {safe: true, upsert: true},
                 function (err, model) {
                     if (err) {
                         console.log(err);
