@@ -572,7 +572,6 @@ router.post('/create_priority', function (req, res, next) {
     if (!req.body.priority_name || !req.body.facility_number) {
         return res.json({Code: 496, Info: 'All fields are required'});
     }
-    return res.json({Code: 496, Info: 'All fields are required'});
     Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
         if (err) {
             return next(err);
