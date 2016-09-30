@@ -22,18 +22,7 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
     return found.role_name
   };
 
-  API.Users.Recent(userdetail,function(res){
-    if(res.Code == 200){
 
-      $scope.user_list = res.Info;
-      //$cookies.put('userDetails',res)
-    }else {
-      $scope.loginForm.username.error = true;
-    }
-
-  },function (error) {
-    alert(error);
-  });
 
   $scope.Logout = function () {
       $cookies.remove('userDetails');
@@ -42,18 +31,34 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
   };
-    $scope.showFacility = function (facility_number) {
-        var facilities_numbers = "";
-        var facility_length = facility_number.length;
-        for (var faci in facility_number) {
-            var found = $filter('getByFacilityNumber')('facility_number', facility_number[faci].facility_number, facilities);
-            if (facility_length - 1 <= faci) {
-                facilities_numbers = facilities_numbers + found.facility_name + ",";
+        var facilities;
+        API.allFacilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                facilities = res.Info.facilities;
+                API.Users.Recent(userdetail, function (res) {
+                    if (res.Code == 200) {
+
+                        $scope.user_list = res.Info;
+                        //$cookies.put('userDetails',res)
+                    } else {
+                        $scope.loginForm.username.error = true;
+                    }
+
+                }, function (error) {
+                    alert(error);
+                });
+                //$cookies.put('userDetails',res)
             } else {
-                facilities_numbers = facilities_numbers + found.facility_name;
+
             }
-        }
-        return facilities_numbers;
+        }, function (error) {
+            alert(error);
+        });
+        $scope.showFacility = function (facility_number) {
+            var found = $filter('getByFacilityUserID')('facility_users', facility_number, facilities);
+            console.log(found);
+            return found.facility_name;
     };
     var status_list;
     $scope.editUser = function (user_email) {
@@ -100,6 +105,32 @@ PGapp.filter('getByFacilityNumber', function () {
                 for (i; i < len; i++) {
                     if (collection[i][propertyName] == propertyValue) {
                         return collection[i];
+                    }
+                }
+            }
+        } catch (err) {
+            return null;
+        }
+
+
+    }
+});
+
+PGapp.filter('getByFacilityUserID', function () {
+    //console.log(input);
+    return function (propertyName, propertyValue, collection) {
+        try {
+            if (collection != 'undefined') {
+                var i = 0,
+                    len = collection.length;
+                for (i; i < len; i++) {
+                    var j = 0,
+                        lena = collection[i][propertyName].length;
+                    for (j; j < lena; j++) {
+                        if (collection[i][propertyName][j].user_id == propertyValue) {
+                            console.log(collection[i])
+                            return collection[i];
+                        }
                     }
                 }
             }

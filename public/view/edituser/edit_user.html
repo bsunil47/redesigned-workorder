@@ -1,4 +1,4 @@
-Page wrapper start -->
+<!--Page wrapper start -->
 <div class="page-wrapper">
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
@@ -73,7 +73,7 @@ Page wrapper start -->
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Password:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="user.password" ng-disabled="user.password" type="password"
+                                            <input ng-model="user.password" type="password"
                                                    class="form-control" name="password" value={{user.password}}
                                                    required>
                                         </div>
@@ -81,10 +81,17 @@ Page wrapper start -->
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Role:</label>
                                         <div class="col-sm-6">
-                                            <input class="form-control" ng-model="item.role_name"
+                                            <select class="form-control" ng-model="user.userrole" name="userrole"
+                                                    required>
+                                                <option ng-repeat="role in roles" value="{{role._id}}">
+                                                    {{role.role_name}}
+                                                </option>
+                                            </select>
+
+                                            <!--<input class="form-control" ng-model="item.role_name"
                                                    ng-disabled="user.roles" ng-repeat="item in user.roles"
-                                                   name="userrole" ng-value={{item.role_name}} required>
-                                            </input>
+                                                   name="userrole" value="{{item.role_name}}" required>
+                                            </input>-->
                                         </div>
                                     </div>
                                     <div class="form-group">

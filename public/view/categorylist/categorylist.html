@@ -45,6 +45,7 @@
                                 <tr>
                                     <th>Category Name</th>
                                     <th>Facility</th>
+                                    <th>Operator</th>
                                     <!--<th>Status</th>-->
                                 </tr>
                                 </thead>
@@ -52,6 +53,7 @@
                                 <tr ng-repeat="category in categories">
                                     <td>{{category.category_name}}</td>
                                     <td>{{showFacility(category.facilities)}}</td>
+                                    <td>{{showOperator(category.operator_available)}}</td>
                                     <!--<td>{{showStatus(category.status)}}</td>-->
                                 </tr>
                                 </tbody>

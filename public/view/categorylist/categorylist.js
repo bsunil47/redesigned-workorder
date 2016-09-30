@@ -93,5 +93,12 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             }
             return found.status_name;
         }
+        $scope.showOperator = function (val) {
+            if (val) {
+                return "Available"
+            } else {
+                return "-"
+            }
+        }
     }]);
 

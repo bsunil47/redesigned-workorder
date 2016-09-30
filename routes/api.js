@@ -566,6 +566,18 @@ router.post('/facilities', function (req, res, next) {
         }
     });
 });
+router.post('/allfacilities', function (req, res, next) {
+    Facility.find({}, {}, function (err, facilities) {
+        if (err) {
+            return next(err)
+        }
+        if (facilities != null) {
+            res.json({Code: 200, Info: {facilities: facilities}});
+        } else {
+            res.json({Code: 406, Info: 'no facilities'});
+        }
+    });
+});
 
 
 router.post('/create_priority', function (req, res, next) {
@@ -1432,6 +1444,18 @@ router.post('/get_role', function (req, res, next) {
         }
     });
 });
+router.post('/get_roles', function (req, res, next) {
+    Roles.find({}, function (err, roles) {
+        if (err) {
+            return next(err)
+        }
+        if (roles != null) {
+            res.json({Code: 200, Info: {roles: roles}});
+        } else {
+            res.json({Code: 406, Info: 'No User Role'});
+        }
+    });
+});
 router.post('/get_users', function (req, res, next) {
     Users.find(req.body, function (err, users) {
         if (err) {
@@ -1500,17 +1524,19 @@ router.post('/get_user_details', function (req, res, next) {
 });
 
 router.post('/edit_user', function (req, res, next) {
-    console.log("Details in apijs: " + JSON.stringify(req.body.params));
+    console.log("Details in apijs: " + JSON.stringify(req.body));
     Users.count({
         _id: req.body._id,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
-        email: req.body.email
+        email: req.body.email,
+        userrole: req.body.userrole,
+        password: req.body.password
     }, function (err, user_count) {
         if (err) {
             return next(err);
         }
-        else if (user_count) {
+        if (user_count) {
             return res.json({Code: 299, Info: 'No changes made to the document'});
 
             next();
@@ -1519,7 +1545,9 @@ router.post('/edit_user', function (req, res, next) {
             Users.update({_id: req.body._id, email: req.body.email}, {
                     $set: {
                         "firstname": req.body.firstname,
-                        "lastname": req.body.lastname
+                        "lastname": req.body.lastname,
+                        "userrole": req.body.userrole,
+                        "password": req.body.password
                     }
                 },
                 function (err, model) {
