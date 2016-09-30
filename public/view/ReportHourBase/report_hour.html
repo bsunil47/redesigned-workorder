@@ -30,6 +30,7 @@
         </thead>
         <tbody>
         {% for item in data %}
+        {% if(item.equipment_name) %}
         <tr style="background-color: #F6F6F6">
             <!--<td style="border: 1px solid #D4D4D4; text-align: left; word-wrap: break-word">
             </td>-->
@@ -40,6 +41,7 @@
             <td style="border: 1px solid #D4D4D4; text-align: left; word-wrap: break-word">{{item.total_hrs}}</td>
         </tr>
         {% for someId, wkr in item.workorders %}
+
         <tr style="background-color: #FFF">
             <!-- <td style="text-align: left; word-wrap: break-word; border-right:1px solid #D4D4D4">{{wkr.workorder_number}}
              </td>-->
@@ -50,7 +52,9 @@
             </td>
             <td style="text-align: left; word-wrap: break-word">{{wkr.wo_timespent}}</td>
         </tr>
+
         {% endfor %}
+        {% endif %}
         {% endfor %}
         </tbody>
     </table>
