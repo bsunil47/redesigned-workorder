@@ -697,6 +697,66 @@ router.post('/status_list', function (req, res, next) {
         }
     });
 });
+router.post('/create_status', function (req, res, next) {
+    if (!req.body.status_name || !req.body.facility_number) {
+        return res.json({Code: 496, Info: 'All fields are required'});
+    }
+
+    Facility.findOne({facility_number: req.body.facility_number}, function (err, facility) {
+        if (err) {
+            return next(err);
+        }
+        // validations ** start
+
+        var query_count_status = {
+            status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")},
+            "facilities.facility_number": req.body.facility_number
+        };
+
+        Status.count(query_count_status, function (err, statuscount) {
+            if (err) {
+                return next(err);
+            }
+            console.log("query_count_status" + JSON.stringify(query_count_status));
+            if (statuscount) {
+                return res.json({Code: 498, Info: 'Status already exists'});
+                next();
+            }
+
+            Status.count({}, function (err, incstatuscount) {
+                if (err) {
+                    return next(err);
+                }
+                console.log("count_status" + JSON.stringify(incstatuscount));
+                if (incstatuscount) {
+                    var statuscountinc = incstatuscount + 1;
+                }
+                // validations ** end
+                var query = {
+                    status_name: req.body.status_name
+                };
+
+                Status.update(query, {
+                        $setOnInsert: {status_number: statuscountinc},
+                        $push: {"facilities": {facility_number: req.body.facility_number}}
+                    },
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating Status',
+                            });
+                        } else {
+                            res.json({Code: 200, Info: 'Status created sucessfull'});
+                        }
+                    });
+            });
+        })
+
+    })
+});
 
 router.post('/createparts', function (req, res, next) {
     if (!req.body.equipment_name || !req.body.equipment_number || !req.body.part_number || !req.body.part_name || !req.body.vendor_number || !req.body.vendor_name || !req.body.min_qty || !req.body.max_qty) {
