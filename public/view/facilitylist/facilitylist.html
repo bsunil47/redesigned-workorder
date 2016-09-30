@@ -45,7 +45,7 @@
                                 <tr>
                                     <th>Facility Number</th>
                                     <th>Facility Name</th>
-                                    <th>Status</th>
+                                    <!--<th>Status</th>-->
                                     <th>Edit</th>
                                 </tr>
                                 </thead>
@@ -53,7 +53,7 @@
                                 <tr ng-repeat="facility in facilities">
                                     <td>{{facility.facility_number}}</td>
                                     <td>{{facility.facility_name}}</td>
-                                    <td>{{showStatus(facility.status)}}</td>
+                                    <!--<td>{{showStatus(facility.status)}}</td>-->
                                     <td><i class="fa fa-edit" ng-click="editFacility(facility.facility_number)"></i>
                                     </td>
                                 </tr>
