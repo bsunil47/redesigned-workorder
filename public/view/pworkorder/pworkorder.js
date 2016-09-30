@@ -180,7 +180,7 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
                 if ($scope.workOrder.status == 2) {
                     $scope.reqPMTask = true;
                 }
-                if (!angular.isUndefined($scope.workOrder.wo_equipmentcost)) {
+                if (!angular.isUndefined($scope.workOrder.wo_equipmentcost) && $scope.workOrder.wo_equipmentcost != "") {
                     console.log($scope.workOrder.wo_equipmentcost);
                     $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
                 } else {
@@ -268,6 +268,8 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
                     var yyyy = currentDt.getFullYear();
                     var date = mm + '/' + dd + '/' + yyyy;
                     $scope.workOrder.wo_pm_date = date;
+                } else {
+                    $scope.workOrder.wo_pm_date = "";
                 }
                 //$cookies.put('userDetails',res)
             } else {
