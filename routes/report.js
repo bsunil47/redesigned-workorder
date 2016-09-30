@@ -44,7 +44,7 @@ router.post('/', function (req, res, next) {
     console.log('request made....print hr ');
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
-    var query = {wo_timespent: {$exists: true, $not: {$size: 0}}};
+    var query = {wo_timespent: {$exists: true, $nin: ["", null, 'NaN']}};
     var search_date = {
         'from': "",
         'to': ""
@@ -53,7 +53,7 @@ router.post('/', function (req, res, next) {
     console.log(req.body.wo_datefrom);
     if ((req.body.wo_datefrom != "" ) && (req.body.wo_dateto != "")) {
         query = {
-            wo_timespent: {$exists: true, $not: {$size: 0}},
+            wo_timespent: {$exists: true, $nin: ["", null, 'NaN']},
             wo_datecomplete: {
                 '$gte': req.body.wo_datefrom,
                 '$lte': req.body.wo_dateto
@@ -84,6 +84,7 @@ router.post('/', function (req, res, next) {
             var total_hrs = 0;
             equipments.push(function (callback) {
                 query.workorder_equipment = eq._id;
+                console.log(query);
                 WorkOrder.find(query, {},
                     {
                         sort: {
@@ -94,105 +95,114 @@ router.post('/', function (req, res, next) {
                             next()
                         }
                         var Wkodrs = [];
-                        workorders.forEach(function (wrkORder) {
-                            Wkodrs.push(function (callback) {
-                                var wo_timespent = 0;
-                                var details = {};
-                                var time_spent = wrkORder.wo_timespent.split(':');
-                                if (time_spent[1] == "15") {
-                                    wo_timespent = parseFloat(time_spent[0]) + 0.25;
-                                    total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.25);
-                                    details.wo_timespent = wo_timespent;
-                                } else {
-                                    if (time_spent[1] == "30") {
-                                        wo_timespent = parseFloat(parseFloat(time_spent[0]) + parseFloat(0.5));
-                                        total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.5);
+
+                        if (workorders.length > 0) {
+                            console.log('not null');
+                            console.log(workorders);
+                            console.log('not null end');
+                            workorders.forEach(function (wrkORder) {
+                                Wkodrs.push(function (callback) {
+                                    var wo_timespent = 0;
+                                    var details = {};
+                                    var time_spent = wrkORder.wo_timespent.split(':');
+                                    if (time_spent[1] == "15") {
+                                        wo_timespent = parseFloat(time_spent[0]) + 0.25;
+                                        total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.25);
                                         details.wo_timespent = wo_timespent;
                                     } else {
-                                        if (time_spent[1] == "45") {
-                                            wo_timespent = parseFloat(parseFloat(time_spent[0]) + parseFloat(0.75));
-                                            total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.75);
+                                        if (time_spent[1] == "30") {
+                                            wo_timespent = parseFloat(parseFloat(time_spent[0]) + parseFloat(0.5));
+                                            total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.5);
                                             details.wo_timespent = wo_timespent;
                                         } else {
-                                            wo_timespent = parseFloat(time_spent[0]);
-                                            total_hrs = total_hrs + parseFloat(time_spent[0]);
-                                            details.wo_timespent = wo_timespent;
+                                            if (time_spent[1] == "45") {
+                                                wo_timespent = parseFloat(parseFloat(time_spent[0]) + parseFloat(0.75));
+                                                total_hrs = total_hrs + parseFloat(time_spent[0]) + parseFloat(0.75);
+                                                details.wo_timespent = wo_timespent;
+                                            } else {
+                                                wo_timespent = parseFloat(time_spent[0]);
+                                                total_hrs = total_hrs + parseFloat(time_spent[0]);
+                                                details.wo_timespent = wo_timespent;
+                                            }
                                         }
                                     }
+
+
+                                    details.workorder_number = setPadZeros(parseInt(wrkORder.workorder_number), 8);
+                                    Category.findOne({_id: wrkORder.workorder_category}, function (categoryErr, category) {
+                                        if (categoryErr) {
+
+                                        }
+                                        details.workorder_category = category.category_name;
+                                        callback(null, details);
+                                    });
+                                    console.log('workorder issue');
+
+                                });
+                            });
+                            async.parallel(Wkodrs, function (err, result) {
+                                var category = {};
+                                var itemsProcessed = 0;
+                                console.log(result);
+                                function callback1() {
+                                    var caty = [];
+                                    var equpment = {
+                                        total_hrs: total_hrs,
+                                        equipment_number: eq.equipment_number,
+                                        equipment_name: eq.equipment_name,
+                                        status: eq.status,
+                                        equipments: eq.equipments,
+                                        facilities: eq.facilities,
+                                        workorders: category
+                                    };
+                                    console.log(itemsProcessed);
+                                    callback(null, equpment);
                                 }
 
 
-                                details.workorder_number = setPadZeros(parseInt(wrkORder.workorder_number), 8);
-                                Category.findOne({_id: wrkORder.workorder_category}, function (categoryErr, category) {
-                                    if (categoryErr) {
-
-                                    }
-                                    details.workorder_category = category.category_name;
-                                    callback(null, details);
+                                result.forEach((cat, index, array) => {
+                                    asyncFunction(cat, () => {
+                                        if (typeof category[cat.workorder_category] === 'undefined') {
+                                            category[cat.workorder_category] = [];
+                                            category[cat.workorder_category] = {
+                                                workorder_category: cat.workorder_category,
+                                                wo_timespent: cat.wo_timespent
+                                            };
+                                        } else {
+                                            category[cat.workorder_category].wo_timespent = category[cat.workorder_category].wo_timespent + cat.wo_timespent;
+                                        }
+                                        itemsProcessed++;
+                                        console.log(itemsProcessed);
+                                        console.log(array.length);
+                                        if (itemsProcessed === array.length) {
+                                            callback1();
+                                        }
+                                    });
                                 });
-                                console.log('workorder issue');
+                                function asyncFunction(item, cb) {
+                                    setTimeout(() => {
+                                        console.log('done with', item);
+                                        cb();
+                                    }, 1000);
+                                }
 
-                            });
-                        });
-                        async.parallel(Wkodrs, function (err, result) {
-                            var category = {};
-                            var itemsProcessed = 0;
-                            console.log(result);
-                            function callback1() {
-                                var caty = [];
-                                var equpment = {
-                                    total_hrs: total_hrs,
-                                    equipment_number: eq.equipment_number,
-                                    equipment_name: eq.equipment_name,
-                                    status: eq.status,
-                                    equipments: eq.equipments,
-                                    facilities: eq.facilities,
-                                    workorders: category
-                                };
-                                console.log(itemsProcessed);
-                                callback(null, equpment);
-                            }
+                                /*result.forEach(function (cat) {
+                                 console.log(category[cat.workorder_category]);
+                                 if(typeof category[cat.workorder_category] === 'undefined'){
+                                 category[cat.workorder_category] =[];
+                                 category[cat.workorder_category].push(cat);
+                                 }else{
+                                 category[cat.workorder_category].push(cat);
+                                 }
+                                 console.log(category);
+                                 });*/
 
 
-                            result.forEach((cat, index, array) => {
-                                asyncFunction(cat, () => {
-                                    if (typeof category[cat.workorder_category] === 'undefined') {
-                                        category[cat.workorder_category] = [];
-                                        category[cat.workorder_category] = {
-                                            workorder_category: cat.workorder_category,
-                                            wo_timespent: cat.wo_timespent
-                                        };
-                                    } else {
-                                        category[cat.workorder_category].wo_timespent = category[cat.workorder_category].wo_timespent + cat.wo_timespent;
-                                    }
-                                    itemsProcessed++;
-                                    console.log(itemsProcessed);
-                                    console.log(array.length);
-                                    if (itemsProcessed === array.length) {
-                                        callback1();
-                                    }
-                                });
-                            });
-                            function asyncFunction(item, cb) {
-                                setTimeout(() => {
-                                    console.log('done with', item);
-                                    cb();
-                                }, 1000);
-                            }
+                            })
+                        } else {
+                            callback();
+                        }
 
-                            /*result.forEach(function (cat) {
-                             console.log(category[cat.workorder_category]);
-                             if(typeof category[cat.workorder_category] === 'undefined'){
-                             category[cat.workorder_category] =[];
-                             category[cat.workorder_category].push(cat);
-                             }else{
-                             category[cat.workorder_category].push(cat);
-                             }
-                             console.log(category);
-                             });*/
-
-
-                        })
 
                     });
             })
