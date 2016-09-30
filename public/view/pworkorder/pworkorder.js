@@ -183,6 +183,8 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
                 if (!angular.isUndefined($scope.workOrder.wo_equipmentcost)) {
                     console.log($scope.workOrder.wo_equipmentcost);
                     $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
+                } else {
+                    $scope.workOrder.wo_equipmentcost = "";
                 }
 
                 $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
@@ -258,7 +260,7 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
                     var date = mm + '/' + dd + '/' + yyyy;
                     $scope.workOrder.wo_datecomplete = date;
                 }
-                if (!angular.isUndefined($scope.workOrder.wo_pm_date)) {
+                if (!angular.isUndefined($scope.workOrder.wo_pm_date) && $scope.workOrder.wo_pm_date != "") {
                     var currentDt = new Date(parseInt($scope.workOrder.wo_pm_date));
                     var mm = currentDt.getMonth() + 1;
                     mm = (mm < 10) ? '0' + mm : mm;
@@ -285,24 +287,6 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
         };
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
-        };
-
-        $scope.pgWorkOrder = function () {
-            console.log($scope.workOrder.wo_pm_frequency);
-
-            if ($scope.workOrder.wo_pm_frequency > 0) {
-                var currentDt = new Date();
-                currentDt.setDate(currentDt.getDate() + parseInt($scope.workOrder.wo_pm_frequency));
-                var mm = currentDt.getMonth() + 1;
-                mm = (mm < 10) ? '0' + mm : mm;
-                var dd = currentDt.getDate();
-                var yyyy = currentDt.getFullYear();
-                var date = mm + '/' + dd + '/' + yyyy;
-                $scope.workOrder.wo_pm_date = date;
-            } else {
-                $scope.workOrder.wo_pm_date = "";
-            }
-
         };
 
         $scope.showTimeChange = function () {
