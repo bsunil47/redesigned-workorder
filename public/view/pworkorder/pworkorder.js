@@ -261,13 +261,18 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
                     $scope.workOrder.wo_datecomplete = date;
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_pm_date) && $scope.workOrder.wo_pm_date != "") {
-                    var currentDt = new Date(parseInt($scope.workOrder.wo_pm_date));
-                    var mm = currentDt.getMonth() + 1;
-                    mm = (mm < 10) ? '0' + mm : mm;
-                    var dd = currentDt.getDate();
-                    var yyyy = currentDt.getFullYear();
-                    var date = mm + '/' + dd + '/' + yyyy;
-                    $scope.workOrder.wo_pm_date = date;
+                    if (!isNaN(parseInt($scope.workOrder.wo_pm_date))) {
+                        var currentDt = new Date(parseInt($scope.workOrder.wo_pm_date));
+                        var mm = currentDt.getMonth() + 1;
+                        mm = (mm < 10) ? '0' + mm : mm;
+                        var dd = currentDt.getDate();
+                        var yyyy = currentDt.getFullYear();
+                        var date = mm + '/' + dd + '/' + yyyy;
+                        $scope.workOrder.wo_pm_date = date;
+                    } else {
+                        $scope.workOrder.wo_pm_date = "";
+                    }
+
                 } else {
                     $scope.workOrder.wo_pm_date = "";
                 }
