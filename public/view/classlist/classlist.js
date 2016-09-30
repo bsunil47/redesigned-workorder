@@ -9,11 +9,14 @@ angular.module('PGapp.classlist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('ClassListCtrl', ["$scope", "$cookies", "$location", "$filter", 'API', function ($scope, $cookies, $location, $filter, API) {
+    .controller('ClassListCtrl', ["$scope", "$cookies", "$location", "$filter", "$window", 'API', function ($scope, $cookies, $location, $filter, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         API.Classes.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
 

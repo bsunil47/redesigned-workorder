@@ -9,11 +9,14 @@ angular.module('PGapp.editfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('EditFacilityCtrl', ["$scope", "$cookies", "$location", '$routeParams', 'API', function ($scope, $cookies, $location, $routeParams, API) {
+    .controller('EditFacilityCtrl', ["$scope", "$cookies", "$location", '$routeParams', '$window', 'API', function ($scope, $cookies, $location, $routeParams, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         var edit_facility_number = $routeParams.id;
 
         $scope.EditFacility = EditFacility;

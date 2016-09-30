@@ -9,11 +9,14 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('CreatePriorityCtrl', ["$scope", "$cookies", "$location", 'API', function ($scope, $cookies, $location, API) {
+    .controller('CreatePriorityCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
 
         $scope.Logout = function () {
             $cookies.remove('userDetails');

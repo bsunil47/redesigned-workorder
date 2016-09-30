@@ -9,11 +9,14 @@ angular.module('PGapp.facilitylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('FacilityListCtrl', ["$scope", "$cookies", "$location", "$filter", 'API', function ($scope, $cookies, $location, $filter, API) {
+    .controller('FacilityListCtrl', ["$scope", "$cookies", "$location", "$filter", "$window", 'API', function ($scope, $cookies, $location, $filter, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         API.Facilities.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
 

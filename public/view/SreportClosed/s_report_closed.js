@@ -9,7 +9,7 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
         });
     }])
 
-    .controller('SReportClosedCtrl', ["$scope", "$cookies", "$location", 'API', function ($scope, $cookies, $location, API) {
+    .controller('SReportClosedCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
         $scope.workOrder = {
             wo_datefrom: ""
         };
@@ -23,6 +23,9 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         API.Facilities.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
 

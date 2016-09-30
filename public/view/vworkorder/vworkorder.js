@@ -9,13 +9,16 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         });
     }])
 
-    .controller('VworkorderCtrl', ["$scope", "$cookies", "$location", 'API', '$filter', '$routeParams', 'ngDialog', function ($scope, $cookies, $location, API, $filter, $routeParams, ngDialog) {
+    .controller('VworkorderCtrl', ["$scope", "$cookies", "$location", 'API', '$filter', '$routeParams', "$window", 'ngDialog', function ($scope, $cookies, $location, API, $filter, $routeParams, $window, ngDialog) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         $scope.updateWorkOrder = updateWorkOrder;
         var currentId = $routeParams.id;
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         $scope.workOrder = {
             workorder_number: currentId,
             workorder_creator: "",

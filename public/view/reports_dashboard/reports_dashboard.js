@@ -10,12 +10,15 @@ angular.module('PGapp.reportdashboard', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('ReportDashboardCtrl', ["$scope", "$cookies", "$location", 'API', function ($scope, $cookies, $location, API) {
+    .controller('ReportDashboardCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
 
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         API.SFacilities.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
                 $scope.facilities = res.Info.facilities;

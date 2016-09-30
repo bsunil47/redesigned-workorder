@@ -9,7 +9,7 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
     }])
 
-    .controller('CreatePartsCtrl', ["$scope", "$cookies", "$location", "$filter", 'API', function ($scope, $cookies, $location, $filter, API) {
+    .controller('CreatePartsCtrl', ["$scope", "$cookies", "$location", "$filter", "$window", 'API', function ($scope, $cookies, $location, $filter, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
@@ -24,7 +24,9 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
             max_qty: ""
         };
         var userdetail = $cookies.getObject('userDetails');
-
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         $scope.Logout = function () {
             $cookies.remove('userDetails');
             $location.path("/");

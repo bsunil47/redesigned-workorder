@@ -9,11 +9,14 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
   });
 }])
 
-.controller('UserListCtrl', ["$scope","$cookies","$location","$filter",'API',function($scope,$cookies,$location,$filter,API) {
+    .controller('UserListCtrl', ["$scope", "$cookies", "$location", "$filter", "$window", 'API', function ($scope, $cookies, $location, $filter, $window, API) {
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
   var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
   $scope.showRole = function(role_id){
     var found = $filter('getById')('_id', role_id, $scope.user_list.roles);
     return found.role_name

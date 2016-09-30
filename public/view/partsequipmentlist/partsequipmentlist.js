@@ -9,11 +9,14 @@ angular.module('PGapp.partsequipmentlist', ['ngRoute', 'ngAnimate', 'ngCookies']
         });
     }])
 
-    .controller('PartsequipmentListCtrl', ["$scope", "$cookies", "$location", "$filter", 'API', function ($scope, $cookies, $location, $filter, API) {
+    .controller('PartsequipmentListCtrl', ["$scope", "$cookies", "$location", "$filter", "$window", 'API', function ($scope, $cookies, $location, $filter, $window, API) {
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
         var userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
         API.Equipments.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
 

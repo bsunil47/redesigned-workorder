@@ -9,9 +9,12 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
   });
 }])
 
-    .controller('CworkorderCtrl', ["$scope", "$cookies", "$location", "$filter", 'API', function ($scope, $cookies, $location, $filter, API) {
+    .controller('CworkorderCtrl', ["$scope", "$cookies", "$location", "$filter", "$window", 'API', function ($scope, $cookies, $location, $filter, $window, API) {
   $scope.CreateWorkOrder = CreateWorkOrder;
   var userdetail = $cookies.getObject('userDetails');
+      $scope.redirectBack = function (reloc) {
+        $window.history.back();
+      };
   $scope.workOrder = {
     workorder_number: "",
     workorder_creator: "",
