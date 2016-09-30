@@ -762,6 +762,9 @@ router.post('/createparts', function (req, res, next) {
     if (!req.body.equipment_name || !req.body.equipment_number || !req.body.part_number || !req.body.part_name || !req.body.vendor_number || !req.body.vendor_name || !req.body.min_qty || !req.body.max_qty) {
         return res.json({Code: 496, Info: 'All fields are required'});
     }
+    if (req.body.min_qty > req.body.max_qty) {
+        return res.json({Code: 495, Info: 'Min Qty cant be greater than Max Qty'});
+    }
     Equipment.findOne({
         equipment_name: req.body.equipment_name,
         equipment_number: req.body.equipment_number

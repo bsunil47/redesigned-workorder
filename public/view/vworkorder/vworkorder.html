@@ -274,7 +274,8 @@
                                                    class="form-control" ng-model="workOrder.wo_pm_frequency"
                                                    ng-disabled="true"
                                                    name="wo_pm_frequency"
-                                                   value="0" ng-readonly="readOnlyFrequency" ng-change="pgWorkOrder()">
+                                                   value="{{workOrder.wo_pm_frequency}}"
+                                                   ng-readonly="readOnlyFrequency">
                                         </div>
                                     </div>
                                 </div>

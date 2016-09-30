@@ -108,14 +108,17 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             $scope.selectedWorkOrder.workorder_priority = showPriority(workorder.workorder_priority);
             $scope.selectedWorkOrder.workorder_class = showClass(workorder.workorder_class);
             var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.created_on = date;
-            var currentDt = new Date(parseInt(workorder.wo_pm_date));
-            var mm = currentDt.getMonth() + 1;
-            mm = (mm < 10) ? '0' + mm : mm;
-            var dd = currentDt.getDate();
-            var yyyy = currentDt.getFullYear();
-            var date = mm + '/' + dd + '/' + yyyy;
-            $scope.selectedWorkOrder.wo_pm_date = date;
+            $scope.selectedWorkOrder.created_on = date
+            if (!angular.isUndefined(workorder.wo_pm_date)) {
+                var currentDt = new Date(parseInt(workorder.wo_pm_date));
+                var mm = currentDt.getMonth() + 1;
+                mm = (mm < 10) ? '0' + mm : mm;
+                var dd = currentDt.getDate();
+                var yyyy = currentDt.getFullYear();
+                var date = mm + '/' + dd + '/' + yyyy;
+                $scope.selectedWorkOrder.wo_pm_date = date;
+            }
+
             console.log(workorder.workorder_facility);
             $scope.selectedWorkOrder.workorder_facility = showFacility(workorder.workorder_facility);
             $scope.selectedWorkOrder.workorder_creator = showRequestor(workorder.workorder_creator);
@@ -266,7 +269,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     alert(error);
                 });
                 $scope.pmTaskAlreadySet = true;
-                if ($scope.workOrder.wo_pm_number != "") {
+                if (!angular.isUndefined($scope.workOrder.workorder_PM) && $scope.workOrder.workorder_PM != "") {
                     $scope.pmTaskAlreadySet = false;
                     API.GetPMTask.Recent({pm_number: $scope.workOrder.workorder_PM}, function (res) {
                         if (res.Code == 200) {
