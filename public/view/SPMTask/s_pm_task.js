@@ -18,7 +18,7 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
             currentDt.getFullYear(),
             currentDt.getMonth(),
          currentDt.getDate());*/
-        $scope.maxDate = new Date();
+        ///$scope.maxDate = new Date();
         $scope.datefrom;
         if (!$cookies.get('userDetails')) {
             $location.path('login');
