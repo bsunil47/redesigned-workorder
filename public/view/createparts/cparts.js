@@ -119,6 +119,17 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 $scope.pe.equipment_name = found.equipment_name;
             }
         });
+        $scope.$watch("pe.max_qty", function (newValue, oldValue) {
+            if (!isInt($scope.pe.max_qty)) {
+                $scope.pe.max_qty = "";
+            }
+        });
+        $scope.$watch("pe.min_qty", function (newValue, oldValue) {
+            if (!isInt($scope.pe.min_qty)) {
+                $scope.pe.min_qty = "";
+            }
+        });
+
 
         $scope.clearForm = function () {
             $scope.pe = {};
