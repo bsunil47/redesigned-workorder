@@ -57,6 +57,9 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
         Facilities: $resource(url + 'api/facilities', {}, {
             Recent: post_set
         }),
+        allFacilities: $resource(url + 'api/allfacilities', {}, {
+            Recent: post_set
+        }),
         CreateFacility: $resource(url + 'api/create_facility', {}, {
             Facility: post_set
         }),
@@ -124,6 +127,9 @@ PGapp.factory('API', ['$resource', function ($resource, $scope) {
             Recent: post_set
         }),
         UserRole: $resource(url + 'api/get_role', {}, {
+            Recent: post_set
+        }),
+        Roles: $resource(url + 'api/get_roles', {}, {
             Recent: post_set
         }),
         GetUsers: $resource(url + 'api/get_users', {}, {

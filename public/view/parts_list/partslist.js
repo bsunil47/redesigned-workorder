@@ -79,7 +79,7 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                 }
               swal({
                 title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                text: 'Sucessfully Created',
+                  text: res.Info,
                 width: "450px",
                 confirmButtonText: 'Ok'
               });
@@ -99,7 +99,7 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
         } else {
           swal({
             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-            text: 'Need qty for selected part request',
+              text: "Qty should be between min and max values",
             width: "450px",
             confirmButtonText: 'Ok'
           });

@@ -150,9 +150,9 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 } else {
                     var currentDt = new Date();
                     if (userdetail.role == 'technician') {
-                        $scope.workOrder.wo_datecomplete = new Date(currentDt.getFullYear(),
+                        /* $scope.workOrder.wo_datecomplete = new Date(currentDt.getFullYear(),
                             currentDt.getMonth(),
-                            currentDt.getDate());
+                         currentDt.getDate());*/
                         var currentDt = new Date();
                         $scope.maxDate = new Date(currentDt.getFullYear(),
                             currentDt.getMonth(),

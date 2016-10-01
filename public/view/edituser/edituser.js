@@ -32,6 +32,28 @@ angular.module('PGapp.edituser', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $window.history.back();
         };
         console.log("User Details: " + JSON.stringify(userdetail));
+
+        API.Roles.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.roles = res.Info.roles;
+                API.GetUserDetails.Recent({user_email: edit_user_email}, function (res) {
+                    if (res.Code == 200) {
+                        $scope.user = res.Info.user;
+                        $scope.user.userrole = res.Info.user.userrole;
+                    }
+                }, function (error) {
+                    alert(error);
+
+                });
+
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
         API.Facilities.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
 
@@ -44,14 +66,7 @@ angular.module('PGapp.edituser', ['ngRoute', 'ngAnimate', 'ngCookies'])
             alert(error);
         });
 
-        API.GetUserDetails.Recent({user_email: edit_user_email}, function (res) {
-            if (res.Code == 200) {
-                $scope.user = res.Info.user;
-            }
-        }, function (error) {
-            alert(error);
 
-        });
 
 
         $scope.Logout = function () {

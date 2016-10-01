@@ -39,6 +39,7 @@ angular.module('PGapp.dashboard', ['ngRoute','ngAnimate', 'ngCookies'])
     $scope.showAdmin= true;
       $scope.hideCreateworkorder = true;
       $scope.hidePartList = true;
+      $scope.hideSearchWorkOrder = true;
 
   }
   if(userdetail.role == 'admin' || userdetail.role == 'manager'){

@@ -68,7 +68,7 @@ var setPadZeros = function (num, size) {
 };
 var cron = require('node-cron');
 
-cron.schedule('* 1 * * *', function () {
+cron.schedule('* * 1 * *', function () {
     var num = setPadZeros(10, 8);
     /*PM.find({}, function (err, tasks) {
         if (err) {
