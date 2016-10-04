@@ -217,7 +217,7 @@ router.post('/create_workorder', function (req, res, next) {
                 workorder_category: req.body.workorder_category,
                 workorder_equipment: req.body.workorder_equipment,
                 workorder_priority: req.body.workorder_priority,
-                created_on: new Date().valueOf(),
+                created_on: dateToDesireDateString(req.body.created_on),
                 status: 1
             });
             workOrder.save(function (err, resp) {
@@ -271,7 +271,7 @@ router.post('/create_workorder', function (req, res, next) {
                                         +
                                         '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
                                         +
-                                        '<p><b>Work Order Date</b>: ' + dateFormat(date, 'shortDate') + '</p>'
+                                        '<p><b>Work Order Date</b>: ' + req.body.created_on + '</p>'
                                         +
                                         '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
                                         +
@@ -1354,6 +1354,9 @@ router.post('/update_workorder', function (req, res, next) {
 
         });
     }
+    if (typeof requestedArray.wo_datecomplete !== "undefined") {
+        requestedArray.wo_datecomplete = dateToDesireDateString(requestedArray.wo_datecomplete);
+    }
     if (req.body.wo_pm_frequency > 0 && requestedArray.workorder_PM != "") {
         var pmNumber;
         requestedArray.workorder_PM = pmNumber = req.body.wo_pm_number;
@@ -1368,16 +1371,13 @@ router.post('/update_workorder', function (req, res, next) {
         var pm_task = {
             pm_number: pmNumber,
             pm_frequency: req.body.wo_pm_frequency,
-            pm_next_date: req.body.wo_pm_date,
+            pm_next_date: dateToDesireDateString(req.body.wo_pm_date),
             pm_current_date: new Date().valueOf(),
             pm_previous_date: new Date(previous_date).valueOf(),
             status: 1
         };
         var where = {pm_number: pm_task.pm_number};
         requestedArray.workorder_number = parseInt(req.body.workorder_number);
-        if (requestedArray.wo_datecomplete == 'NaN') {
-            delete requestedArray['wo_datecomplete'];
-        }
         WorkOrder.count({
             workorder_PM: pm_task.pm_number,
             workorder_number: parseInt(req.body.workorder_number)
@@ -1387,7 +1387,6 @@ router.post('/update_workorder', function (req, res, next) {
                     if (err) {
                         console.log(err);
                     }
-                    console.log(pm);
                     updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
                 });
             } else {
@@ -1397,7 +1396,6 @@ router.post('/update_workorder', function (req, res, next) {
                             if (err) {
                                 console.log(err);
                             }
-                            console.log(pm);
                             updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
                         });
                     } else {
@@ -1406,14 +1404,8 @@ router.post('/update_workorder', function (req, res, next) {
                 });
             }
         });
-
-
     } else {
         requestedArray.workorder_number = parseInt(req.body.workorder_number);
-        if (requestedArray.wo_datecomplete == 'NaN') {
-            delete requestedArray['wo_datecomplete'];
-        }
-        console.log('no pm');
         updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
     }
 
@@ -1576,43 +1568,43 @@ router.post('/get_search_wo', function (req, res, next) {
     }
     if (typeof req.body.created_on_from !== "undefined") {
         if (typeof req.body.created_on_to === "undefined") {
-            var created_on = new Date().valueOf();
+            var created_on = dateFormat(new Date(), 'yyyymmdd');
         } else {
-            var created_on = new Date(req.body.created_on_to).valueOf();
+            var created_on = dateFormat(new Date(req.body.created_on_to), 'yyyymmdd');
             delete query['created_on_to'];
         }
         query.created_on = {
-            '$gte': new Date(req.body.created_on_from).valueOf(),
-            '$lte': parseInt(created_on)
+            '$gte': dateFormat(new Date(req.body.created_on_from), 'yyyymmdd'),
+            '$lte': created_on
 
         };
         delete query['created_on_from'];
     }
     if (typeof req.body.wo_datecomplete_from !== "undefined") {
         if (typeof req.body.wo_datecomplete_to === "undefined") {
-            var created_on = new Date().valueOf();
+            var created_on = dateFormat(new Date(), 'yyyymmdd');
         } else {
-            var created_on = new Date(req.body.wo_datecomplete_to).valueOf();
+            var created_on = dateFormat(new Date(req.body.wo_datecomplete_to), 'yyyymmdd');
             delete query['wo_datecomplete_to'];
         }
         query.wo_datecomplete = {
             $exists: true,
-            '$gte': new Date(req.body.wo_datecomplete_from).valueOf(),
-            '$lte': parseInt(created_on)
+            '$gte': dateFormat(new Date(req.body.wo_datecomplete_from), 'yyyymmdd'),
+            '$lte': created_on
         };
         delete query['wo_datecomplete_from'];
     }
     if (typeof req.body.wo_pm_date_from !== "undefined") {
         var pMquery = {};
         if (typeof req.body.wo_pm_date_to === "undefined") {
-            var created_on = new Date().valueOf();
+            var created_on = dateFormat(new Date(), 'yyyymmdd');
         } else {
-            var created_on = new Date(req.body.wo_datecomplete_to).valueOf();
+            var created_on = dateFormat(new Date(req.body.wo_datecomplete_to), 'yyyymmdd');
             delete query['wo_pm_date_to'];
         }
         pMquery.pm_next_date = {
-            '$gte': new Date(req.body.wo_pm_date_from).valueOf(),
-            '$lte': parseInt(created_on)
+            '$gte': dateFormat(new Date(req.body.wo_pm_date_from), 'yyyymmdd'),
+            '$lte': created_on
         };
         delete query['wo_pm_date_from'];
         PM.find(pMquery, function (err, pm) {
@@ -1759,7 +1751,7 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
         +
         '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
         +
-        '<p><b>Work Order Date</b>: ' + dateFormat(parseInt(req.body.created_on), 'shortDate') + '</p>'
+        '<p><b>Work Order Date</b>: ' + requestedArray.created_on + '</p>'
         +
         '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
         +
@@ -1794,6 +1786,10 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
     //delete requestedArray['wo_pm_date'];
     delete requestedArray['wo_pm_previous_date'];
     delete requestedArray['__v'];
+    requestedArray.created_on = dateToDesireDateString(requestedArray.created_on);
+    if (typeof requestedArray.wo_pm_date !== "undefined") {
+        requestedArray.wo_pm_date = dateToDesireDateString(requestedArray.wo_pm_date);
+    }
     WorkOrder.findOneAndUpdate(query, requestedArray, {upsert: false}, function (err, doc) {
         if (err) return res.json({Code: 500, Info: err});
         if (doc != null) {
@@ -1834,8 +1830,9 @@ var createWorkOrderPM = function (task) {
                 console.error('Counter on workeOrder error: ' + err);
                 return;
             }
-            var pm_date = new Date(parseInt(task.wo_pm_date));
+            var pm_date = new Date(dateStringToDate(task.wo_pm_date));
             pm_date.setDate(pm_date.getDate() + parseInt(task.pm_frequency));
+            var pmdate = dateFormat(pm_date, 'yyyymmdd')
 
             var insert_query = {
                 workorder_number: result.seq,
@@ -1849,7 +1846,7 @@ var createWorkOrderPM = function (task) {
                 workorder_class: wkOrd.workorder_class,
                 created_on: task.wo_pm_date,
                 workorder_PM: wkOrd.workorder_PM,
-                wo_pm_date: new Date(pm_date).valueOf(),
+                wo_pm_date: pmdate,
                 status: 1
             };
             console.log(insert_query);
@@ -1920,7 +1917,7 @@ var createWorkOrderPM = function (task) {
                                         +
                                         '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
                                         +
-                                        '<p><b>Work Order Date</b>: ' + dateFormat(new Date(parseInt(task.wo_pm_date)), 'shortDate') + '</p>'
+                                        '<p><b>Work Order Date</b>: ' + task.wo_pm_date + '</p>'
                                         +
                                         '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
                                         +
@@ -2108,4 +2105,50 @@ var setPadZeros = function (num, size) {
         return null;
     }
 };
+
+var dateToDesireDateString = function (str) {
+    var res = str.split("/");
+    var mm = (parseInt(res[0]) < 10) ? '0' + parseInt(res[0]) : res[0];
+    var dd = (parseInt(res[1]) < 10) ? '0' + parseInt(res[1]) : res[1];
+    return res[2] + mm + dd;
+}
+
+var dateStringToDateISO = function (str) {
+    var res = str.split("");
+    var year = "";
+    var month = "";
+    var day = "";
+    for (var i = 0; i < res.length; i++) {
+        if (i < 4) {
+            year += res[i];
+        } else {
+            if (i > 5) {
+                day += res[i];
+            } else {
+                month += res[i];
+            }
+        }
+    }
+    return month + "/" + day + "/" + year;
+};
+
+var dateStringToDate = function (str) {
+    var res = str.split("");
+    var year = "";
+    var month = "";
+    var day = "";
+    for (var i = 0; i < res.length; i++) {
+        if (i < 4) {
+            year += res[i];
+        } else {
+            if (i > 5) {
+                day += res[i];
+            } else {
+                month += res[i];
+            }
+        }
+    }
+    return year + "-" + month + "-" + day;
+};
+
 module.exports = router;

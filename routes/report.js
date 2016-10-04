@@ -55,8 +55,8 @@ router.post('/', function (req, res, next) {
         query = {
             wo_timespent: {$exists: true, $nin: ["", null, 'NaN']},
             wo_datecomplete: {
-                '$gte': req.body.wo_datefrom,
-                '$lte': req.body.wo_dateto
+                '$gte': dateFormat(parseInt(req.body.wo_datefrom), 'yyyymmdd'),
+                '$lte': dateFormat(parseInt(req.body.wo_dateto), 'yyyymmdd')
             }
         };
         search_date = {
@@ -186,18 +186,6 @@ router.post('/', function (req, res, next) {
                                     }, 1000);
                                 }
 
-                                /*result.forEach(function (cat) {
-                                 console.log(category[cat.workorder_category]);
-                                 if(typeof category[cat.workorder_category] === 'undefined'){
-                                 category[cat.workorder_category] =[];
-                                 category[cat.workorder_category].push(cat);
-                                 }else{
-                                 category[cat.workorder_category].push(cat);
-                                 }
-                                 console.log(category);
-                                 });*/
-
-
                             })
                         } else {
                             callback();
@@ -241,18 +229,12 @@ router.post('/report_category', function (req, res, next) {
     };
 
     if ((req.body.wo_datefrom != "") && (req.body.wo_dateto != "")) {
-        /*query = {
-         status: 2,
-         wo_datecomplete: {
-         '$gte': parseInt(req.body.wo_datefrom),
-         '$lt': parseInt(req.body.wo_dateto)
-         }
-         }*/
         query = {
             status: 2,
             wo_datecomplete: {
-                '$gte': req.body.wo_datefrom,
-                '$lte': req.body.wo_dateto
+                $exists: true, $nin: ["", null, 'NaN'],
+                '$gte': dateFormat(parseInt(req.body.wo_datefrom), 'yyyymmdd'),
+                '$lte': dateFormat(parseInt(req.body.wo_dateto), 'yyyymmdd')
 
             }
         };
@@ -285,9 +267,9 @@ router.post('/report_category', function (req, res, next) {
                             return false;
                         }
                         if (isNaN(parseInt(work.wo_datecomplete))) {
-                            var date = dateFormat(new Date(work.wo_datecomplete), 'isoDate');
+                            var date = dateStringToDateISO(work.wo_datecomplete);
                         } else {
-                            var date = dateFormat(new Date(parseInt(work.wo_datecomplete)), 'isoDate');
+                            var date = dateStringToDateISO(work.wo_datecomplete);
                         }
 
                         work.workorder_number = setPadZeros(parseInt(work.workorder_number), 8);
@@ -334,111 +316,210 @@ router.post('/report_pm', function (req, res, next) {
     console.log('request made....print PM ');
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
-    var query = {};
-    if (req.body.equipment != 0) {
-        query.workorder_equipment = req.body.equipment;
-    }
-    if (req.body.facility != 0) {
-        query.workorder_facility = req.body.facility;
-    }
-    var pMquery = {};
-    if ((req.body.wo_pm_date_from != "")) {
-        if (req.body.wo_pm_date_to == "") {
-            var created_on = new Date().valueOf();
+    var query = {
+        workorder_PM: {$exists: true}
+    };
+    if ((req.body.wo_datefrom != "")) {
+        if (req.body.wo_dateto == "") {
+            var created_on = dateFormat(new Date(), 'yyyymmdd');
         } else {
-            var created_on = new Date(req.body.wo_pm_date_to).valueOf();
+            var created_on = dateFormat(parseInt(req.body.wo_pm_date_to), 'yyyymmdd');
         }
-        pMquery.pm_next_date = {
-            '$gte': new Date(req.body.wo_pm_date_from).valueOf(),
-            '$lte': parseInt(created_on)
+        query.wo_pm_date = {
+            '$gte': dateFormat(parseInt(req.body.wo_datefrom), 'yyyymmdd'),
+            '$lte': created_on
         };
     }
-
-    PM.find(pMquery, {}, {
+    console.log(query);
+    WorkOrder.find(query, {}, {
         sort: {
             _id: -1 //Sort by Date Added DESC
         }
-    }, function (err, pm) {
-        if (err) {
-            return next(err)
-        }
+    }, function (erra, works) {
+
+        if (erra) {
+            console.log(erra);
+            }
         var calls = [];
-        var workorders = [];
-        pm.forEach(function (pmNM) {
-            calls.push(function (callback) {
-                WorkOrder.findOne({workorder_PM: pmNM.pm_number}, function (erra, work) {
-
-                    if (erra) {
-
-                    }
-                    if (work != null) {
-
-                        Equipment.findOne({_id: work.workorder_equipment}, function (er, ra) {
-                            if (er) {
-                                return false;
-                            }
-                            Facility.findOne({facility_number: work.workorder_facility}, function (erraa, fc) {
-                                var order = {
-                                    workorder_number: setPadZeros(parseInt(work.workorder_number), 8),
-                                    workorder_PM: work.workorder_PM,
-                                    pm_next_date: dateFormat(parseInt(pmNM.pm_next_date), 'shortDate'),
-                                    workorder_description: work.workorder_description,
-                                    workorder_facility: fc.facility_name,
-                                    workorder_equipment: ra.equipment_name
-                                };
-                                //order.workorder_equipment = ra.equipment_name;
-                                console.log(order);
-                                callback(null, order);
-                            });
-
+        if (works != null) {
+            works.forEach(function (work) {
+                calls.push(function (callback) {
+                    Equipment.findOne({_id: work.workorder_equipment}, function (er, ra) {
+                        if (er) {
+                            return false;
+                        }
+                        Facility.findOne({facility_number: work.workorder_facility}, function (erraa, fc) {
+                            var order = {
+                                workorder_number: setPadZeros(parseInt(work.workorder_number), 8),
+                                workorder_PM: work.workorder_PM,
+                                pm_next_date: dateStringToDateISO(work.wo_pm_date),
+                                workorder_description: work.workorder_description,
+                                workorder_facility: fc.facility_name,
+                                workorder_equipment: ra.equipment_name
+                            };
+                            order.workorder_equipment = ra.equipment_name;
+                            console.log(order);
+                            callback(null, order);
                         });
 
-                        //work.pm_next_date = pmNM.pm_next_date;
+                    });
+
+                })
+            });
+            async.parallel(calls, function (err, result) {
+
+
+                console.log('asda');
+                if (err)
+                    return console.log(err);
+                var v_result = [];
+                for (var i in result) {
+                    console.log(result[i]);
+                    if (typeof result[i] === "undefined" || result[i] == null) {
+                        delete result[i];
                     } else {
-                        callback(null, null);
+                        v_result.push(result[i]);
                     }
-
-
-                });
-
-
-            });
-
-        });
-
-        async.parallel(calls, function (err, result) {
-
-            /* this code will run after all calls finished the job or
-             when any of the calls passes an error */
-            console.log('asda');
-            if (err)
-                return console.log(err);
-            var v_result = [];
-            for (var i in result) {
-                console.log(result[i]);
-                if (typeof result[i] === "undefined" || result[i] == null) {
-                    delete result[i];
-                } else {
-                    v_result.push(result[i]);
                 }
-            }
-            var obj = {
-                url: fullUrl,
-                date: today,
-                data: v_result
-            };
-            var renderedHtml = nunjucks.render('./view/ReportPMTask/report_hour.html', obj);
-            pdf.create(renderedHtml, {ticketnum: 'hello', "orientation": "landscape"}).toStream(function (err, stream) {
-                stream.pipe(res);
+                var obj = {
+                    url: fullUrl,
+                    date: today,
+                    data: v_result
+                };
+                var renderedHtml = nunjucks.render('./view/ReportPMTask/report_hour.html', obj);
+                pdf.create(renderedHtml, {
+                    ticketnum: 'hello',
+                    "orientation": "landscape"
+                }).toStream(function (err, stream) {
+                    stream.pipe(res);
+                });
+                console.log(result);
             });
-            console.log(result);
+        } else {
+            res.redirect(fullUrl + "/#!/search_PM_task");
+        }
+        ;
+
+
+        //work.pm_next_date = pmNM.pm_next_date;
+
+
+
         });
 
-
-    });
 
     // res.render('index', { title: 'Prysmian Group - Maintenance Work Order Application' });
 });
+
+/*router.post('/report_pm', function (req, res, next) {
+ console.log('request made....print PM ');
+ var today = new Date();
+ var fullUrl = req.protocol + '://' + req.get('host');
+ var query = {};
+ if (req.body.equipment != 0) {
+ query.workorder_equipment = req.body.equipment;
+ }
+ if (req.body.facility != 0) {
+ query.workorder_facility = req.body.facility;
+ }
+ var pMquery = {};
+ if ((req.body.wo_pm_date_from != "")) {
+ if (req.body.wo_pm_date_to == "") {
+ var created_on = dateFormat(new Date(),'yyyymmdd');
+ } else {
+ var created_on = dateFormat(parseInt(req.body.wo_pm_date_to),'yyyymmdd');
+ }
+ pMquery.pm_next_date = {
+ '$gte': dateFormat(parseInt(req.body.wo_pm_date_from),'yyyymmdd'),
+ '$lte': parseInt(created_on)
+ };
+ }
+
+ PM.find(pMquery, {}, {
+ sort: {
+ _id: -1 //Sort by Date Added DESC
+ }
+ }, function (err, pm) {
+ if (err) {
+ return next(err)
+ }
+ var calls = [];
+ var workorders = [];
+ pm.forEach(function (pmNM) {
+ calls.push(function (callback) {
+ WorkOrder.findOne({workorder_PM: pmNM.pm_number}, function (erra, work) {
+
+ if (erra) {
+
+ }
+ if (work != null) {
+
+ Equipment.findOne({_id: work.workorder_equipment}, function (er, ra) {
+ if (er) {
+ return false;
+ }
+ Facility.findOne({facility_number: work.workorder_facility}, function (erraa, fc) {
+ var order = {
+ workorder_number: setPadZeros(parseInt(work.workorder_number), 8),
+ workorder_PM: work.workorder_PM,
+ pm_next_date: dateFormat(parseInt(pmNM.pm_next_date), 'shortDate'),
+ workorder_description: work.workorder_description,
+ workorder_facility: fc.facility_name,
+ workorder_equipment: ra.equipment_name
+ };
+ //order.workorder_equipment = ra.equipment_name;
+ console.log(order);
+ callback(null, order);
+ });
+
+ });
+
+ //work.pm_next_date = pmNM.pm_next_date;
+ } else {
+ callback(null, null);
+ }
+
+
+ });
+
+
+ });
+
+ });
+
+ async.parallel(calls, function (err, result) {
+
+ /!* this code will run after all calls finished the job or
+ when any of the calls passes an error *!/
+ console.log('asda');
+ if (err)
+ return console.log(err);
+ var v_result = [];
+ for (var i in result) {
+ console.log(result[i]);
+ if (typeof result[i] === "undefined" || result[i] == null) {
+ delete result[i];
+ } else {
+ v_result.push(result[i]);
+ }
+ }
+ var obj = {
+ url: fullUrl,
+ date: today,
+ data: v_result
+ };
+ var renderedHtml = nunjucks.render('./view/ReportPMTask/report_hour.html', obj);
+ pdf.create(renderedHtml, {ticketnum: 'hello', "orientation": "landscape"}).toStream(function (err, stream) {
+ stream.pipe(res);
+ });
+ console.log(result);
+ });
+
+
+ });
+
+ // res.render('index', { title: 'Prysmian Group - Maintenance Work Order Application' });
+ });*/
 
 var setPadZeros = function (num, size) {
     try {
@@ -448,8 +529,32 @@ var setPadZeros = function (num, size) {
     } catch (err) {
         return null;
     }
+};
 
+var dateToDesireDateString = function (str) {
+    var res = str.split("/");
+    var mm = (parseInt(res[0]) < 10) ? '0' + parseInt(res[0]) : res[0];
+    var dd = (parseInt(res[1]) < 10) ? '0' + parseInt(res[1]) : res[1];
+    return res[2] + mm + dd;
+}
 
+var dateStringToDateISO = function (str) {
+    var res = str.split("");
+    var year = "";
+    var month = "";
+    var day = "";
+    for (var i = 0; i < res.length; i++) {
+        if (i < 4) {
+            year += res[i];
+        } else {
+            if (i > 5) {
+                day += res[i];
+            } else {
+                month += res[i];
+            }
+        }
+    }
+    return month + "/" + day + "/" + year;
 };
 
 module.exports = router;

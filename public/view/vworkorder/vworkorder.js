@@ -109,24 +109,16 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
                 $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
 
-                var currentDt = new Date(parseInt($scope.workOrder.created_on));
-                var mm = currentDt.getMonth() + 1;
-                mm = (mm < 10) ? '0' + mm : mm;
-                var dd = currentDt.getDate();
-                var yyyy = currentDt.getFullYear();
-                var date = mm + '/' + dd + '/' + yyyy;
-                $scope.workOrder.created_on = date;
+
+                $scope.workOrder.created_on = $filter('changeStringToDate')($scope.workOrder.created_on);
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
-                    $scope.workOrder.wo_datecomplete = new Date(parseInt($scope.workOrder.wo_datecomplete));
+                    $scope.workOrder.wo_datecomplete = new Date($filter('changeStringToDate')($scope.workOrder.wo_datecomplete));
                     $scope.maxDate = new Date(
                         $scope.workOrder.wo_datecomplete.getFullYear(),
                         $scope.workOrder.wo_datecomplete.getMonth(),
                         $scope.workOrder.wo_datecomplete.getDate());
                 }
-                $scope.minDate = new Date(
-                    currentDt.getFullYear(),
-                    currentDt.getMonth(),
-                    currentDt.getDate());
+                //$scope.workOrder.wo_datecomplete = $filter('changeStringToDate')($scope.workOrder.wo_datecomplete);
                 $scope.selected_facility = $scope.workOrder.workorder_facility;
                 API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
@@ -257,14 +249,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                             var dd = currentDt.getDate();
                             var yyyy = currentDt.getFullYear();
                             var date = mm + '/' + dd + '/' + yyyy;
-                            $scope.workOrder.wo_pm_date = date;
-                            /*var wo_pm_date = new Date(parseInt(res.Info.pm_task.pm_next_date));
-                            var mm = wo_pm_date.getMonth() + 1;
-                            mm = (mm < 10) ? '0' + mm : mm;
-                            var dd = wo_pm_date.getDate();
-                            var yyyy = wo_pm_date.getFullYear();
-                            var date = mm + '/' + dd + '/' + yyyy;
-                             $scope.workOrder.wo_pm_date = date;*/
+                            $scope.workOrder.wo_pm_date = $filter('changeStringToDate')($scope.workOrder.wo_pm_date);
                             $scope.workOrder.wo_pm_frequency = res.Info.pm_task.pm_frequency;
                             $scope.workOrder.wo_pm_number = res.Info.pm_task.pm_number;
                             $scope.workOrder.pm_task = 1;

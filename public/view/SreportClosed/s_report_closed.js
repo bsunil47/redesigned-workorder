@@ -67,9 +67,7 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
         };
         $scope.$watch("datefrom", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.datefrom)) {
-                console.log(new Date('2016-09-13T18:30:00.000Z').valueOf());
                 $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
-                console.log($scope.workOrder.wo_datefrom);
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {

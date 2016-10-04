@@ -60,7 +60,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
     var dd = currentDt.getDate();
     var yyyy = currentDt.getFullYear();
     var date = mm + '/' + dd + '/' + yyyy;
-    $scope.today = date;
+      $scope.workOrder.created_on = $scope.today = date;
     //$scope.today = new Date();
 
   }
@@ -149,7 +149,6 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
   function CreateWorkOrder() {
     if ($scope.CreateWorkOrderForm.workorder_description.$valid && $scope.CreateWorkOrderForm.workorder_category.$valid && $scope.CreateWorkOrderForm.workorder_equipment.$valid && $scope.CreateWorkOrderForm.workorder_priority.$valid) {
       var data_post = $scope.workOrder;
-      data_post.created_on = new Date(data_post.created_on).valueOf();
       $scope.user_id = API.CreateWorkOrder.save(data_post, function (res) {
         if (res.Code == 200) {
           swal({
