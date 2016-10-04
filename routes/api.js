@@ -852,7 +852,7 @@ router.post('/create_part_request', function (req, res, next) {
     var in_qry = req.body;
     in_qry.status = 1;
     var partRequest = new PartsRequest(in_qry);
-    if (req.body.workorder_number != "") {
+    if (req.body.workorder_number != "" && typeof req.body.workorder_number !== 'undefined') {
         WorkOrder.count({workorder_number: req.body.workorder_number, status: 1}, function (err, cnt) {
             if (err) {
             }
