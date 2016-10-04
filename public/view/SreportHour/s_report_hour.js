@@ -11,7 +11,6 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
     .controller('SreportHour', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
         $scope.workOrder = {
-            wo_datefrom: ""
         };
         var currentDt = new Date();
         $scope.maxDate = new Date(
