@@ -64,11 +64,13 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.$watch("datefrom", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.datefrom)) {
                 $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
+                $scope.minDate = new Date($scope.datefrom);
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.dateto)) {
                 $scope.workOrder.wo_dateto = new Date($scope.dateto).valueOf();
+                $scope.maxDate = new Date($scope.dateto);
             }
         });
     }]);
