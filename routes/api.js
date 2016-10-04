@@ -1751,7 +1751,7 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
         +
         '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
         +
-        '<p><b>Work Order Date</b>: ' + requestedArray.created_on + '</p>'
+        '<p><b>Work Order Date</b>: ' + req.body.created_on + '</p>'
         +
         '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
         +
