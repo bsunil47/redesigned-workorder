@@ -78,6 +78,4 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 $scope.maxDate = new Date($scope.dateto);
             }
         })
-
-
     }]);

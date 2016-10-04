@@ -1357,7 +1357,7 @@ router.post('/update_workorder', function (req, res, next) {
     if (typeof requestedArray.wo_datecomplete !== "undefined") {
         requestedArray.wo_datecomplete = dateToDesireDateString(requestedArray.wo_datecomplete);
     }
-    if (req.body.wo_pm_frequency > 0 && requestedArray.workorder_PM != "") {
+    if (req.body.wo_pm_frequency > 0 && typeof requestedArray.workorder_PM !== 'undefined') {
         var pmNumber;
         requestedArray.workorder_PM = pmNumber = req.body.wo_pm_number;
         if (req.body.pm_task == 1) {
@@ -1793,7 +1793,7 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
     WorkOrder.findOneAndUpdate(query, requestedArray, {upsert: false}, function (err, doc) {
         if (err) return res.json({Code: 500, Info: err});
         if (doc != null) {
-            if (requestedArray.workorder_PM != "" && requestedArray.status == 2) {
+            if (typeof requestedArray.workorder_PM !== 'undefined' && requestedArray.status == 2) {
                 WorkOrder.count({
                     workorder_PM: requestedArray.workorder_PM,
                     created_on: {'$gt': requestedArray.created_on}
