@@ -239,40 +239,18 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
                     alert(error);
                 });
                 $scope.workOrder.workorder_equipment = showEquipment($scope.workOrder.workorder_equipment);
-
-
-                var currentDt = new Date(parseInt($scope.workOrder.created_on));
-                var mm = currentDt.getMonth() + 1;
-                mm = (mm < 10) ? '0' + mm : mm;
-                var dd = currentDt.getDate();
-                var yyyy = currentDt.getFullYear();
-                var date = mm + '/' + dd + '/' + yyyy;
-                $scope.workOrder.created_on = date;
+                $scope.workOrder.created_on = $filter('changeStringToDate')($scope.workOrder.created_on);
                 $scope.selected_facility = $scope.workOrder.workorder_facility;
 
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
-                    var currentDt = new Date(parseInt($scope.workOrder.wo_datecomplete));
-                    console.log(currentDt);
-                    var mm = currentDt.getMonth() + 1;
-                    mm = (mm < 10) ? '0' + mm : mm;
-                    var dd = currentDt.getDate();
-                    var yyyy = currentDt.getFullYear();
-                    var date = mm + '/' + dd + '/' + yyyy;
-                    $scope.workOrder.wo_datecomplete = date;
+                    $scope.workOrder.wo_datecomplete = $filter('changeStringToDate')($scope.workOrder.wo_datecomplete);
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_pm_date) && $scope.workOrder.wo_pm_date != "") {
                     if (!isNaN(parseInt($scope.workOrder.wo_pm_date))) {
-                        var currentDt = new Date(parseInt($scope.workOrder.wo_pm_date));
-                        var mm = currentDt.getMonth() + 1;
-                        mm = (mm < 10) ? '0' + mm : mm;
-                        var dd = currentDt.getDate();
-                        var yyyy = currentDt.getFullYear();
-                        var date = mm + '/' + dd + '/' + yyyy;
-                        $scope.workOrder.wo_pm_date = date;
+                        $scope.workOrder.wo_pm_date = $filter('changeStringToDate')($scope.workOrder.wo_pm_date);
                     } else {
                         $scope.workOrder.wo_pm_date = "";
                     }
-
                 } else {
                     $scope.workOrder.wo_pm_date = "";
                 }

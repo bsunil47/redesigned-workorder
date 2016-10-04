@@ -51,9 +51,9 @@
                                                                        md-max-date="maxDate"
                                                                        md-placeholder="Enter date"
                                                                        ng-disabled="disableDateCompleted"></md-datepicker>
-                                                        <input type="hidden" name="wo_pm_date_from"
-                                                               ng-model="workOrder.wo_pm_date_from"
-                                                               value="{{workOrder.wo_pm_date_from}}" required>
+                                                        <input type="hidden" name="wo_datefrom"
+                                                               ng-model="workOrder.wo_datefrom"
+                                                               value="{{workOrder.wo_datefrom}}" required>
                                                     </div>
 
                                                 </div>
@@ -67,13 +67,12 @@
                                                 <div layout-gt-xs="row">
                                                     <div flex-gt-xs>
                                                         <md-datepicker md-min-date="minDate"
-                                                                       md-max-date="maxDate"
                                                                        ng-model="dateto"
                                                                        md-placeholder="Enter date"
                                                                        ng-disabled="disableDateCompleted"></md-datepicker>
-                                                        <input type="hidden" name="wo_pm_date_to"
-                                                               ng-model="workOrder.wo_pm_date_to"
-                                                               value="{{workOrder.wo_pm_date_to}}" required>
+                                                        <input type="hidden" name="wo_dateto"
+                                                               ng-model="workOrder.wo_dateto"
+                                                               value="{{workOrder.wo_dateto}}" required>
                                                     </div>
 
                                                 </div>

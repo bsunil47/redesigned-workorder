@@ -156,3 +156,24 @@ PGapp.filter('setPadZeros', function () {
 
     }
 });
+PGapp.filter('changeStringToDate', function () {
+    //console.log(input);
+    return function (str) {
+        var res = str.split("");
+        var year = "";
+        var month = "";
+        var day = "";
+        for (var i = 0; i < res.length; i++) {
+            if (i < 4) {
+                year += res[i];
+            } else {
+                if (i > 5) {
+                    day += res[i];
+                } else {
+                    month += res[i];
+                }
+            }
+        }
+        return month + "/" + day + "/" + year;
+    }
+});

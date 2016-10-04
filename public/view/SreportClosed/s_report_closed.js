@@ -10,15 +10,9 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
     }])
 
     .controller('SReportClosedCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
-        $scope.workOrder = {
-            wo_datefrom: ""
-        };
+        $scope.workOrder = {};
         var currentDt = new Date();
-        $scope.maxDate = new Date(
-            currentDt.getFullYear(),
-            currentDt.getMonth(),
-            currentDt.getDate());
-        $scope.datefrom;
+        
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
@@ -62,21 +56,18 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         };
-        $scope.changeDate = function () {
-            $scope.workOrder.wo_datefrom = $scope.workOrder.wo_datefrom;
-        };
+
         $scope.$watch("datefrom", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.datefrom)) {
-                console.log(new Date('2016-09-13T18:30:00.000Z').valueOf());
                 $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
-                console.log($scope.workOrder.wo_datefrom);
+                $scope.minDate = new Date($scope.datefrom);
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.dateto)) {
                 $scope.workOrder.wo_dateto = new Date($scope.dateto).valueOf();
+                $scope.maxDate = new Date($scope.dateto);
             }
-        });
-
+        })
 
     }]);
