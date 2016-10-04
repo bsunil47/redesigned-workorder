@@ -323,7 +323,7 @@ router.post('/report_pm', function (req, res, next) {
         if (req.body.wo_dateto == "") {
             var created_on = dateFormat(new Date(), 'yyyymmdd');
         } else {
-            var created_on = dateFormat(parseInt(req.body.wo_pm_date_to), 'yyyymmdd');
+            var created_on = dateFormat(parseInt(req.body.wo_dateto), 'yyyymmdd');
         }
         query.wo_pm_date = {
             '$gte': dateFormat(parseInt(req.body.wo_datefrom), 'yyyymmdd'),
