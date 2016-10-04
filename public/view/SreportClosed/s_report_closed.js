@@ -12,10 +12,7 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
     .controller('SReportClosedCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
         $scope.workOrder = {};
         var currentDt = new Date();
-        $scope.maxDate = new Date(
-            currentDt.getFullYear(),
-            currentDt.getMonth(),
-            currentDt.getDate());
+        
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }

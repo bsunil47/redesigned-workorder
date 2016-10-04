@@ -13,10 +13,7 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.workOrder = {
         };
         var currentDt = new Date();
-        $scope.maxDate = new Date(
-            currentDt.getFullYear(),
-            currentDt.getMonth(),
-            currentDt.getDate());
+
 
         if (!$cookies.get('userDetails')) {
             $location.path('login');
