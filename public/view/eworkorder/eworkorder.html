@@ -229,6 +229,7 @@
                                         <label class="col-sm-5 control-label">Status:</label>
                                         <div class="col-sm-7">
                                             <select required class="form-control" ng-model="workOrder.status"
+                                                    ng-disabled="disableClerk"
                                                     name="status"
                                                     ng-options='status.status_number as status.status_name for status in statuses'
                                                     ng-change="selectAction()">
@@ -300,7 +301,8 @@
                                 <label class="col-sm-2 control-label">Action Taken:</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" rows="2" ng-model="workOrder.workorder_actiontaken"
-                                              name="workorder_actiontaken" ng-required="reqActionTaken"></textarea>
+                                              name="workorder_actiontaken" ng-required="reqActionTaken"
+                                              ng-readonly="accessActionTaken"></textarea>
                                 </div>
                             </div>
                             <div class="text-center clearfix">

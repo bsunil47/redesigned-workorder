@@ -67,6 +67,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         $scope.reqTimeSpent = false;
         $scope.reqActionTaken = false;
         $scope.reqPMFreq = false;
+        $scope.accessActionTaken = false;
+        $scope.disableClerk = false;
         if (userdetail.role == 'technician') {
             $scope.showTechnician = false;
             $scope.disableEquipmentCost = false;
@@ -96,6 +98,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
         if (userdetail.role == 'clerk') {
             $scope.showClerk = true;
+            $scope.accessActionTaken = true;
+            $scope.disableClerk = true;
         }
         API.GetWorkOrder.Recent({workorder_number: currentId}, function (res) {
             if (res.Code == 200) {
