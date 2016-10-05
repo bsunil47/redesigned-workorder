@@ -101,6 +101,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             $scope.accessActionTaken = true;
             $scope.disableClerk = true;
         }
+        $scope.checkGoods = false;
         API.GetWorkOrder.Recent({workorder_number: currentId}, function (res) {
             if (res.Code == 200) {
 
@@ -111,6 +112,11 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 workorder_created_on = res.Info.workorder.created_on;
                 if ($scope.workOrder.status == 2) {
                     $scope.reqPMTask = true;
+                }
+                if (!angular.isUndefined($scope.workOrder.wo_goodsreceipt)) {
+                    if ($scope.workOrder.wo_goodsreceipt) {
+                        $scope.checkGoods = true;
+                    }
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_equipmentcost)) {
                     console.log($scope.workOrder.wo_equipmentcost);
