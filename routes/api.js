@@ -864,8 +864,8 @@ router.post('/create_part_request', function (req, res, next) {
                             Info: 'Error creating part request'
                         });
                     }
-                    sendMailPartRequest(req);
                     res.json({Code: 200, Info: 'Part request created successfully'});
+                    sendMailPartRequest(req);
                 });
             } else {
                 res.json({Code: 499, Info: 'This WorkOrder dont exist or already Closed'});
