@@ -61,41 +61,51 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
       $scope.createPartRequest = function (part) {
 
         if (!angular.isUndefined($scope.p.qty)) {
-          var set = {
-            equipment_number: $scope.equipment_number,
-            material_number: part,
-            qty: $scope.p.qty[part],
-            user_id: userdetail.user._id,
-          };
+            if ($scope.p.qty[part.material_number] >= part.min_qty && $scope.p.qty[part.material_number] <= part.max_qty) {
+                var set = {
+                    equipment_number: $scope.equipment_number,
+                    material_number: part.material_number,
+                    qty: $scope.p.qty[part.material_number],
+                    user_id: userdetail.user._id,
+                };
 
-          if (!angular.isUndefined($scope.p.workorder)) {
-            set.workorder_number = $scope.p.workorder[part];
-          }
-          API.CreatePartsRequest.Recent(set, function (res) {
-            if (res.Code == 200) {
-                $scope.p.qty[part] = "";
                 if (!angular.isUndefined($scope.p.workorder)) {
-                    $scope.p.workorder[part] = "";
+                    set.workorder_number = $scope.p.workorder[part];
                 }
-              swal({
-                title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                  text: res.Info,
-                width: "450px",
-                confirmButtonText: 'Ok'
-              });
-              $location.path("/parts_list");
+                API.CreatePartsRequest.Recent(set, function (res) {
+                    if (res.Code == 200) {
+                        $scope.p.qty[part] = "";
+                        if (!angular.isUndefined($scope.p.workorder)) {
+                            $scope.p.workorder[part] = "";
+                        }
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
+                        $location.path("/parts_list");
+                    } else {
+                        swal({
+                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                            text: res.Info,
+                            width: "450px",
+                            confirmButtonText: 'Ok'
+                        });
+                        //$scope.CreateUserForm.email.error = true;
+                    }
+                }, function (error) {
+                    alert(error);
+                });
             } else {
                 swal({
                     title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                    text: res.Info,
+                    text: "Qty should be between min and max values",
                     width: "450px",
                     confirmButtonText: 'Ok'
                 });
-              //$scope.CreateUserForm.email.error = true;
             }
-          }, function (error) {
-            alert(error);
-          });
+
         } else {
           swal({
             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
