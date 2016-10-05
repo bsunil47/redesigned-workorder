@@ -94,7 +94,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         if (userdetail.role == 'clerk') {
             $scope.showClerk = true;
         }
-
+        $scope.checkGoods = false;
         API.GetWorkOrder.Recent({workorder_number: currentId}, function (res) {
             if (res.Code == 200) {
 
@@ -105,6 +105,12 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 if (!angular.isUndefined($scope.workOrder.wo_equipmentcost)) {
                     console.log($scope.workOrder.wo_equipmentcost);
                     $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
+                }
+
+                if (!angular.isUndefined($scope.workOrder.wo_goodsreceipt)) {
+                    if ($scope.workOrder.wo_goodsreceipt) {
+                        $scope.checkGoods = true;
+                    }
                 }
 
                 $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
