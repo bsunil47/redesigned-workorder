@@ -107,8 +107,8 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
                 }
 
-                if (!angular.isUndefined($scope.wo_goodsreceipt)) {
-                    if ($scope.wo_goodsreceipt) {
+                if (!angular.isUndefined($scope.workOrder.wo_goodsreceipt)) {
+                    if ($scope.workOrder.wo_goodsreceipt) {
                         $scope.checkGoods = true;
                     }
                 }
