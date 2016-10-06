@@ -302,6 +302,7 @@
                                     <th>Work Order</th>
                                     <th>Work Order Description</th>
                                     <th>Equipment</th>
+                                    <th>Technicain</th>
                                     <th>Status</th>
                                     <th>View</th>
                                     <th>Print</th>
@@ -313,13 +314,14 @@
                                     <td>{{showWithzeros(workorder.workorder_number)}}</td>
                                     <td>{{workorder.workorder_description}}</td>
                                     <td>{{showEquipment(workorder.workorder_equipment)}}</td>
+                                    <td>{{showtechnician(workorder.workorder_technician)}}</td>
                                     <td>{{showStatus(workorder.status)}}</td>
                                     <td><i class="fa fa-eye" ng-click="viewWorkOrder(workorder.workorder_number)"></i>
                                     </td>
                                     <td><i class="fa fa-print" ng-click="goPrint(workorder.workorder_number)"></i>
                                     </td>
                                     <td><i class="fa fa-edit" ng-click="editWorkOrder(workorder.workorder_number)"
-                                           ng-show="showEdit(workorder.status)"></i>
+                                           ng-show="showEdit(workorder)"></i>
                                     </td>
                                 </tr>
                                 </tbody>
