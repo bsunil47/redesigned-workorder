@@ -37,7 +37,8 @@ var counters = mongoose.model('counter');
 
 router.post('/', function (req, res, next) {
     var query = {
-        $text: {$search: req.body.username},
+        'username': {$regex: /^req.body.username$/i},
+        //$text: {$search: req.body.username},
         password: req.body.password
     };
     console.log(query);
