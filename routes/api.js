@@ -36,11 +36,14 @@ var PartsRequest = mongoose.model('Collection_PartRequest');
 var counters = mongoose.model('counter');
 
 router.post('/', function (req, res, next) {
-
-    Users.findOne({
-        $text: {$search: req.body.username},
+    var regex = new RegExp(["^", req.body.username, "$"].join(""), "i");
+    var query = {
+        'username': {$regex: regex},
+        //$text: {$search: req.body.username},
         password: req.body.password
-    }, function (err, users) {
+    };
+    console.log(query);
+    Users.findOne(query, function (err, users) {
         if (err) {
             return next(err);
         }
@@ -1171,7 +1174,7 @@ router.post('/manager_workorder', function (req, res, next) {
                     console.log(role);
                     var query = {workorder_facility: {$in: facilities_array}};
                     if (role.role_name == 'technician') {
-                        query.workorder_technician = req.body._id;
+                        //query.workorder_technician = req.body._id;
                     }
                     if (role.role_name == 'clerk') {
                         //query.workorder_technician = req.body._id;
@@ -1564,7 +1567,7 @@ router.post('/get_search_wo', function (req, res, next) {
     delete query['userrole'];
     delete query['role'];
     if (user_details.role == 'technician') {
-        query.workorder_technician = user_details.user_id;
+        //query.workorder_technician = user_details.user_id;
     }
     if (typeof req.body.created_on_from !== "undefined") {
         if (typeof req.body.created_on_to === "undefined") {

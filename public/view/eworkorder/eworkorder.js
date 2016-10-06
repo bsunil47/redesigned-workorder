@@ -141,7 +141,9 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 $scope.saveDisable = true;
                 if (parseInt(currentDate) > parseInt(lessDate) && parseInt(currentDate) < parseInt(grtDate)) {
                     console.log('compare');
+
                     $scope.saveDisable = false;
+
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                     var min_date = $scope.workOrder.wo_datecomplete = new Date($filter('changeStringToDate')($scope.workOrder.wo_datecomplete));
@@ -247,9 +249,11 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 }, function (error) {
                     alert(error);
                 });
+                if (userdetail.user._id != $scope.workOrder.workorder_technician && userdetail.role == 'technician') {
+                    $scope.saveDisable = true;
+                }
                 API.GetUserByType.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
-
                         $scope.technicians = res.Info.users;
                         if ($scope.workOrder.workorder_technician == "") {
                             $scope.workOrder.workorder_technician = $scope.technicians[0]._id;
