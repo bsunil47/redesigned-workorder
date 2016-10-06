@@ -36,11 +36,12 @@ var PartsRequest = mongoose.model('Collection_PartRequest');
 var counters = mongoose.model('counter');
 
 router.post('/', function (req, res, next) {
-
-    Users.findOne({
+    var query = {
         $text: {$search: req.body.username},
         password: req.body.password
-    }, function (err, users) {
+    };
+    console.log(query);
+    Users.findOne(query, function (err, users) {
         if (err) {
             return next(err);
         }
