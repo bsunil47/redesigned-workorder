@@ -36,8 +36,9 @@ var PartsRequest = mongoose.model('Collection_PartRequest');
 var counters = mongoose.model('counter');
 
 router.post('/', function (req, res, next) {
+    var regex = new RegExp(["^", req.body.username, "$"].join(""), "i");
     var query = {
-        'username': {$regex: /^req.body.username$/i},
+        'username': {$regex: regex},
         //$text: {$search: req.body.username},
         password: req.body.password
     };
