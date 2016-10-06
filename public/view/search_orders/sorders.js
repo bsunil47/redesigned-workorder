@@ -259,10 +259,14 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             return found.status_name;
         }
         $scope.showEdit = function (status) {
-            if (status == 2 && userdetail.role == 'technician') {
+            if (status.status == 2 && userdetail.role == 'technician') {
                 return false;
             } else {
-                return true;
+                if (status.workorder_technician != userdetail.user._id && userdetail.role == 'technician') {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         };
 
