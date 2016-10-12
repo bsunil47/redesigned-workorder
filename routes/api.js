@@ -286,7 +286,7 @@ router.post('/create_workorder', function (req, res, next) {
                                         +
                                         '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
                                         +
-                                        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+                                        '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Maintenance Work Order Application</p>'
 
                                     };
                                     transporter.sendMail(mailData, function (err, info) {
@@ -1766,7 +1766,7 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
         +
         '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
         +
-        '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
+        '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Maintenance Work Order Application</p>'
 
     };
     transporter.sendMail(mailData, function (err, info) {
@@ -2070,7 +2070,7 @@ function mail(mail_to, req) {
                 +
                 '<p><b>Vendor Number</b>: ' + gpresult.equipments.vendor_number + '</p>'
                 +
-                '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Part request</p>'
+                '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Part request</p>'
 
             };
             transporter.sendMail(mailData, function (err, info) {
