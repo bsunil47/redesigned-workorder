@@ -77,10 +77,12 @@ router.post('/', function (req, res, next) {
     if (req.body.workorder_type == 1) {
         query.workorder_PM = {$exists: false};
     }
+    if (req.body.category != 0) {
+        query.workorder_category = req.body.category;
+    }
     Equipment.find(qr, function (err, equi) {
         var equipments = [];
         equi.forEach(function (eq) {
-            console.log(eq.equipment_name);
             var total_hrs = 0;
             equipments.push(function (callback) {
                 query.workorder_equipment = eq._id;
