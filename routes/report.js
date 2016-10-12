@@ -262,6 +262,7 @@ router.post('/report_category', function (req, res, next) {
                         if (e) {
                             return false;
                         }
+
                         work.workorder_category = r.category_name;
 
                     });
@@ -279,6 +280,9 @@ router.post('/report_category', function (req, res, next) {
                         work.wo_datecomplete = date;
                         work.workorder_equipment = ra.equipment_name;
                         cat = work.workorder_category;
+                        if (req.body.categories == 0) {
+                            cat = "All";
+                        }
                         callback(null, work);
                     });
 
