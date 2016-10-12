@@ -2,19 +2,28 @@
 <div class="page-wrapper">
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="site-logo clearfix"><a ng-click="redirectLoc('dashboard')"><img
-                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="site-title clearfix">Maintenance Work Order Application</div>
-                </div>
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
             </div>
         </div>
+        <!--</div>-->
     </header>
-    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn" ng-click="Logout()">logout</a></span>
+
     <!-- Page wrapper header end -->
     <!-- Page wrapper container start -->
     <div class="page-wrapper-container">
@@ -23,13 +32,20 @@
                 <div class="col-sm-12">
                     <!-- Main container start -->
                     <div class="main-container clearfix">
-                        <div class="col-sm-12 text-right"><a ng-click="redirectLoc('users')" class="btn btn-primary">Back</a>
+                        <div class="col-sm-12 text-right"><a ng-click="redirectBack('users')" class="btn btn-primary">Back</a>
                         </div>
                         <h1>Create User</h1>
                         <!-- Change password form start -->
                         <form name="CreateUserForm" class="form-horizontal clearfix">
                             <div class="row">
                                 <div class="col-sm-4 col-sm-offset-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">User Name:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="user.username" type="text" class="form-control"
+                                                   name="username" ng-pattern="/^[a-zA-Z0-9\.]*$/" required>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">First Name:</label>
                                         <div class="col-sm-6">
@@ -45,7 +61,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Email :</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="user.email" type="email" class="form-control" name="email" required>
+                                            <input ng-model="user.email" type="email" class="form-control" name="email"
+                                                   ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -57,11 +74,23 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Role:</label>
                                         <div class="col-sm-6">
-                                            <select required class="form-control" ng-model="user.userrole" name="userrole">
+                                            <select required class="form-control" ng-model="user.userrole"
+                                                    name="userrole" required>
                                                 <option value="operator">Operator</option>
                                                 <option value="manager">Manager</option>
                                                 <option value="clerk">Clerk</option>
                                                 <option value="technician">Technician</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Facility:</label>
+                                        <div class="col-sm-6">
+                                            <select required class="form-control" ng-model="user.facility"
+                                                    name="facility" required>
+                                                <option ng-repeat="facilit in facilities"
+                                                        value="{{facilit.facility_number}}">{{facilit.facility_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
@@ -70,9 +99,15 @@
                             </div>
                             <div class="text-center clearfix">
                                 <p>
-                                    <button type="submit" ng-click="CreateUser()" class="btn btn-primary" ng-disabled="CreateUserForm.firstname.$dirty && CreateUserForm.username.$invalid ||
-  CreateUserForm.password.$dirty && CreateUserForm.password.$invalid" >Save</button>
-                                    <button type="reset" class="btn btn-primary">Clear</button>
+                                    <button type="submit" ng-click="CreateUser()" class="btn btn-primary" ng-disabled="CreateUserForm.firstname.$dirty && CreateUserForm.firstname.$invalid ||
+                                    CreateUserForm.lastname.$dirty && CreateUserForm.lastname.$invalid ||
+                                    CreateUserForm.username.$dirty && CreateUserForm.username.$invalid ||
+                                    CreateUserForm.email.$dirty && CreateUserForm.email.$invalid ||
+                                    CreateUserForm.password.$dirty && CreateUserForm.password.$invalid ||
+                                    CreateUserForm.userrole.$dirty && CreateUserForm.userrole.$invalid ||
+                                    CreateUserForm.facility.$dirty && CreateUserForm.facility.$invalid">Save
+                                    </button>
+                                    <button class="btn btn-primary" ng-click="clearForm()">Clear</button>
                                 </p>
                             </div>
                         </form>

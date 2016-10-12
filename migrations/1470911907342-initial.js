@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 require('../config/db');
 var express = require('express');
 var mongoose = require('mongoose');
@@ -7,7 +7,8 @@ var Users = mongoose.model('Collection_Users');
 var Roles = mongoose.model('Collection_Roles');
 
 exports.up = function(next) {
-  var roles = new Roles({"role_name":'admin'});
+
+    var roles = new Roles({"role_name":'admin'});
   roles.save();
 
   var user = new Users(

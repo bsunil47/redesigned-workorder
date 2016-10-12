@@ -9,17 +9,17 @@ angular.module('PGapp.systemsettings', ['ngRoute','ngAnimate', 'ngCookies'])
   });
 }])
 
-.controller('SsettingsCtrl', ["$scope","$cookies","$location",'API',function($scope,$cookies,$location,API) {
+    .controller('SsettingsCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
   $scope.Logout = function () {
-    $cookies.remove('userDetails')
+      $cookies.remove('userDetails');
     $location.path("/");
-  }
-  $scope.redirectLoc = function (reloc) {
-    $location.path(reloc);
-  }
+  };
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+  };
   $scope.redirectLoc = function (reloc) {
     $location.path(reloc);
   }

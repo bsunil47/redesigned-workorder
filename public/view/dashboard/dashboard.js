@@ -16,6 +16,18 @@ angular.module('PGapp.dashboard', ['ngRoute','ngAnimate', 'ngCookies'])
     $location.path('login');
   }
   var userdetail = $cookies.getObject('userDetails');
+  API.Facilities.Recent(userdetail.user, function (res) {
+    if (res.Code == 200) {
+      $scope.facilities = res.Info.facilities;
+      $cookies.putObject('facilities', res.Info.facilities);
+      //$cookies.put('userDetails',res)
+    } else {
+
+    }
+
+  }, function (error) {
+    alert(error);
+  });
   $scope.screenTypeTitle = userdetail.role.charAt(0).toUpperCase() + userdetail.role.slice(1);
   $scope.showAdmin= false;
   $scope.showManager= false;
@@ -25,10 +37,17 @@ angular.module('PGapp.dashboard', ['ngRoute','ngAnimate', 'ngCookies'])
 
   if(userdetail.role == 'admin'){
     $scope.showAdmin= true;
+      $scope.hideCreateworkorder = true;
+      $scope.hidePartList = true;
+      $scope.hideSearchWorkOrder = true;
 
   }
   if(userdetail.role == 'admin' || userdetail.role == 'manager'){
     $scope.showManager= true;
+    if (userdetail.role == 'manager') {
+      $scope.hideCreateworkorder = true;
+        $scope.hidePartList = true;
+    }
   }
 
   if(userdetail.role == 'technician'){

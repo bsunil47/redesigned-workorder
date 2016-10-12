@@ -9,12 +9,15 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
   });
 }])
 
-.controller('ChangePasswordCtrl', ["$scope","$cookies","$location",'API',function($scope,$cookies,$location,API) {
+    .controller('ChangePasswordCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
   $scope.ChangePassword = ChangePassword;
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
   userdetail = $cookies.getObject('userDetails');
+        $scope.redirectBack = function (reloc) {
+            $window.history.back();
+        };
   $scope.user = {
     id:userdetail.user._id,
     p_password:'',
@@ -22,17 +25,35 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
     c_password:''
   };
   $scope.Logout = function () {
-    $cookies.remove('userDetails')
+      $cookies.remove('userDetails');
     $location.path("/");
-  }
+  };
   function ChangePassword(){
     $scope.user_id = API.ChangePassword.save($scope.user,function(res){
       if(res.Code == 200){
-        $location.path("/users");
+        swal({
+          title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+          text: 'Successfully Changed password',
+          width: "450px",
+          confirmButtonText: 'Ok'
+        });
+        $location.path("/");
       }else {
+        swal({
+          title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+          text: 'Error with changing Password',
+          width: "450px",
+          confirmButtonText: 'Ok'
+        });
         $scope.ChangePasswordForm.password.error = true;
       }
     },function (error) {
+      swal({
+        title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+        text: "Oop's.. Something went worng.. Try again later",
+        width: "450px",
+        confirmButtonText: 'Ok'
+      });
       console.log(error)
     });
   }
@@ -97,4 +118,4 @@ PGapp.directive('equalPassword', [function () {
       });
     }
   };
-}])
+}]);

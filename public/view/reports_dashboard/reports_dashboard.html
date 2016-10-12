@@ -1,0 +1,88 @@
+<!-- Page wrapper start -->
+<div class="page-wrapper">
+    <!-- Page wrapper header start -->
+    <header class="page-wrapper-header">
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
+            </div>
+        </div>
+        <!--</div>-->
+
+
+    </header>
+
+    <!-- Page wrapper header end -->
+    <!-- Page wrapper container start -->
+    <div class="page-wrapper-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Main container start -->
+                    <div class="main-container clearfix">
+                        <div class="col-sm-12 text-right">
+                            <a ng-click="redirectBack('dashboard')"
+                               class="btn btn-primary">Back</a>
+                        </div>
+                        <h1 class="col-sm-18">Reports </h1>
+                        <div class="col-sm-12 text-right">
+
+                            <div class="row">
+                            <div class="col-sm-4 col-sm-offset-4">
+                                <!-- Demo menu start -->
+                                <nav class="demo-menu-nav">
+                                    <h2 class="demo-menu-header clearfix">Reports</h2>
+                                    <div class="demo-menu-container clearfix">
+                                        <ul class="demo-menu">
+
+                                            <li ng-show="showManager"><a ng-click="redirectLoc('search_report_hour')"
+                                                                         class="btn btn-lg btn-primary">Hours by
+                                                Equipment</a></li>
+                                            <li ng-show="showManager"><a ng-click="redirectLoc('search_closed_report')"
+                                                                         class="btn btn-lg btn-primary">Closed Work
+                                                Order</a></li>
+                                            <li ng-show="showManager"><a ng-click="redirectLoc('search_PM_task')"
+                                                                         class="btn btn-lg btn-primary">PM Task</a></li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                                <!-- Demo menu end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Main container end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page wrapper container end -->
+    <!-- Page wrapper footer start -->
+    <footer class="page-wrapper-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="site-copy-rights clearfix">&copy;
+                        <!--<script>var d = new Date(); document.write(d.getFullYear());</script>--> Prysmian Group. All
+                        Rights Reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Page wrapper footer end -->
+</div>
+<!-- Page wrapper end -->

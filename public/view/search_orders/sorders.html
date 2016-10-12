@@ -1,20 +1,28 @@
 <!-- Page wrapper start -->
-<div class="page-wrapper">
+<div class="page-wrapper hidden-print" print-hide>
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="site-logo clearfix"><a ng-click="redirectLoc('dashboard')"><img
-                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="site-title clearfix">Maintenance Work Order Application</div>
-                </div>
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
             </div>
         </div>
+        <!--</div>-->
     </header>
-    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn" ng-click="Logout()">logout</a></span>
     <!-- Page wrapper header end -->
     <!-- Page wrapper container start -->
     <div class="page-wrapper-container">
@@ -23,7 +31,7 @@
                 <div class="col-sm-12">
                     <!-- Main container start -->
                     <div class="main-container clearfix">
-                        <div class="col-sm-12 text-right"><a ng-click="redirectLoc('dashboard')"
+                        <div class="col-sm-12 text-right"><a ng-click="redirectBack('dashboard')"
                                                              class="btn btn-primary">Back</a></div>
                         <h1>Search Work Order</h1>
                         <!-- Search work order form start -->
@@ -35,7 +43,8 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Work Order: #</label>
                                                 <div class="col-sm-6">
-                                                    <input type="text" class="form-control">
+                                                    <input type="text" class="form-control"
+                                                           ng-model="workOrder.workorder_number">
                                                 </div>
                                             </div>
                                         </div>
@@ -45,8 +54,10 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Requestor Name:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control">
-                                                        <option>--Select Requestor Name--</option>
+                                                    <select class="form-control" ng-model="workOrder.workorder_creator">
+                                                        <option ng-repeat="requestor in requestors"
+                                                                value="{{requestor._id}}">{{requestor.username}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -55,17 +66,38 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Work Order Date:</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control">
+                                                <label class="col-sm-5 contol-label">Work Order Date:</label>
+                                                <div class="col-sm-7">
+                                                    <md-content layout-padding>
+                                                        <div layout-gt-xs="row">
+                                                            <div flex-gt-xs>
+                                                                <md-datepicker name="created_on"
+                                                                               ng-model="workOrder.created_on_from"
+                                                                               md-placeholder="Enter date"
+                                                                ></md-datepicker>
+                                                            </div>
+
+                                                        </div>
+                                                    </md-content>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-4 control-label text-right">To:</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control">
+                                                <label class="col-sm-5 control-label"
+                                                       style="padding-left: 76px">To:</label>
+                                                <div class="col-sm-7">
+                                                    <md-content layout-padding>
+                                                        <div layout-gt-xs="row">
+                                                            <div flex-gt-xs>
+                                                                <md-datepicker name="wo_pm_date"
+                                                                               ng-model="workOrder.created_on_to"
+                                                                               md-placeholder="Enter date"
+                                                                ></md-datepicker>
+                                                            </div>
+
+                                                        </div>
+                                                    </md-content>
                                                 </div>
                                             </div>
                                         </div>
@@ -73,17 +105,40 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Work Order Completion Date:</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control">
+                                                <label class="col-sm-5 control-label">Work Order Completion
+                                                    Date:</label>
+                                                <div class="col-sm-7">
+                                                    <md-content layout-padding>
+                                                        <div layout-gt-xs="row">
+                                                            <div flex-gt-xs>
+                                                                <md-datepicker name=""
+
+                                                                               ng-model="workOrder.wo_datecomplete_from"
+                                                                               md-placeholder="Enter date"
+                                                                ></md-datepicker>
+                                                            </div>
+
+                                                        </div>
+                                                    </md-content>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-4 control-label text-right">To:</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control">
+                                                <label class="col-sm-5 control-label "
+                                                       style="padding-left: 76px">To:</label>
+                                                <div class="col-sm-7">
+                                                    <md-content layout-padding>
+                                                        <div layout-gt-xs="row">
+                                                            <div flex-gt-xs>
+                                                                <md-datepicker name="wo_datecomplete"
+                                                                               ng-model="workOrder.wo_datecomplete_to"
+                                                                               md-placeholder="Enter date"
+                                                                ></md-datepicker>
+                                                            </div>
+
+                                                        </div>
+                                                    </md-content>
                                                 </div>
                                             </div>
                                         </div>
@@ -93,8 +148,11 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Category:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control">
-                                                        <option>--Select Category--</option>
+                                                    <select class="form-control"
+                                                            ng-model="workOrder.workorder_category">
+                                                        <option ng-repeat="category in categories"
+                                                                value="{{category._id}}">{{category.category_name}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -105,8 +163,12 @@
                                             <div class="form-group">
                                                 <label class="col-sm-6 control-label">Equipment:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control">
-                                                        <option>--Select Equipment--</option>
+                                                    <select class="form-control"
+                                                            ng-model="workOrder.workorder_equipment">
+                                                        <option ng-repeat="equipment in equipments"
+                                                                value="{{equipment._id}}">
+                                                            {{equipment.equipment_name}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -115,17 +177,38 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-6 control-label">Next PM Date:</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control">
+                                                <label class="col-sm-5 control-label">Next PM Date:</label>
+                                                <div class="col-sm-7">
+                                                    <md-content layout-padding>
+                                                        <div layout-gt-xs="row">
+                                                            <div flex-gt-xs>
+                                                                <md-datepicker name="wo_pm_date"
+                                                                               ng-model="workOrder.wo_pm_date_from"
+                                                                               md-placeholder="Enter date"
+                                                                ></md-datepicker>
+                                                            </div>
+
+                                                        </div>
+                                                    </md-content>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="col-sm-4 control-label text-right">To:</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control">
+                                                <label class="col-sm-5 control-label"
+                                                       style="padding-left: 76px">To:</label>
+                                                <div class="col-sm-7">
+                                                    <md-content layout-padding>
+                                                        <div layout-gt-xs="row">
+                                                            <div flex-gt-xs>
+                                                                <md-datepicker name="wo_pm_date"
+                                                                               ng-model="workOrder.wo_pm_date_to"
+                                                                               md-placeholder="Enter date"
+                                                                ></md-datepicker>
+                                                            </div>
+
+                                                        </div>
+                                                    </md-content>
                                                 </div>
                                             </div>
                                         </div>
@@ -135,54 +218,66 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Skill:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control">
-                                                <option>--Select Skill--</option>
+                                            <select class="form-control" ng-model="workOrder.workorder_skill">
+                                                <option ng-repeat="skill in skills" value="{{skill._id}}">
+                                                    {{skill.skill_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Technician:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control">
-                                                <option>--Select Technician--</option>
+                                            <select class="form-control" ng-model="workOrder.workorder_technician">
+                                                <option ng-repeat="technician in technicians"
+                                                        value="{{technician._id}}">{{technician.username}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Status:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control">
-                                                <option>--Select Status--</option>
+                                            <select class="form-control" ng-model="workOrder.status">
+                                                <option ng-repeat="status in statuses" value="{{status.status_number}}">
+                                                    {{status.status_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Facility:<br><br></label>
                                         <div class="col-sm-6">
-                                            <select class="form-control">
-                                                <option>--Select Facility--</option>
+                                            <select class="form-control" ng-model="workOrder.workorder_facility">
+                                                <option ng-repeat="facility in facilities"
+                                                        value="{{facility.facility_number}}">{{facility.facility_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Class:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control">
-                                                <option>--Select Class--</option>
+                                            <select class="form-control" ng-model="workOrder.workorder_class">
+                                                <option ng-repeat="clas in classes" value="{{clas._id}}">
+                                                    {{clas.class_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">PM Task: #</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" ng-model="workOrder.workorder_PM">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Priority:</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control">
-                                                <option>--Select Priority--</option>
+                                            <select class="form-control" ng-model="workOrder.workorder_priority">
+                                                <option ng-repeat="priority in priorities" value="{{priority._id}}">
+                                                    {{priority.priority_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
@@ -190,8 +285,9 @@
                             </div>
                             <div class="text-center clearfix">
                                 <p>
-                                    <button type="submit" class="btn btn-primary">Search</button>
-                                    <button type="reset" class="btn btn-primary">Clear</button>
+                                    <button type="submit" ng-click="ListWorkOrders()" class="btn btn-primary">Search
+                                    </button>
+                                    <button type="reset" class="btn btn-primary" ng-click="clearForm()">Clear</button>
                                 </p>
                             </div>
                         </form>
@@ -206,51 +302,27 @@
                                     <th>Work Order</th>
                                     <th>Work Order Description</th>
                                     <th>Equipment</th>
+                                    <th>Technicain</th>
+                                    <th>Status</th>
                                     <th>View</th>
                                     <th>Print</th>
                                     <th>Edit</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>001</td>
-                                    <td>Nunc vitae massa venenatis, mollis libero id, suscipit ante.</td>
-                                    <td>Vestibulum</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>002</td>
-                                    <td>Fusce tempus arcu non neque blandit, non eleifend tortor cursus.</td>
-                                    <td>Aenean</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>003</td>
-                                    <td>Vestibulum faucibus ex ac libero ultricies, in dignissim nisl mollis.</td>
-                                    <td>Aliquam</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>004</td>
-                                    <td>Integer a sem id ante dictum placerat.</td>
-                                    <td>Vestibulum</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>005</td>
-                                    <td>Nulla nec leo nec orci consectetur iaculis sit amet in erat.</td>
-                                    <td>Pretium Quam</td>
-                                    <td><i class="fa fa-eye"></i></td>
-                                    <td><i class="fa fa-print"></i></td>
-                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(1)"></i></td>
+                                <tr ng-repeat="workorder in workOrders">
+                                    <td>{{showWithzeros(workorder.workorder_number)}}</td>
+                                    <td>{{workorder.workorder_description}}</td>
+                                    <td>{{showEquipment(workorder.workorder_equipment)}}</td>
+                                    <td>{{showtechnician(workorder.workorder_technician)}}</td>
+                                    <td>{{showStatus(workorder.status)}}</td>
+                                    <td><i class="fa fa-eye" ng-click="viewWorkOrder(workorder.workorder_number)"></i>
+                                    </td>
+                                    <td><i class="fa fa-print" ng-click="goPrint(workorder.workorder_number)"></i>
+                                    </td>
+                                    <td><i class="fa fa-edit" ng-click="editWorkOrder(workorder.workorder_number)"
+                                           ng-show="showEdit(workorder)"></i>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

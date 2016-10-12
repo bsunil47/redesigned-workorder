@@ -1,19 +1,11 @@
 {
-  "name": "WorkOrder",
-  "version": "0.0.0",
+  "name": "workorder",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "postinstall": "bower install --allow-root",
     "prestart": "npm install",
-    "start": "http-server -a localhost -p 8000 -c-1 ./",
-    "pretest": "npm install",
-    "test": "karma start karma.conf.js",
-    "test-single-run": "karma start karma.conf.js --single-run",
-    "preupdate-webdriver": "npm install",
-    "update-webdriver": "webdriver-manager update",
-    "preprotractor": "npm run update-webdriver",
-    "protractor": "protractor e2e-tests/protractor.conf.js",
-    "update-index-async": "node -e \"require('shelljs/global'); sed('-i', /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, '//@@NG_LOADER_START@@\\n' + sed(/sourceMappingURL=angular-loader.min.js.map/,'sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map','app/bower_components/angular-loader/angular-loader.min.js') + '\\n//@@NG_LOADER_END@@', 'app/index-async.html');\""
+    "migrate": "migrate"
   },
   "dependencies": {
     "angular": "^1.5.8",
@@ -25,22 +17,39 @@
     "angular-resource": "^1.5.8",
     "angular-route": "^1.5.8",
     "angularjs-datepicker": "^2.1.6",
+    "async": "^2.0.1",
     "body-parser": "~1.15.1",
     "bower": "^1.7.9",
     "cookie-parser": "~1.4.3",
+    "dateformat": "^1.0.12",
     "debug": "~2.2.0",
+    "duration": "^0.2.0",
     "ejs": "~2.4.1",
     "express": "~4.13.4",
     "express-session": "^1.14.0",
     "fs": "0.0.2",
     "gulp": "^3.9.1",
+    "gulp-install": "^0.6.0",
+    "html-pdf": "^2.1.0",
+    "jsreport": "^1.0.9",
+    "jsreport-client": "^0.4.1",
+    "jsreport-phantom-pdf": "^1.0.3",
     "migrate": "^0.2.3",
-    "moment": "^2.14.1",
+    "moment": "^2.15.0",
     "mongodb": "^2.2.5",
+    "mongodb-autoincrement": "^1.0.1",
     "mongoose": "^4.5.7",
     "mongoose-migrate": "^0.2.4",
     "morgan": "~1.7.0",
     "node-compass": "^0.2.4",
+    "node-cron": "^1.1.2",
+    "nodemailer": "^2.6.0",
+    "nodemailer-smtp-transport": "^2.7.2",
+    "nunjucks": "^2.5.2",
+    "nunjucks-date": "^1.2.0",
+    "nunjucks-date-filter": "^0.1.1",
+    "phantom": "^2.1.21",
+    "phantom-express": "0.0.1",
     "serve-favicon": "~2.3.0",
     "ui-router": "^1.0.0-alpha.3"
   },
@@ -49,6 +58,28 @@
     "eslint-config-angular": "^0.5.0",
     "eslint-plugin-angular": "^1.3.1",
     "gulp": "^3.9.1",
-    "gulp-bower": "0.0.13"
-  }
+    "gulp-bower": "0.0.13",
+    "gulp-concat": "^2.6.0",
+    "gulp-express": "^0.3.5",
+    "gulp-install": "^0.6.0",
+    "gulp-live-server": "0.0.30",
+    "gulp-minify": "0.0.14"
+  },
+  "description": "Workorder",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsunil47/redesigned-workorder.git"
+  },
+  "keywords": [
+    "node",
+    "angular",
+    "mongo"
+  ],
+  "author": "kesav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bsunil47/redesigned-workorder/issues"
+  },
+  "homepage": "https://github.com/bsunil47/redesigned-workorder#readme"
 }

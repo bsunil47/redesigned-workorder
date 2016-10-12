@@ -1,0 +1,98 @@
+<!-- Page wrapper start -->
+<div class="page-wrapper">
+    <!-- Page wrapper header start -->
+    <header class="page-wrapper-header">
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
+            </div>
+        </div>
+        <!--</div>-->
+    </header>
+    <!-- Page wrapper header end -->
+    <!-- Page wrapper container start -->
+    <div class="page-wrapper-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Main container start -->
+                    <div class="main-container clearfix">
+                        <div class="col-sm-12 text-right">
+                            <a ng-click="redirectBack('system_settings')"
+                               class="btn btn-primary">Back</a>
+                            <a ng-click="redirectLoc('createparts')" class="btn btn-primary">Create Parts</a>
+                        </div>
+                        <h1 class="col-sm-18">Parts List </h1>
+
+                        <!-- Change password form start -->
+                        <div class="table-responsive">
+                            <table class="table">
+                                <!--<caption>Responsive Table Layout</caption>-->
+                                <thead>
+                                <tr>
+                                    <th>Equipment Number</th>
+                                    <th>Equipment Name</th>
+                                    <th>Facilities</th>
+                                    <th>Part Number</th>
+                                    <th>Part Description</th>
+                                    <th>Vendor Number</th>
+                                    <th>Vendor Name</th>
+                                    <th>Min Qty</th>
+                                    <th>Max Qty</th>
+                                    <!--<th>Status</th>-->
+                                    <th>Edit</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-repeat="equipment in equipments">
+                                <tr ng-repeat="vendor in equipment.equipments">
+                                    <td>{{equipment.equipment_number}}</td>
+                                    <td>{{equipment.equipment_name}}</td>
+                                    <td>{{showFacility(equipment.facilities)}}</td>
+                                    <td>{{vendor.material_number}}</td>
+                                    <td>{{vendor.material_description}}</td>
+                                    <td>{{vendor.vendor_number}}</td>
+                                    <td>{{vendor.vendor_name}}</td>
+                                    <td>{{vendor.min_qty}}</td>
+                                    <td>{{vendor.max_qty}}</td>
+                                    <!--<td>{{showStatus(equipment.status)}}</td>-->
+                                    <td><i class="fa fa-edit" ng-click="editParts(vendor.material_number)"></i></td>
+                                </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- Change password form end -->
+                    </div>
+                    <!-- Main container end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page wrapper container end -->
+    <!-- Page wrapper footer start -->
+    <footer class="page-wrapper-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="site-copy-rights clearfix">&copy; 2016 Prysmian Group. All Rights Reserved.</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Page wrapper footer end -->
+</div>
+<!-- Page wrapper end -->

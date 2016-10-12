@@ -1,0 +1,139 @@
+<!-- Page wrapper start -->
+<div class="page-wrapper">
+    <!-- Page wrapper header start -->
+    <header class="page-wrapper-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="site-logo clearfix"><a ng-click="redirectLoc('equipments')"><img
+                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="site-title clearfix">Maintenance Work Order Application</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn"
+                                                                                                      ng-click="Logout()">logout</a></span>
+    <!-- Page wrapper header end -->
+    <!-- Page wrapper container start -->
+    <div class="page-wrapper-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Main container start -->
+                    <div class="main-container clearfix">
+                        <div class="col-sm-12 text-right"><a ng-click="redirectBack('partsequipmentlist')"
+                                                             class="btn btn-primary">Back</a>
+                        </div>
+                        <h1>Edit Parts</h1>
+                        <!-- Change password form start -->
+                        <form name="EditPartsForm" class="form-horizontal clearfix">
+                            <div class="row">
+                                <div class="col-sm-4 col-sm-offset-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Equipment Number:</label>
+                                        <div class="col-sm-6">
+                                            <input required class="form-control" ng-model="ep.equipment_number"
+                                                   ng-disabled="ep.equipment_number"
+                                                   name="equipment_number" value={{ep.equipment_number}}>
+
+                                            </input>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Equipment Name:</label>
+                                        <div class="col-sm-6">
+
+                                            <input ng-model="ep.equipment_name" ng-readonly="true" type="text"
+                                                   ng-disabled="ep.equipment_name"
+                                                   class="form-control" value={{ep.equipment_name}}
+                                                   name="equipment_name" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Material Number:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="ep.equipments.material_number" type="text"
+                                                   class="form-control" ng-disabled="ep.equipments.material_number"
+                                                   name="part_number" value={{ep.equipments.material_number}} required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Material Name:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="ep.equipments.material_description" type="text"
+                                                   class="form-control" ng-disabled="ep.equipments.material_description"
+                                                   name="part_name" value={{ep.equipments.material_description}}
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Vendor Number:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="ep.equipments.vendor_number" type="text"
+                                                   class="form-control" ng-disabled="ep.equipments.vendor_number"
+                                                   name="vendor_number" value={{ep.equipments.vendor_number}} required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Vendor Name:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="ep.equipments.vendor_name" type="text" class="form-control"
+                                                   ng-disabled="disVendorName"
+                                                   name="vendor_name" value={{ep.equipments.vendor_name}} required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Min Qty:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="ep.equipments.min_qty" type="text" class="form-control"
+                                                   value={{ep.equipments.min_qty}}
+                                                   name="min_qty" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Max Qty:</label>
+                                        <div class="col-sm-6">
+                                            <input ng-model="ep.equipments.max_qty" type="text" class="form-control"
+                                                   value={{ep.equipments.max_qty}}
+                                                   name="max_qty" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center clearfix">
+                                <p>
+                                    <button type="submit" ng-click="EditParts()" class="btn btn-primary"
+                                            ng-disabled="           
+                                            (EditPartsForm.min_qty.$dirty && EditPartsForm.min_qty.$invalid) ||
+                                            (EditPartsForm.max_qty.$dirty && EditPartsForm.max_qty.$invalid)
+                                            ">
+                                        Save
+                                    </button>
+                                    <!--<button type="reset" class="btn btn-primary">Clear</button>-->
+                                </p>
+                            </div>
+                        </form>
+                        <!-- Change password form end -->
+                    </div>
+                    <!-- Main container end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page wrapper container end -->
+    <!-- Page wrapper footer start -->
+    <footer class="page-wrapper-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="site-copy-rights clearfix">&copy; 2016 Prysmian Group. All Rights Reserved.</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Page wrapper footer end -->
+</div>
+<!-- Page wrapper end -->

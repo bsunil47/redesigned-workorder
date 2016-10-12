@@ -2,19 +2,27 @@
 <div class="page-wrapper">
     <!-- Page wrapper header start -->
     <header class="page-wrapper-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="site-logo clearfix"><a ng-click="redirectLoc('dashboard')"><img
-                            ng-click="redirectLoc('dashboard')" src="/images/logo.png" alt="Prysmian Group"></a></div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="site-title clearfix">Maintenance Work Order Application</div>
-                </div>
+        <!--<div class="container">-->
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-4">
+                <div class="site-logo clearfix"><a href="javascript:void(0)"><img src="/images/logo.png"
+                                                                                  alt="Prysmian Group"></a></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="site-title clearfix">Maintenance Work Order Application</div>
+            </div>
+            <div class="col-sm-1">
+                    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999">
+                        <a class="btn" ng-click="Logout()">
+                            <img src="/images/logout.png" alt="logout">
+                        </a>
+                    </span>
             </div>
         </div>
+        <!--</div>-->
     </header>
-    <span class="text-right" style="position: absolute; right: 5px; cursor: pointer; z-index: 999"><a class="btn" ng-click="Logout()">logout</a></span>
     <!-- Page wrapper header end -->
     <!-- Page wrapper container start -->
     <div class="page-wrapper-container">
@@ -23,7 +31,7 @@
                 <div class="col-sm-12">
                     <!-- Main container start -->
                     <div class="main-container clearfix">
-                        <div class="col-sm-12 text-right"><a ng-click="redirectLoc('dashboard')"
+                        <div class="col-sm-12 text-right"><a ng-click="redirectBack('dashboard')"
                                                              class="btn btn-primary">Back</a></div>
                         <h1>System Settings</h1>
                         <div class="row">
@@ -34,13 +42,22 @@
                                     <div class="demo-menu-container clearfix">
                                         <ul class="row demo-menu clearfix">
                                             <li class="col-sm-6"><a ng-click="redirectLoc('users')" class="btn btn-lg btn-primary">User Maintenance</a></li>
-                                            <li class="col-sm-6"><a href="javascript:void(0)" class="btn btn-lg btn-primary">Equipment</a></li>
-                                            <li class="col-sm-6"><a href="javascript:void(0)" class="btn btn-lg btn-primary">Facility</a></li>
-                                            <li class="col-sm-6"><a href="javascript:void(0)" class="btn btn-lg btn-primary">Priority</a></li>
-                                            <li class="col-sm-6"><a href="javascript:void(0)" class="btn btn-lg btn-primary">Category</a></li>
-                                            <li class="col-sm-6"><a href="javascript:void(0)" class="btn btn-lg btn-primary">Skill</a></li>
-                                            <li class="col-sm-6"><a href="javascript:void(0)" class="btn btn-lg btn-primary">Status</a></li>
-                                            <li class="col-sm-6"><a href="javascript:void(0)" class="btn btn-lg btn-primary">Class</a></li>
+                                            <li class="col-sm-6"><a ng-click="redirectLoc('equipments')"
+                                                                    class="btn btn-lg btn-primary">Equipment</a></li>
+                                            <li class="col-sm-6"><a ng-click="redirectLoc('facilities')"
+                                                                    class="btn btn-lg btn-primary">Facility</a></li>
+                                            <li class="col-sm-6"><a ng-click="redirectLoc('priorities')"
+                                                                    class="btn btn-lg btn-primary">Priority</a></li>
+                                            <li class="col-sm-6"><a ng-click="redirectLoc('categories')"
+                                                                    class="btn btn-lg btn-primary">Category</a></li>
+                                            <li class="col-sm-6"><a ng-click="redirectLoc('skills')"
+                                                                    class="btn btn-lg btn-primary">Skill</a></li>
+                                            <li class="col-sm-6"><a ng-click="redirectLoc('status')"
+                                                                    class="btn btn-lg btn-primary">Status</a></li>
+                                            <li class="col-sm-6"><a ng-click="redirectLoc('classes')"
+                                                                    class="btn btn-lg btn-primary">Class</a></li>
+                                            <li class="col-sm-6"><a ng-click="redirectLoc('partsequipmentlist')"
+                                                                    class="btn btn-lg btn-primary">Parts</a></li>
                                         </ul>
                                     </div>
                                 </nav>

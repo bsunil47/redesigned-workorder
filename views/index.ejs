@@ -4,13 +4,21 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title><% title %></title>
+  <title>
+    <% title; %>
+  </title>
   <link rel="shortcut icon" href="/images/favicon.ico">
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="/stylesheets/webfonts.css">
   <link rel="stylesheet" href="/javascripts/libs/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="/javascripts/libs/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/javascripts/libs/bootstrap/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/bower-components/angular-material/angular-material.css">
+  <link rel="stylesheet" href="/bower-components/sweetalert2/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="/bower-components/ng-dialog/css/ngDialog.min.css">
+  <link rel="stylesheet" href="/bower-components/ng-dialog/css/ngDialog-theme-default.css">
+  <link rel="stylesheet" href="/bower-components/angularPrint/angularPrint.css">
+  <!--<link rel="stylesheet" href="/bower-components/ngPrint/ngPrint.min.css">-->
   <link rel="stylesheet" href="/stylesheets/style.css">
   <!--[if lt IE 9]>
   <script src="/javascripts/libs/html5shiv/html5shiv.min.js"></script>
@@ -31,19 +39,23 @@
 <script src="/bower-components/angular-cookies/angular-cookies.js"></script>
 <script src="/bower-components/angular-resource/angular-resource.js"></script>
 <script src="/bower-components/angular-material/angular-material.min.js"></script>
+<script src="/bower-components/ng-bootstrap/ng-bootstrap.min.js"></script>
+<script src="/bower-components/angular-ui-bootstrap/src/position/position.js"></script>
+<script src="/bower-components/angular-dateParser/dist/angular-dateparser.js"></script>
 <script src="/bower-components/angularjs-datepicker/src/js/angular-datepicker.js"></script>
+<script src="/bower-components/angular-timepicker/src/angular-timepicker.js"></script>
+<script src="/bower-components/es6-promise/es6-promise.min.js"></script>
+<script src="/bower-components/sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="/bower-components/angular-strap/dist/angular-strap.min.js"></script>
+<script src="bower-components/angular-strap/dist/angular-strap.tpl.min.js"></script>
+<script src="bower-components/ng-dialog/js/ngDialog.min.js"></script>
+<script src="bower-components/angularPrint/angularPrint.js"></script>
+<!--<script src="bower-components/ngPrint/ngPrint.min.js"></script>-->
+
 <script src="/javascripts/appMain.js"></script>
 <script src="/javascripts/commonFactory.js"></script>
-<script src="/view/login/login.js"></script>
-<script src="/view/dashboard/dashboard.js"></script>
-<script src="/view/cworkorder/cworkorder.js"></script>
-<script src="/view/search_orders/sorders.js"></script>
-<script src="/view/parts_list/partslist.js"></script>
-<script src="/view/eworkorder/eworkorder.js"></script>
-<script src="/view/system_settings/systemsettings.js"></script>
-<script src="/view/changepassword/cpassword.js"></script>
-<script src="/view/userlist/userlist.js"></script>
-<script src="/view/createuser/cuser.js"></script>
+<script src="/javascripts/allCtrls-min.js"></script>
+
 </body>
 </html>
 
