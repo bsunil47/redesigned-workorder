@@ -91,13 +91,24 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <!--<div class="form-group">
                                         <label class="col-sm-6 control-label">Work Order Types:</label>
                                         <div class="col-sm-6">
                                             <select required class="form-control" name="workorder_type" required>
                                                 <option value="0">All</option>
                                                 <option value="1">Normal WorkOrder</option>
                                                 <option value="2">PM Work Order</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Categories:</label>
+                                        <div class="col-sm-6">
+                                            <select required class="form-control" name="category" required>
+                                                <option value="0">All</option>
+                                                <option ng-repeat="category in categories"
+                                                        value="{{category._id}}">{{category.category_name}}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
