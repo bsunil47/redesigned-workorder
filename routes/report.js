@@ -245,7 +245,7 @@ router.post('/report_category', function (req, res, next) {
             'to': dateFormat(parseInt(req.body.wo_dateto), 'shortDate')
         }
     }
-
+    var cat = 'All';
     if (req.body.categories != 0) {
         query.workorder_category = req.body.categories;
     }
@@ -263,6 +263,7 @@ router.post('/report_category', function (req, res, next) {
                             return false;
                         }
                         work.workorder_category = r.category_name;
+
                     });
                     Equipment.findOne({_id: work.workorder_equipment}, function (er, ra) {
                         if (er) {
@@ -277,6 +278,7 @@ router.post('/report_category', function (req, res, next) {
                         work.workorder_number = setPadZeros(parseInt(work.workorder_number), 8);
                         work.wo_datecomplete = date;
                         work.workorder_equipment = ra.equipment_name;
+                        cat = work.workorder_category;
                         callback(null, work);
                     });
 
@@ -292,6 +294,7 @@ router.post('/report_category', function (req, res, next) {
                 if (err)
                     return console.log(err);
                 var obj = {
+                    cat: cat,
                     url: fullUrl,
                     date: today,
                     search: search_date,
