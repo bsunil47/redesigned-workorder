@@ -71,8 +71,7 @@ table tr th {
 /* Page styles */
 .page-wrapper {
   position: relative;
-    min-height: 559px;
-}
+  min-height: 650px; }
 
 .page-wrapper-header {
   background: url(../images/pattern1.png) repeat scroll center center;
@@ -282,11 +281,13 @@ input[type="number"]::-webkit-inner-spin-button {
     #printThisElement {
         width: 800px;
     }
+
     #printThisElement h1 {
         font-size: 20px;
         line-height: 30px;
         width: 100%;
     }
+
     #printThisElement .site-title {
         font-size: 20px;
         line-height: 30px;
@@ -515,6 +516,7 @@ input[type="number"]::-webkit-inner-spin-button {
         margin-left: 0;
     }
 }
+
 .ngdialog.ngdialog-theme-default .ngdialog-content {
     -webkit-animation: ngdialog-flyin .5s;
     animation: ngdialog-flyin .5s;
@@ -538,6 +540,7 @@ input[type="number"]::-webkit-inner-spin-button {
     line-height: 30px;
     width: 100%;
 }
+
 #printThisElement .site-title {
     font-size: 20px;
     line-height: 30px;
