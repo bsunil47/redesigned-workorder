@@ -48,6 +48,19 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
             alert(error);
         });
 
+        API.Categories.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+
+                $scope.categories = res.Info.categories;
+                //$cookies.put('userDetails',res)
+            } else {
+
+            }
+
+        }, function (error) {
+            alert(error);
+        });
+
 
         $scope.Logout = function () {
             $cookies.remove('userDetails');
