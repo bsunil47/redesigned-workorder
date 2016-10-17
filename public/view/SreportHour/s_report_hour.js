@@ -13,6 +13,7 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.workOrder = {
         };
         var currentDt = new Date();
+        $scope.submitDisable = true;
 
 
         if (!$cookies.get('userDetails')) {
@@ -75,6 +76,9 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
             if (!angular.isUndefined($scope.datefrom)) {
                 $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
                 $scope.minDate = new Date($scope.datefrom);
+                $scope.submitDisable = false;
+            } else {
+                $scope.submitDisable = true;
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {

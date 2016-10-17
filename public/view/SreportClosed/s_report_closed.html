@@ -50,7 +50,8 @@
                                                         <md-datepicker ng-model="datefrom"
                                                                        md-max-date="maxDate"
                                                                        md-placeholder="Enter date"
-                                                                       ng-disabled="disableDateCompleted"></md-datepicker>
+                                                                       ng-disabled="disableDateCompleted"
+                                                                       ng-required="true"></md-datepicker>
                                                         <input type="hidden" name="wo_datefrom"
                                                                ng-model="workOrder.wo_datefrom"
                                                                value="{{workOrder.wo_datefrom}}" required>
@@ -100,7 +101,7 @@
                             </div>
                             <div class="text-center clearfix">
                                 <p>
-                                    <button type="submit" class="btn btn-primary">Get Report
+                                    <button type="submit" ng-disabled="submitDisable" class="btn btn-primary">Get Report
                                     </button>
                                 </p>
                             </div>

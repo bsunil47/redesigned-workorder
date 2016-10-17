@@ -37,7 +37,7 @@
                         </div>
                         <h1>Get Report - Hour By Equipment</h1>
                         <!-- Change password form start -->
-                        <form name="CreateUserForm" class="form-horizontal clearfix" method="post" action="/report">
+                        <form name="ReportForm" class="form-horizontal clearfix" method="post" action="/report">
                             <div class="row">
                                 <div class="col-sm-4 col-sm-offset-4">
                                     <div class="form-group">
@@ -49,7 +49,8 @@
                                                         <md-datepicker ng-model="datefrom"
                                                                        md-max-date="maxDate"
                                                                        md-placeholder="Enter date"
-                                                                       ng-disabled="disableDateCompleted"></md-datepicker>
+                                                                       ng-disabled="disableDateCompleted"
+                                                                       ng-required="true"></md-datepicker>
                                                         <input type="hidden" name="wo_datefrom"
                                                                ng-model="workOrder.wo_datefrom"
                                                                value="{{workOrder.wo_datefrom}}" required>
@@ -129,7 +130,7 @@
                             </div>
                             <div class="text-center clearfix">
                                 <p>
-                                    <button type="submit" ng-click="CreateUser()" class="btn btn-primary">Get Report
+                                    <button type="submit" ng-disabled="submitDisable" class="btn btn-primary">Get Report
                                     </button>
                                 </p>
                             </div>

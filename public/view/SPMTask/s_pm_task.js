@@ -13,6 +13,7 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.workOrder = {
             wo_datefrom: ""
         };
+        $scope.submitDisable = true;
         var currentDt = new Date();
         /*$scope.maxDate = new Date(
             currentDt.getFullYear(),
@@ -68,6 +69,9 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
             if (!angular.isUndefined($scope.datefrom)) {
                 $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
                 $scope.minDate = new Date($scope.datefrom);
+                $scope.submitDisable = false;
+            } else {
+                $scope.submitDisable = true;
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {

@@ -12,7 +12,7 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
     .controller('SReportClosedCtrl', ["$scope", "$cookies", "$location", "$window", 'API', function ($scope, $cookies, $location, $window, API) {
         $scope.workOrder = {};
         var currentDt = new Date();
-        
+        $scope.submitDisable = true;
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
@@ -61,6 +61,9 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
             if (!angular.isUndefined($scope.datefrom)) {
                 $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
                 $scope.minDate = new Date($scope.datefrom);
+                $scope.submitDisable = false;
+            } else {
+                $scope.submitDisable = true;
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {
