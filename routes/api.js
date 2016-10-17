@@ -1409,6 +1409,7 @@ router.post('/update_workorder', function (req, res, next) {
         });
     } else {
         requestedArray.workorder_number = parseInt(req.body.workorder_number);
+        console.log('no pm task');
         updateWorkOrder({'workorder_number': parseInt(req.body.workorder_number)}, requestedArray, req, res);
     }
 
@@ -1793,7 +1794,9 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
     if (typeof requestedArray.wo_pm_date !== "undefined") {
         requestedArray.wo_pm_date = dateToDesireDateString(requestedArray.wo_pm_date);
     }
-    WorkOrder.findOneAndUpdate(query, requestedArray, {upsert: false}, function (err, doc) {
+    console.log(query);
+    console.log(requestedArray);
+    WorkOrder.update(query, requestedArray, {upsert: false, overwrite: true}, function (err, doc) {
         if (err) return res.json({Code: 500, Info: err});
         if (doc != null) {
             if (typeof requestedArray.workorder_PM !== 'undefined' && requestedArray.status == 2) {
