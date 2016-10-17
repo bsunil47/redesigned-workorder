@@ -131,10 +131,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 $scope.workOrder.created_on = $filter('changeStringToDate')($scope.workOrder.created_on);
                 var orderDt = new Date($scope.workOrder.created_on).valueOf();
                 var currentDate = new Date($scope.workOrder.created_on);
-                currentDate.setDate(currentDate.getDate() - 7);
+                currentDate.setDate(currentDate.getDate() - 10);
                 var lessDate = new Date(currentDate).valueOf();
                 var currentDate = new Date($scope.workOrder.created_on);
-                currentDate.setDate(currentDate.getDate() + 7);
+                currentDate.setDate(currentDate.getDate() + 10);
                 var grtDate = new Date(currentDate).valueOf();
                 var orderDt = new Date($scope.workOrder.created_on).valueOf();
                 var currentDate = new Date().valueOf();
