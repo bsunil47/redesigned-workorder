@@ -2041,48 +2041,58 @@ function mail(mail_to, req) {
                 var wo_number = setPadZeros(parseInt(req.body.workorder_number), 8);
             }
             console.log("API result: " + JSON.stringify(result));
-            var tempstr = JSON.stringify(result).slice(1, -1);
-            var gpresult = JSON.parse(tempstr);
-            var mailData = {
-                // Comma separated list of recipients
-                to: mail_to,
-                // Subject of the message
-                subject: 'Part Request', //
-
-                // plaintext body
-                //text: 'Hello to sunil',
-
-                // HTML body
-                html: '<p>Parts Request raised for following equipment<b>'
-                +
-                '<p><b>Work Order Number</b>: ' + wo_number + '</p>'
-                +
-                '<p><b>Qty</b>: ' + req.body.qty + '</p>'
-                +
-                '<p><b>Date</b>: ' + dateFormat(new Date(), 'shortDate') + '</p>'
-                +
-                '<p><b>Equipment Number</b>: ' + gpresult.equipment_number + '</p>'
-                +
-                '<p><b>Equipment Name</b>: ' + gpresult.equipment_name + '</p>'
-                +
-                '<p><b>Part Number</b>: ' + gpresult.equipments.material_number + '</p>'
-                +
-                '<p><b>Part Description</b>: ' + gpresult.equipments.material_description + '</p>'
-                +
-                '<p><b>Vendor Name</b>: ' + gpresult.equipments.vendor_name + '</p>'
-                +
-                '<p><b>Vendor Number</b>: ' + gpresult.equipments.vendor_number + '</p>'
-                +
-                '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Part request</p>'
-
-            };
-            transporter.sendMail(mailData, function (err, info) {
+            Users.findOne({_id: req.body.user_id}, function (err, username) {
                 if (err) {
-                    console.log(err);
-                }
-                console.log('Message sent successfully!');
 
+                }
+                if (username != null) {
+                    var tempstr = JSON.stringify(result).slice(1, -1);
+                    var gpresult = JSON.parse(tempstr);
+                    var mailData = {
+                        // Comma separated list of recipients
+                        to: mail_to,
+                        // Subject of the message
+                        subject: 'Part Request', //
+
+                        // plaintext body
+                        //text: 'Hello to sunil',
+
+                        // HTML body
+                        html: '<p>Parts Request raised for following equipment<b>'
+                        +
+                        '<p><b>Work Order Number</b>: ' + wo_number + '</p>'
+                        +
+                        '<p><b>Qty</b>: ' + req.body.qty + '</p>'
+                        +
+                        '<p><b>Date</b>: ' + dateFormat(new Date(), 'shortDate') + '</p>'
+                        +
+                        '<p><b>Equipment Number</b>: ' + gpresult.equipment_number + '</p>'
+                        +
+                        '<p><b>Equipment Name</b>: ' + gpresult.equipment_name + '</p>'
+                        +
+                        '<p><b>Part Number</b>: ' + gpresult.equipments.material_number + '</p>'
+                        +
+                        '<p><b>Part Description</b>: ' + gpresult.equipments.material_description + '</p>'
+                        +
+                        '<p><b>Vendor Name</b>: ' + gpresult.equipments.vendor_name + '</p>'
+                        +
+                        '<p><b>Vendor Number</b>: ' + gpresult.equipments.vendor_number + '</p>'
+                        +
+                        '<p><b>Technician Name</b>: ' + username.firstname + " " + username.lastname + '</p>'
+                        +
+                        '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Part request</p>'
+
+                    };
+                    transporter.sendMail(mailData, function (err, info) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        console.log('Message sent successfully!');
+
+                    });
+                }
             });
+
         } else {
             res.json({Code: 406, Info: 'provide details are wrong.'});
         }
