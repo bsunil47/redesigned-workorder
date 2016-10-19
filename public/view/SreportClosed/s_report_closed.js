@@ -52,25 +52,41 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
             $location.path("/");
         };
 
+        $scope.showDetails = function () {
+            console.log('ad');
+        }
 
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         };
 
         $scope.$watch("datefrom", function (newValue, oldValue) {
+            $scope.submitDisable = true;
             if (!angular.isUndefined($scope.datefrom)) {
-                $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
-                $scope.minDate = new Date($scope.datefrom);
-                $scope.submitDisable = false;
-            } else {
-                $scope.submitDisable = true;
+                if (isDate($scope.datefrom) && new Date($scope.datefrom).valueOf() > 0) {
+                    console.log($scope.datefrom);
+                    $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
+                    $scope.minDate = new Date($scope.datefrom);
+                    $scope.submitDisable = false;
+                } else {
+                    $scope.datefrom = "";
+                }
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.dateto)) {
-                $scope.workOrder.wo_dateto = new Date($scope.dateto).valueOf();
-                $scope.maxDate = new Date($scope.dateto);
+                if (isDate($scope.dateto) && new Date($scope.dateto).valueOf() > 0) {
+                    $scope.workOrder.wo_dateto = new Date($scope.dateto).valueOf();
+                    $scope.maxDate = new Date($scope.dateto);
+                } else {
+                    $scope.dateto = "";
+                    $scope.workOrder.wo_dateto = "";
+                }
             }
         })
 
     }]);
+
+var isDate = function (date) {
+    return (new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) ) ? true : false;
+}
