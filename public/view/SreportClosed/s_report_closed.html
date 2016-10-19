@@ -47,7 +47,7 @@
                                             <md-content layout-padding>
                                                 <div layout-gt-xs="row">
                                                     <div flex-gt-xs>
-                                                        <md-datepicker ng-model="datefrom"
+                                                        <md-datepicker onkeydown="return false" ng-model="datefrom"
                                                                        md-max-date="maxDate"
                                                                        md-placeholder="Enter date"
                                                                        ng-disabled="disableDateCompleted"
@@ -67,7 +67,7 @@
                                             <md-content layout-padding>
                                                 <div layout-gt-xs="row">
                                                     <div flex-gt-xs>
-                                                        <md-datepicker md-min-date="minDate"
+                                                        <md-datepicker onkeydown="return false" md-min-date="minDate"
                                                                        md-max-date="maxDate"
                                                                        ng-model="dateto"
                                                                        md-placeholder="Enter date"
