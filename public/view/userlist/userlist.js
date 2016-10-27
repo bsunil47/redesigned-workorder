@@ -15,7 +15,11 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
   }
   var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            $window.history.back();
+            if (userdetail.role == 'manager') {
+                $window.history.back();
+            } else {
+                $location.path("/");
+            }
         };
   $scope.showRole = function(role_id){
     var found = $filter('getById')('_id', role_id, $scope.user_list.roles);

@@ -35,7 +35,11 @@ angular.module('PGapp.statuslist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path("/");
         };
         $scope.redirectLoc = function (reloc) {
-            $location.path(reloc);
+            if (userdetail.role == 'manager') {
+                $window.history.back();
+            } else {
+                $location.path("/");
+            }
         };
         var facilities = $cookies.getObject('facilities');
         $scope.showFacility = function (facility_number) {

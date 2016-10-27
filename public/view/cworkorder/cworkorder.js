@@ -13,7 +13,11 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
   $scope.CreateWorkOrder = CreateWorkOrder;
   var userdetail = $cookies.getObject('userDetails');
       $scope.redirectBack = function (reloc) {
-        $window.history.back();
+        if (userdetail.role == 'manager') {
+          $window.history.back();
+        } else {
+          $location.path("/");
+        }
       };
   $scope.workOrder = {
     workorder_number: "",
