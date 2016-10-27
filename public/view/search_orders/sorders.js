@@ -34,7 +34,11 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
          };*/
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            $window.history.back();
+            if (userdetail.role == 'manager') {
+                $window.history.back();
+            } else {
+                $location.path("/");
+            }
         };
         $scope.facilities = $cookies.getObject('facilities');
         $scope.selected_facility = $scope.facilities[0].facility_number;

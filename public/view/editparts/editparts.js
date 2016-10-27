@@ -27,7 +27,11 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         };
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            $window.history.back();
+            if (userdetail.role == 'manager') {
+                $window.history.back();
+            } else {
+                $location.path("/");
+            }
         };
 
         $scope.Logout = function () {

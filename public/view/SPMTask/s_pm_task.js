@@ -26,7 +26,11 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            $window.history.back();
+            if (userdetail.role == 'manager') {
+                $window.history.back();
+            } else {
+                $location.path("/");
+            }
         };
         API.Facilities.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {

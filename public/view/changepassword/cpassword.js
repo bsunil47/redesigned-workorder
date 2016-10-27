@@ -16,7 +16,11 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
   }
   userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
+          if (userdetail.role == 'manager') {
             $window.history.back();
+          } else {
+            $location.path("/");
+          }
         };
   $scope.user = {
     id:userdetail.user._id,
