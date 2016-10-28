@@ -11,7 +11,15 @@ angular.module('PGapp.dashboard', ['ngRoute','ngAnimate', 'ngCookies'])
 }])
 
 .controller('DashboardCtrl', ["$scope","$cookies","$location",'API',function($scope,$cookies,$location,API) {
-
+    /**
+     * Event-Listner for Back-Button
+     */
+    $scope.$on('$locationChangeStart', function (event, next, current) {
+        // Here you can take the control and call your own functions:
+        ///alert('Sorry ! Back Button is disabled');
+        // Prevent the browser default action (Going back):
+        event.preventDefault();
+    });
   if(!$cookies.get('userDetails')){
     $location.path('login');
   }
