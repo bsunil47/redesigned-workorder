@@ -34,6 +34,17 @@ angular.module('PGapp.statuslist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $cookies.remove('userDetails');
             $location.path("/");
         };
+        $scope.$on('$locationChangeStart', function (event, next, current) {
+            // Here you can take the control and call your own functions:
+            ///alert('Sorry ! Back Button is disabled');
+            // Prevent the browser default action (Going back):
+            if (userdetail.role == 'manager') {
+                $window.history.back();
+            } else {
+                $location.path("/");
+            }
+            event.preventDefault();
+        });
         $scope.redirectLoc = function (reloc) {
             if (userdetail.role == 'manager') {
                 $window.history.back();
