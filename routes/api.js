@@ -1605,7 +1605,7 @@ router.post('/get_search_wo', function (req, res, next) {
         if (typeof req.body.wo_pm_date_to === "undefined") {
             var created_on = dateFormat(new Date(), 'yyyymmdd');
         } else {
-            var created_on = dateFormat(new Date(req.body.wo_datecomplete_to), 'yyyymmdd');
+            var created_on = dateFormat(new Date(req.body.wo_pm_date_to), 'yyyymmdd');
             delete query['wo_pm_date_to'];
         }
         query.wo_pm_date = {
