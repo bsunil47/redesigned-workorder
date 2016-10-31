@@ -34,18 +34,19 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
          };*/
         var userdetail = $cookies.getObject('userDetails');
 
-        $scope.$on('$locationChangeStart', function (event, next, current) {
-            // Here you can take the control and call your own functions:
-            ///alert('Sorry ! Back Button is disabled');
-            // Prevent the browser default action (Going back):
-            if (userdetail.role == 'manager') {
-                $window.history.back();
-            } else {
-                $location.path("/");
-            }
 
-        });
         $scope.redirectBack = function (reloc) {
+            $scope.$on('$locationChangeStart', function (event, next, current) {
+                // Here you can take the control and call your own functions:
+                ///alert('Sorry ! Back Button is disabled');
+                // Prevent the browser default action (Going back):
+                if (userdetail.role == 'manager') {
+                    $window.history.back();
+                } else {
+                    $location.path("/");
+                }
+
+            });
             if (userdetail.role == 'manager') {
                 $window.history.back();
             } else {
