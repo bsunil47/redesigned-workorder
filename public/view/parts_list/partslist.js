@@ -72,9 +72,9 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                     qty: $scope.p.qty[part.material_number],
                     user_id: userdetail.user._id,
                 };
-
+                console.log($scope.p.workorder);
                 if (!angular.isUndefined($scope.p.workorder)) {
-                    set.workorder_number = $scope.p.workorder[part];
+                    set.workorder_number = $scope.p.workorder[part.material_number];
                 }
                 API.CreatePartsRequest.Recent(set, function (res) {
                     if (res.Code == 200) {
