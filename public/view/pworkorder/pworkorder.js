@@ -16,11 +16,7 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
         var currentId = $routeParams.id;
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            if (userdetail.role == 'manager') {
-                $window.history.back();
-            } else {
                 $location.path("/");
-            }
         };
         $scope.facilities = $cookies.getObject('facilities');
         //$scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;

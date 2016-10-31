@@ -1194,7 +1194,7 @@ router.post('/manager_workorder', function (req, res, next) {
                                 query = {
                                     workorder_number: {$in: list_workorders}
                                 };
-                                query.status = 1;
+                                query.status = {$in: [1, 3]};
                                 console.log(query);
                                 WorkOrder.find(query, {}, {
                                     sort: {
@@ -1213,7 +1213,7 @@ router.post('/manager_workorder', function (req, res, next) {
                             }
                         });
                     } else {
-                        query.status = 1;
+                        query.status = {$in: [1, 3]};
                         WorkOrder.find(query, {}, {
                             sort: {
                                 _id: -1 //Sort by Date Added DESC

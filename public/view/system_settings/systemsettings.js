@@ -18,7 +18,7 @@ angular.module('PGapp.systemsettings', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path("/");
         };
         $scope.redirectBack = function (reloc) {
-            if (userdetail.role == 'manager') {
+            if (userdetail.role == 'manager' || userdetail.role == 'admin') {
                 $window.history.back();
             } else {
                 $location.path("/");

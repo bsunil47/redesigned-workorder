@@ -16,10 +16,10 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         $scope.workOrder = {};
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            if (userdetail.role == 'manager') {
+            if (userdetail.role == 'manager' || userdetail.role == 'admin') {
                 $window.history.back();
             } else {
-                $location.path(reloc);
+                $location.path("/");
             }
         };
         $scope.facilities = $cookies.getObject('facilities');

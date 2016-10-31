@@ -17,11 +17,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         var currentId = parseInt($routeParams.id);
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            if (userdetail.role == 'manager') {
-                $window.history.back();
-            } else {
-                $location.path("/");
-            }
+            $window.history.back();
+
         };
         var workorder_created_on;
         var wo_pm_date;
