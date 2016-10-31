@@ -322,7 +322,18 @@ router.post('/report_category', function (req, res, next) {
             });
 
         } else {
-            res.redirect(fullUrl + "/#!/search_closed_report");
+            var obj = {
+                cat: cat,
+                url: fullUrl,
+                date: today,
+                search: search_date,
+                data: []
+            };
+            var renderedHtml = nunjucks.render('./view/ReportClosedWorkOrder/report_closed.html', obj);
+            pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
+                stream.pipe(res);
+            });
+            //res.redirect(fullUrl + "/#!/search_closed_report");
         }
 
     });
