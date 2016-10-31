@@ -1484,8 +1484,10 @@ router.post('/get_user_details', function (req, res, next) {
             var tempstr = JSON.stringify(result).slice(1, -1);
             userd = JSON.parse(tempstr);
             var queryud;
-
-            if (userd.roles[0].role_name == "manager") {
+            /*
+             * untill all managers are added facility_mangers list
+             */
+            if (userd.roles[0].role_name == "manager1") {
                 queryud = {facility_managers: {$elemMatch: {user_id: userd._id, email: userd.email}}};
             } else {
                 queryud = {facility_users: {$elemMatch: {user_id: userd._id, email: userd.email}}};
