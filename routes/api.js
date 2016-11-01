@@ -1918,7 +1918,7 @@ var createWorkOrderPM = function (task) {
                                         //text: 'Hello to sunil',
 
                                         // HTML body
-                                        html: '<p>New PM Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
+                                        html: '<b><p>New PM Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
                                         +
                                         '<p><b>Work Order Details</b></p>'
                                         +
