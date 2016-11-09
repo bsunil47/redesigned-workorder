@@ -17,11 +17,8 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         var currentId = parseInt($routeParams.id);
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            if (userdetail.role == 'manager') {
-                $window.history.back();
-            } else {
-                $location.path("/");
-            }
+            $window.history.back();
+
         };
         var workorder_created_on;
         var wo_pm_date;
@@ -475,6 +472,22 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 $scope.reqPMTask = false;
                 $scope.workOrder.wo_pm_frequency = "";
             }
+        });
+        $scope.$watch("workOrder.status", function (newValue, oldValue) {
+            if (userdetail.role == 'technician') {
+                if ($scope.workOrder.status == 3) {
+                    $scope.reqCost = false;
+                    $scope.reqDateComplete = false;
+                    $scope.reqTimeSpent = false;
+                    $scope.reqActionTaken = false;
+                } else {
+                    $scope.reqCost = true;
+                    $scope.reqDateComplete = true;
+                    $scope.reqTimeSpent = true;
+                    $scope.reqActionTaken = true;
+                }
+            }
+
         });
         $scope.$watch("workOrder.wo_equipmentcost", function (newValue, oldValue) {
             if ($scope.workOrder.wo_equipmentcost < 0) {

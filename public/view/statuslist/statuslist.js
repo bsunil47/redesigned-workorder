@@ -15,7 +15,12 @@ angular.module('PGapp.statuslist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            $window.history.back();
+            if (userdetail.role == 'manager' || userdetail.role == 'admin') {
+                $window.history.back();
+            } else {
+                $location.path("/");
+            }
+
         };
         API.Status.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
@@ -35,11 +40,7 @@ angular.module('PGapp.statuslist', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path("/");
         };
         $scope.redirectLoc = function (reloc) {
-            if (userdetail.role == 'manager') {
-                $window.history.back();
-            } else {
-                $location.path("/");
-            }
+            $location.path(reloc);
         };
         var facilities = $cookies.getObject('facilities');
         $scope.showFacility = function (facility_number) {

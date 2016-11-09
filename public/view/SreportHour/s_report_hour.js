@@ -21,7 +21,7 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            if (userdetail.role == 'manager') {
+            if (userdetail.role == 'manager' || userdetail.role == 'admin') {
                 $window.history.back();
             } else {
                 $location.path("/");

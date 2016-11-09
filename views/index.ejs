@@ -51,6 +51,13 @@
 <script src="bower-components/ng-dialog/js/ngDialog.min.js"></script>
 <script src="bower-components/angularPrint/angularPrint.js"></script>
 <!--<script src="bower-components/ngPrint/ngPrint.min.js"></script>-->
+<script>
+    // *** Author: Wael Sidawi
+    // ****  Deactive Back Button ****
+    var history_api = typeof history.pushState !== 'undefined';
+    // history.pushState must be called out side of AngularJS Code
+    if (history_api) history.pushState(null, '', '');
+</script>
 
 <script src="/javascripts/appMain.js"></script>
 <script src="/javascripts/commonFactory.js"></script>

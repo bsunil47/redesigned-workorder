@@ -268,7 +268,7 @@ router.post('/create_workorder', function (req, res, next) {
                                         //text: 'Hello to sunil',
 
                                         // HTML body
-                                        html: '<p>New Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
+                                        html: '<b><p>New Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
                                         +
                                         '<p><b>Work Order Details</b></p>'
                                         +
@@ -777,7 +777,7 @@ router.post('/createparts', function (req, res, next) {
     if (!req.body.equipment_name || !req.body.equipment_number || !req.body.part_number || !req.body.part_name || !req.body.vendor_number || !req.body.vendor_name || !req.body.min_qty || !req.body.max_qty) {
         return res.json({Code: 496, Info: 'All fields are required'});
     }
-    if (req.body.min_qty > req.body.max_qty) {
+    if (parseInt(req.body.min_qty) > parseInt(req.body.max_qty)) {
         return res.json({Code: 495, Info: 'Min Qty cant be greater than Max Qty'});
     }
     Equipment.findOne({
@@ -1194,7 +1194,7 @@ router.post('/manager_workorder', function (req, res, next) {
                                 query = {
                                     workorder_number: {$in: list_workorders}
                                 };
-                                query.status = 1;
+                                query.status = {$in: [1, 3]};
                                 console.log(query);
                                 WorkOrder.find(query, {}, {
                                     sort: {
@@ -1213,7 +1213,7 @@ router.post('/manager_workorder', function (req, res, next) {
                             }
                         });
                     } else {
-                        query.status = 1;
+                        query.status = {$in: [1, 3]};
                         WorkOrder.find(query, {}, {
                             sort: {
                                 _id: -1 //Sort by Date Added DESC
@@ -1484,8 +1484,10 @@ router.post('/get_user_details', function (req, res, next) {
             var tempstr = JSON.stringify(result).slice(1, -1);
             userd = JSON.parse(tempstr);
             var queryud;
-
-            if (userd.roles[0].role_name == "manager") {
+            /*
+             * untill all managers are added facility_mangers list
+             */
+            if (userd.roles[0].role_name == "manager1") {
                 queryud = {facility_managers: {$elemMatch: {user_id: userd._id, email: userd.email}}};
             } else {
                 queryud = {facility_users: {$elemMatch: {user_id: userd._id, email: userd.email}}};
@@ -1603,15 +1605,15 @@ router.post('/get_search_wo', function (req, res, next) {
         if (typeof req.body.wo_pm_date_to === "undefined") {
             var created_on = dateFormat(new Date(), 'yyyymmdd');
         } else {
-            var created_on = dateFormat(new Date(req.body.wo_datecomplete_to), 'yyyymmdd');
+            var created_on = dateFormat(new Date(req.body.wo_pm_date_to), 'yyyymmdd');
             delete query['wo_pm_date_to'];
         }
-        pMquery.pm_next_date = {
+        query.wo_pm_date = {
             '$gte': dateFormat(new Date(req.body.wo_pm_date_from), 'yyyymmdd'),
             '$lte': created_on
         };
         delete query['wo_pm_date_from'];
-        PM.find(pMquery, function (err, pm) {
+        /*PM.find(pMquery, function (err, pm) {
             if (err) {
                 return next(err)
             }
@@ -1637,10 +1639,9 @@ router.post('/get_search_wo', function (req, res, next) {
                     res.json({Code: 406, Info: 'No Users'});
                 }
             });
-        });
-
-
-    } else {
+         });*/
+    }
+    //else {
         console.log(query);
         WorkOrder.find(query, {}, {
             sort: {
@@ -1656,7 +1657,7 @@ router.post('/get_search_wo', function (req, res, next) {
                 res.json({Code: 406, Info: 'No Users'});
             }
         });
-    }
+    // }
 
 });
 
@@ -1749,7 +1750,7 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
         //text: 'Hello to sunil',
 
         // HTML body
-        html: '<p>Maintenace Work Order number <b>' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</b>' + last_message + '</p>'
+        html: '<b><p>Maintenace Work Order number <b>' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</b>' + last_message + '</p>'
         +
         '<p><b>Work Order Details</b></p>'
         +
@@ -1917,7 +1918,7 @@ var createWorkOrderPM = function (task) {
                                         //text: 'Hello to sunil',
 
                                         // HTML body
-                                        html: '<p>New PM Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
+                                        html: '<b><p>New PM Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
                                         +
                                         '<p><b>Work Order Details</b></p>'
                                         +
@@ -2058,7 +2059,7 @@ function mail(mail_to, req) {
                         //text: 'Hello to sunil',
 
                         // HTML body
-                        html: '<p>Parts Request raised for following equipment<b>'
+                        html: '<b><p>Parts Request raised for following equipment</p>'
                         +
                         '<p><b>Work Order Number</b>: ' + wo_number + '</p>'
                         +

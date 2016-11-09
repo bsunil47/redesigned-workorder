@@ -13,12 +13,13 @@ angular.module('PGapp.systemsettings', ['ngRoute', 'ngAnimate', 'ngCookies'])
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
+        var userdetail = $cookies.getObject('userDetails');
         $scope.Logout = function () {
             $cookies.remove('userDetails');
             $location.path("/");
         };
         $scope.redirectBack = function (reloc) {
-            if (userdetail.role == 'manager') {
+            if (userdetail.role == 'manager' || userdetail.role == 'admin') {
                 $window.history.back();
             } else {
                 $location.path("/");
