@@ -73,7 +73,7 @@
                                 <p>
                                     <button type="submit" ng-click="CreateCategory()" class="btn btn-primary"
                                             ng-disabled="CreateCategoryForm.category_name.$dirty && CreateCategoryForm.category_name.$invalid ||
- CreateCategoryForm.facility_number.$dirty && CreateCategoryForm.facility_number.$invalid">Save
+ CreateCategoryForm.facility_number.$dirty && CreateCategoryForm.facility_number.$invalid &&  disableSubmit">Save
                                     </button>
                                     <button ng-click="clearForm()" class="btn btn-primary">Clear</button>
                                 </p>

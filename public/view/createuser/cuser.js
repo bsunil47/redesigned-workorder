@@ -49,9 +49,10 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
       $cookies.remove('userDetails');
     $location.path("/");
   };
-
+        $scope.disableSubmit = false;
   function CreateUser(){
     $scope.user._v = 0;
+      $scope.disableSubmit = true;
     if($scope.CreateUserForm.firstname.$valid && $scope.CreateUserForm.lastname.$valid){
       $scope.user_id = API.Create.User($scope.user,function(res){
         if(res.Code == 200){
@@ -69,6 +70,7 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
             width: "450px",
             confirmButtonText: 'Ok'
           });
+            $scope.disableSubmit = false;
         }
       },function (error) {
           swal({
@@ -77,6 +79,7 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
               width: "450px",
               confirmButtonText: 'Ok'
           });
+          $scope.disableSubmit = false;
       });
     }
   }

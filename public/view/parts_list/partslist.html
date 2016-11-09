@@ -74,7 +74,7 @@
                                     <td><input type="text" class="form-control"
                                                ng-model="p.workorder[part.material_number]"></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary"
+                                        <button type="button" class="btn btn-primary" ng-disabled="disableSubmit"
                                                 ng-click="createPartRequest(part)">Create PR
                                         </button>
                                     </td>

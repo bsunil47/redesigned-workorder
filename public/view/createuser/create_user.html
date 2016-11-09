@@ -105,7 +105,8 @@
                                     CreateUserForm.email.$dirty && CreateUserForm.email.$invalid ||
                                     CreateUserForm.password.$dirty && CreateUserForm.password.$invalid ||
                                     CreateUserForm.userrole.$dirty && CreateUserForm.userrole.$invalid ||
-                                    CreateUserForm.facility.$dirty && CreateUserForm.facility.$invalid">Save
+                                    CreateUserForm.facility.$dirty && CreateUserForm.facility.$invalid && disableSubmit">
+                                        Save
                                     </button>
                                     <button class="btn btn-primary" ng-click="clearForm()">Clear</button>
                                 </p>

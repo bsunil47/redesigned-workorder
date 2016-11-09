@@ -31,7 +31,7 @@
                 <div class="col-sm-12">
                     <!-- Main container start -->
                     <div class="main-container clearfix">
-                        <div class="col-sm-12 text-right"><a ng-click="redirectBack('dashboard')"
+                        <div class="col-sm-12 text-right"><a ng-click="redirectBack('search_workorder')"
                                                              class="btn btn-primary">Back</a></div>
                         <h1>{{workOrderTitle}}</h1>
                         <!-- Edit work order form start -->
@@ -217,7 +217,7 @@
                                             <select required class="form-control" ng-disabled="true"
                                                     ng-model="workOrder.workorder_technician"
                                                     name="workorder_technician"
-                                                    ng-options='technician._id as technician.username for technician in technicians'
+                                                    ng-options='technician._id as technician.firstname +" "+ technician.lastname for technician in technicians'
                                                     ng-change="selectAction()"
                                                     required
                                             >

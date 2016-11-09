@@ -61,9 +61,9 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
         }
       });
       $scope.p = [];
-
+        $scope.disableSubmit = false;
       $scope.createPartRequest = function (part) {
-
+          $scope.disableSubmit = true;
         if (!angular.isUndefined($scope.p.qty)) {
             if ($scope.p.qty[part.material_number] >= part.min_qty && $scope.p.qty[part.material_number] <= part.max_qty) {
                 var set = {
@@ -88,7 +88,9 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         $location.path("/parts_list");
+
                     } else {
                         swal({
                             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
@@ -96,11 +98,13 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
                     alert(error);
                 });
+
             } else {
                 swal({
                     title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
@@ -109,7 +113,7 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                     confirmButtonText: 'Ok'
                 });
             }
-
+            $scope.disableSubmit = false;
         } else {
           swal({
             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
@@ -117,6 +121,7 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
             width: "450px",
             confirmButtonText: 'Ok'
           });
+            $scope.disableSubmit = false;
         }
 
       }

@@ -16,7 +16,7 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
         var currentId = $routeParams.id;
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-                $location.path("/");
+            $location.path(reloc);
         };
         $scope.facilities = $cookies.getObject('facilities');
         //$scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
@@ -305,7 +305,7 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
             if (angular.isUndefined(found) || found === null) {
                 return null;
             }
-            return found.firstname;
+            return found.firstname + " " + found.lastname;
         }
 
         $scope.showSkill = showSkill;
@@ -360,7 +360,7 @@ angular.module('PGapp.workorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMater
             if (angular.isUndefined(found) || found === null) {
                 return null;
             }
-            return found.firstname;
+            return found.firstname + " " + found.lastname;
         }
 
         $scope.showWithzeros = showWithzeros;

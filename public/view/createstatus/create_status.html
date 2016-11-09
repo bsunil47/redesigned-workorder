@@ -64,7 +64,7 @@
                                 <p>
                                     <button type="submit" ng-click="CreateStatus()" class="btn btn-primary"
                                             ng-disabled="CreateStatusForm.status_name.$dirty && CreateStatusForm.status_name.$invalid ||
-  CreateStatusForm.facility_number.$dirty && CreateStatusForm.facility_number.$invalid">Save
+  CreateStatusForm.facility_number.$dirty && CreateStatusForm.facility_number.$invalid &&  disableSubmit">Save
                                     </button>
                                     <button ng-click="clearForm()" class="btn btn-primary">Clear</button>
                                 </p>

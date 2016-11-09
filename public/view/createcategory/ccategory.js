@@ -46,9 +46,11 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }, function (error) {
             alert(error);
         });
-
+        $scope.disableSubmit = false;
         function CreateCategory() {
+            $scope.disableSubmit = true;
             if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {
+
                 $scope.category_id = API.CreateCategory.Category($scope.category, function (res) {
                     if (res.Code == 200) {
                         swal({
@@ -65,6 +67,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -74,6 +77,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

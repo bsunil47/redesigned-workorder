@@ -147,11 +147,12 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         alert(error);
       });
 
-
+        $scope.disableSubmit = false;
 
 
   function CreateWorkOrder() {
     if ($scope.CreateWorkOrderForm.workorder_description.$valid && $scope.CreateWorkOrderForm.workorder_category.$valid && $scope.CreateWorkOrderForm.workorder_equipment.$valid && $scope.CreateWorkOrderForm.workorder_priority.$valid) {
+        $scope.disableSubmit = true;
       var data_post = $scope.workOrder;
       $scope.user_id = API.CreateWorkOrder.save(data_post, function (res) {
         if (res.Code == 200) {
@@ -169,6 +170,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             width: "450px",
             confirmButtonText: 'Ok'
           });
+            $scope.disableSubmit = false;
           $scope.CreateWorkOrderForm.workorder_description.error = true;
         }
       }, function (error) {
@@ -178,6 +180,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
           width: "450px",
           confirmButtonText: 'Ok'
         });
+          $scope.disableSubmit = false;
       });
     }
   }

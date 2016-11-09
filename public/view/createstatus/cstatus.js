@@ -45,7 +45,9 @@ angular.module('PGapp.createstatus', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }, function (error) {
             alert(error);
         });
+        $scope.disableSubmit = false;
         function CreateStatus() {
+            $scope.disableSubmit = true;
             if ($scope.CreateStatusForm.status_name.$valid && $scope.CreateStatusForm.facility_number.$valid) {
                 $scope.status_id = API.CreateStatus.Status($scope.status, function (res) {
                     if (res.Code == 200) {
@@ -63,6 +65,7 @@ angular.module('PGapp.createstatus', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -72,6 +75,7 @@ angular.module('PGapp.createstatus', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

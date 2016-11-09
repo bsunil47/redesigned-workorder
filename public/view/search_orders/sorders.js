@@ -15,17 +15,6 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         }
         $scope.workOrder = {};
         var userdetail = $cookies.getObject('userDetails');
-        $scope.$on('$locationChangeStart', function (event, next, current) {
-            // Here you can take the control and call your own functions:
-            ///alert('Sorry ! Back Button is disabled');
-            // Prevent the browser default action (Going back):
-            if (userdetail.role == 'manager') {
-                $window.history.back();
-            } else {
-                $location.path("/");
-            }
-
-        });
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
                 $window.history.back();
@@ -314,7 +303,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             if (angular.isUndefined(found) || found === null) {
                 return null;
             }
-            return found.firstname;
+            return found.firstname + " " + found.lastname;
         }
 
         $scope.showSkill = showSkill;
@@ -369,7 +358,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             if (angular.isUndefined(found) || found === null) {
                 return null;
             }
-            return found.firstname;
+            return found.firstname + " " + found.lastname;
         }
 
         function isNullOrEmptyOrUndefined(value) {
