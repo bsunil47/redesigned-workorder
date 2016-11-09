@@ -51,17 +51,22 @@ router.post('/', function (req, res, next) {
     };
     var search_to = "";
     console.log(req.body.wo_datefrom);
-    if ((req.body.wo_datefrom != "" ) && (req.body.wo_dateto != "")) {
+    if ((req.body.wo_datefrom != "" )) {
+        if (req.body.wo_dateto != "") {
+            var to_date = parseInt(req.body.wo_dateto);
+        } else {
+            var to_date = new Date();
+        }
         query = {
             wo_timespent: {$exists: true, $nin: ["", null, 'NaN']},
             wo_datecomplete: {
                 '$gte': dateFormat(parseInt(req.body.wo_datefrom), 'yyyymmdd'),
-                '$lte': dateFormat(parseInt(req.body.wo_dateto), 'yyyymmdd')
+                '$lte': dateFormat(to_date, 'yyyymmdd')
             }
         };
         search_date = {
             'from': dateFormat(parseInt(req.body.wo_datefrom), 'shortDate'),
-            'to': dateFormat(parseInt(req.body.wo_dateto), 'shortDate')
+            'to': dateFormat(to_date, 'shortDate')
         }
     }
     var qr = {};
@@ -230,19 +235,24 @@ router.post('/report_category', function (req, res, next) {
         'to': ""
     };
 
-    if ((req.body.wo_datefrom != "") && (req.body.wo_dateto != "")) {
+    if ((req.body.wo_datefrom != "")) {
+        if (req.body.wo_dateto != "") {
+            var to_date = parseInt(req.body.wo_dateto);
+        } else {
+            var to_date = new Date();
+        }
         query = {
             status: 2,
             wo_datecomplete: {
                 $exists: true, $nin: ["", null, 'NaN'],
                 '$gte': dateFormat(parseInt(req.body.wo_datefrom), 'yyyymmdd'),
-                '$lte': dateFormat(parseInt(req.body.wo_dateto), 'yyyymmdd')
+                '$lte': dateFormat(to_date, 'yyyymmdd')
 
             }
         };
         search_date = {
             'from': dateFormat(parseInt(req.body.wo_datefrom), 'shortDate'),
-            'to': dateFormat(parseInt(req.body.wo_dateto), 'shortDate')
+            'to': dateFormat(to_date, 'shortDate')
         }
     }
     var cat = 'All';
@@ -312,7 +322,18 @@ router.post('/report_category', function (req, res, next) {
             });
 
         } else {
-            res.redirect(fullUrl + "/#!/search_closed_report");
+            var obj = {
+                cat: cat,
+                url: fullUrl,
+                date: today,
+                search: search_date,
+                data: []
+            };
+            var renderedHtml = nunjucks.render('./view/ReportClosedWorkOrder/report_closed.html', obj);
+            pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
+                stream.pipe(res);
+            });
+            //res.redirect(fullUrl + "/#!/search_closed_report");
         }
 
     });
@@ -324,20 +345,30 @@ router.post('/report_category', function (req, res, next) {
 router.post('/report_pm', function (req, res, next) {
     console.log('request made....print PM ');
     var today = new Date();
+    var search_date = {
+        'from': "",
+        'to': ""
+    };
     var fullUrl = req.protocol + '://' + req.get('host');
     var query = {
         workorder_PM: {$exists: true}
     };
     if ((req.body.wo_datefrom != "")) {
         if (req.body.wo_dateto == "") {
+            var to_date = new Date();
             var created_on = dateFormat(new Date(), 'yyyymmdd');
         } else {
+            var to_date = parseInt(req.body.wo_dateto);
             var created_on = dateFormat(parseInt(req.body.wo_dateto), 'yyyymmdd');
         }
         query.wo_pm_date = {
             '$gte': dateFormat(parseInt(req.body.wo_datefrom), 'yyyymmdd'),
             '$lte': created_on
         };
+        search_date = {
+            'from': dateFormat(parseInt(req.body.wo_datefrom), 'shortDate'),
+            'to': dateFormat(to_date, 'shortDate')
+        }
     }
     console.log(query);
     WorkOrder.find(query, {}, {
@@ -393,7 +424,8 @@ router.post('/report_pm', function (req, res, next) {
                 var obj = {
                     url: fullUrl,
                     date: today,
-                    data: v_result
+                    data: v_result,
+                    search: search_date,
                 };
                 var renderedHtml = nunjucks.render('./view/ReportPMTask/report_hour.html', obj);
                 pdf.create(renderedHtml, {

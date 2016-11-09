@@ -14,24 +14,6 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             $location.path('login');
         }
         $scope.workOrder = {};
-        /*$scope.workOrder = {
-            workorder_number: "",
-            workorder_creator: "",
-            workorder_faciity: "",
-            workorder_category: "",
-            workorder_equipment: "",
-            workorder_priority: "",
-            workorder_skill: "",
-            workorder_technician: "",
-            workorder_class: "",
-            wo_goodsreceipt: "",
-            wo_equipmentcost: "",
-            wo_datecomplete: "",
-            workorder_description: "",
-            workorder_leadcomments: "",
-            workorder_actiontaken: "",
-            wo_pm_number: "",
-         };*/
         var userdetail = $cookies.getObject('userDetails');
         $scope.$on('$locationChangeStart', function (event, next, current) {
             // Here you can take the control and call your own functions:
@@ -45,7 +27,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
 
         });
         $scope.redirectBack = function (reloc) {
-            if (userdetail.role == 'manager') {
+            if (userdetail.role == 'manager' || userdetail.role == 'admin') {
                 $window.history.back();
             } else {
                 $location.path("/");
