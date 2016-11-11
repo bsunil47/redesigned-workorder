@@ -18,7 +18,7 @@ angular.module('PGapp.reportdashboard', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
