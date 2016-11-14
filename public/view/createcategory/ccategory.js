@@ -50,7 +50,9 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         function CreateCategory() {
             $scope.disableSubmit = true;
             if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {
-
+                if (!angular.isUndefined($scope.category.operator_available) && $scope.category.operator_available == false) {
+                    delete ($scope.category.operator_available);
+                }
                 $scope.category_id = API.CreateCategory.Category($scope.category, function (res) {
                     if (res.Code == 200) {
                         swal({
