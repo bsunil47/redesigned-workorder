@@ -230,7 +230,7 @@
                             <div class="text-center clearfix">
                                 <p>
                                     <button type="submit" class="btn btn-primary" ng-click="CreateWorkOrder()"
-                                            ng-disabled="CreateWorkOrderForm.workorder_description.$dirty && CreateWorkOrderForm.workorder_description.$invalid && CreateWorkOrderForm.workorder_category.$invalid && CreateWorkOrderForm.workorder_priority.$invalid && CreateWorkOrderForm.workorder_equipment.$invalid && disableSubmit">
+                                            ng-disabled="(CreateWorkOrderForm.workorder_description.$dirty && CreateWorkOrderForm.workorder_description.$invalid) || (CreateWorkOrderForm.workorder_category.$invalid) || (CreateWorkOrderForm.workorder_priority.$invalid) || (CreateWorkOrderForm.workorder_equipment.$invalid) || disableSubmit">
                                         Save
                                     </button>
                                     <button type="button" class="btn btn-primary" ng-click="clearForm()">Clear</button>
