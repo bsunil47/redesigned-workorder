@@ -787,31 +787,32 @@ router.post('/createparts', function (req, res, next) {
         if (err) {
             return next(err);
         }
-
-        var pequipments = new Equipment({
-            equipment_name: req.body.equipment_name,
+        var Qery = {
             equipment_number: req.body.equipment_number,
-            material_number: req.body.part_number,
-            material_description: req.body.part_name,
-            vendor_number: req.body.vendor_number,
-            vendor_name: req.body.vendor_name,
-            min_qty: req.body.min_qty,
-            max_qty: req.body.max_qty,
-            //equipment_vendorname: req.body.equipment_vendorname,
-            status: 1
-        });
-        var upsertData = pequipments.toObject();
+            'equipments.material_number': {$regex: new RegExp('^' + req.body.part_number + '$', "i")},
+            'equipments.vendor_number': req.body.vendor_number
+        };
 
-        Equipment.count({
-            equipment_number: req.body.equipment_number, equipments: {
-                material_number: {$regex: new RegExp('^' + req.body.part_number + '$', "i")},
-                vendor_number: req.body.vendor_number,
-            }
-        }, function (err, count) {
+        console.log(Qery);
+        Equipment.count(Qery
+            , function (err, count) {
             if (count) {
-                res.json({Code: 200, Info: 'Part Number already exists'});
+                res.json({Code: 499, Info: 'Part Number already exists'});
             }
             else {
+                var pequipments = new Equipment({
+                    equipment_name: req.body.equipment_name,
+                    equipment_number: req.body.equipment_number,
+                    material_number: req.body.part_number,
+                    material_description: req.body.part_name,
+                    vendor_number: req.body.vendor_number,
+                    vendor_name: req.body.vendor_name,
+                    min_qty: req.body.min_qty,
+                    max_qty: req.body.max_qty,
+                    //equipment_vendorname: req.body.equipment_vendorname,
+                    status: 1
+                });
+                var upsertData = pequipments.toObject();
                 Equipment.update({equipment_number: req.body.equipment_number}, pequipments, {upsert: true}, function (err, resp) {
                     console.log("Session1: " + JSON.stringify(err));
                     if (err) {
