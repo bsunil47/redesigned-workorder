@@ -803,13 +803,9 @@ router.post('/createparts', function (req, res, next) {
         var upsertData = pequipments.toObject();
 
         Equipment.count({
-            equipment_number: req.body.equipment_number, equipment_name: req.body.equipment_name, equipments: {
+            equipment_number: req.body.equipment_number, equipments: {
                 material_number: {$regex: new RegExp('^' + req.body.part_number + '$', "i")},
-                material_description: req.body.part_name,
                 vendor_number: req.body.vendor_number,
-                vendor_name: req.body.vendor_name,
-                min_qty: req.body.min_qty,
-                max_qty: req.body.max_qty
             }
         }, function (err, count) {
             if (count) {
@@ -920,6 +916,7 @@ router.post('/get_parts', function (req, res, next) {
         {
             $match: {
                 "equipments.material_number": req.body.part_number,
+                "equipments.vendor_number": req.body.vendor_number,
 
             }
         },
@@ -956,28 +953,27 @@ router.post('/edit_parts', function (req, res, next) {
     Equipment.count({
         _id: req.body._id,
         equipment_number: req.body.equipment_number,
-        equipment_name: req.body.equipment_name,
         "equipments.material_number": req.body.material_number,
-        "equipments.min_qty": req.body.min_qty,
-        "equipments.max_qty": req.body.max_qty
+        "equipments.vendor_number": req.body.vendor_number,
     }, function (err, equipment_count) {
         if (err) {
             return next(err);
         }
-        else if (equipment_count) {
-            return res.json({Code: 299, Info: 'No changes made to the document'});
-
-            next();
-        }
-        else {
+        if (equipment_count) {
             Equipment.update({
                     _id: req.body._id,
                     equipment_number: req.body.equipment_number,
-                    "equipments.material_number": req.body.material_number
+                    "equipments.material_number": req.body.material_number,
+                    "equipments.vendor_number": req.body.vendor_number
                 }, {$set: {"equipments.$.min_qty": req.body.min_qty, "equipments.$.max_qty": req.body.max_qty}},
                 function (err, model) {
                     console.log(err);
                 });
+
+        }
+        else {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+            next();
         }
         res.json({Code: 200, Info: 'Document updated'});
     });
