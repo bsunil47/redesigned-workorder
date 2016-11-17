@@ -2017,6 +2017,7 @@ function mail(mail_to, req) {
         {
             $match: {
                 "equipments.material_number": req.body.material_number,
+                "equipments.vendor_number": req.body.vendor_number,
             }
         },
         {
