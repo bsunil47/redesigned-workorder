@@ -270,21 +270,21 @@ router.post('/create_workorder', function (req, res, next) {
                                         // HTML body
                                         html: '<b><p>New Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
                                         +
-                                        '<p><b>Work Order Details</b></p>'
+                                        '<p><b><u>Work Order Details</u></b></p>'
                                         +
-                                        '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Work Order Number</b>: </span>' + setPadZeros(result.seq, 8) + '</p>'
                                         +
-                                        '<p><b>Work Order Date</b>: ' + req.body.created_on + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Work Order Date</b>: </span>' + req.body.created_on + '</p>'
                                         +
-                                        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Facility</b>: </span>' + facility.facility_name + '</p>'
                                         +
-                                        '<p><b>Category</b>: ' + category.category_name + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Category</b>: </span>' + category.category_name + '</p>'
                                         +
-                                        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Equipment</b>: </span>' + equipment.equipment_name + '</p>'
                                         +
-                                        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Priority</b>: </span>' + priority.priority_name + '</p>'
                                         +
-                                        '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Description</b>: </span>' + req.body.workorder_description + '</p>'
                                         +
                                         '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Maintenance Work Order Application</p>'
 
@@ -787,35 +787,32 @@ router.post('/createparts', function (req, res, next) {
         if (err) {
             return next(err);
         }
-
-        var pequipments = new Equipment({
-            equipment_name: req.body.equipment_name,
+        var Qery = {
             equipment_number: req.body.equipment_number,
-            material_number: req.body.part_number,
-            material_description: req.body.part_name,
-            vendor_number: req.body.vendor_number,
-            vendor_name: req.body.vendor_name,
-            min_qty: req.body.min_qty,
-            max_qty: req.body.max_qty,
-            //equipment_vendorname: req.body.equipment_vendorname,
-            status: 1
-        });
-        var upsertData = pequipments.toObject();
+            'equipments.material_number': {$regex: new RegExp('^' + req.body.part_number + '$', "i")},
+            'equipments.vendor_number': req.body.vendor_number
+        };
 
-        Equipment.count({
-            equipment_number: req.body.equipment_number, equipment_name: req.body.equipment_name, equipments: {
-                material_number: {$regex: new RegExp('^' + req.body.part_number + '$', "i")},
-                material_description: req.body.part_name,
-                vendor_number: req.body.vendor_number,
-                vendor_name: req.body.vendor_name,
-                min_qty: req.body.min_qty,
-                max_qty: req.body.max_qty
-            }
-        }, function (err, count) {
+        console.log(Qery);
+        Equipment.count(Qery
+            , function (err, count) {
             if (count) {
-                res.json({Code: 200, Info: 'Part Number already exists'});
+                res.json({Code: 499, Info: 'Part Number already exists'});
             }
             else {
+                var pequipments = new Equipment({
+                    equipment_name: req.body.equipment_name,
+                    equipment_number: req.body.equipment_number,
+                    material_number: req.body.part_number,
+                    material_description: req.body.part_name,
+                    vendor_number: req.body.vendor_number,
+                    vendor_name: req.body.vendor_name,
+                    min_qty: req.body.min_qty,
+                    max_qty: req.body.max_qty,
+                    //equipment_vendorname: req.body.equipment_vendorname,
+                    status: 1
+                });
+                var upsertData = pequipments.toObject();
                 Equipment.update({equipment_number: req.body.equipment_number}, pequipments, {upsert: true}, function (err, resp) {
                     console.log("Session1: " + JSON.stringify(err));
                     if (err) {
@@ -920,6 +917,7 @@ router.post('/get_parts', function (req, res, next) {
         {
             $match: {
                 "equipments.material_number": req.body.part_number,
+                "equipments.vendor_number": req.body.vendor_number,
 
             }
         },
@@ -956,28 +954,27 @@ router.post('/edit_parts', function (req, res, next) {
     Equipment.count({
         _id: req.body._id,
         equipment_number: req.body.equipment_number,
-        equipment_name: req.body.equipment_name,
         "equipments.material_number": req.body.material_number,
-        "equipments.min_qty": req.body.min_qty,
-        "equipments.max_qty": req.body.max_qty
+        "equipments.vendor_number": req.body.vendor_number,
     }, function (err, equipment_count) {
         if (err) {
             return next(err);
         }
-        else if (equipment_count) {
-            return res.json({Code: 299, Info: 'No changes made to the document'});
-
-            next();
-        }
-        else {
+        if (equipment_count) {
             Equipment.update({
                     _id: req.body._id,
                     equipment_number: req.body.equipment_number,
-                    "equipments.material_number": req.body.material_number
+                    "equipments.material_number": req.body.material_number,
+                    "equipments.vendor_number": req.body.vendor_number
                 }, {$set: {"equipments.$.min_qty": req.body.min_qty, "equipments.$.max_qty": req.body.max_qty}},
                 function (err, model) {
                     console.log(err);
                 });
+
+        }
+        else {
+            return res.json({Code: 299, Info: 'No changes made to the document'});
+            next();
         }
         res.json({Code: 200, Info: 'Document updated'});
     });
@@ -1561,6 +1558,7 @@ router.post('/edit_user', function (req, res, next) {
 
 router.post('/get_search_wo', function (req, res, next) {
     var query = req.body;
+    query.workorder_number = parseInt(query.workorder_number);
     var user_details = {
         user_id: req.body.user_id,
         userrole: req.body.userrole,
@@ -1752,21 +1750,21 @@ var send = function (mail_to, last_message, req, facility, category, equipment, 
         // HTML body
         html: '<b><p>Maintenace Work Order number <b>' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</b>' + last_message + '</p>'
         +
-        '<p><b>Work Order Details</b></p>'
+        '<p><b><u>Work Order Details</u></b></p>'
         +
-        '<p><b>Work Order Number</b>: ' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
+        '<p><span style="display:inline-block; width:160px"><b>Work Order Number</b>: </span>' + setPadZeros(parseInt(req.body.workorder_number), 8) + '</p>'
         +
-        '<p><b>Work Order Date</b>: ' + dateStringToDateISO(req.body.created_on) + '</p>'
+        '<p><span style="display:inline-block; width:160px"><b>Work Order Date</b>: </span>' + dateStringToDateISO(req.body.created_on) + '</p>'
         +
-        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+        '<p><span style="display:inline-block; width:160px"><b>Facility</b>: </span>' + facility.facility_name + '</p>'
         +
-        '<p><b>Category</b>: ' + category.category_name + '</p>'
+        '<p><span style="display:inline-block; width:160px"><b>Category</b>: </span>' + category.category_name + '</p>'
         +
-        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+        '<p><span style="display:inline-block; width:160px"><b>Equipment</b>: </span>' + equipment.equipment_name + '</p>'
         +
-        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+        '<p><span style="display:inline-block; width:160px"><b>Priority</b>: </span>' + priority.priority_name + '</p>'
         +
-        '<p><b>Description</b>: ' + req.body.workorder_description + '</p>'
+        '<p><span style="display:inline-block; width:160px"><b>Description</b>: </span>' + req.body.workorder_description + '</p>'
         +
         '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Maintenance Work Order Application</p>'
 
@@ -1851,6 +1849,7 @@ var createWorkOrderPM = function (task) {
                 workorder_priority: wkOrd.workorder_priority,
                 workorder_skill: wkOrd.workorder_skill,
                 workorder_class: wkOrd.workorder_class,
+                workorder_technician: wkOrd.workorder_technician,
                 created_on: task.wo_pm_date,
                 workorder_PM: wkOrd.workorder_PM,
                 wo_pm_date: pmdate,
@@ -1920,21 +1919,21 @@ var createWorkOrderPM = function (task) {
                                         // HTML body
                                         html: '<b><p>New PM Maintenace Work Order number <b>' + setPadZeros(result.seq, 8) + '</b> has been submited for your approval</p>'
                                         +
-                                        '<p><b>Work Order Details</b></p>'
+                                        '<p><b><u>Work Order Details</u></b></p>'
                                         +
-                                        '<p><b>Work Order Number</b>: ' + setPadZeros(result.seq, 8) + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Work Order Number</b>: </span>' + setPadZeros(result.seq, 8) + '</p>'
                                         +
-                                        '<p><b>Work Order Date</b>: ' + task.wo_pm_date + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Work Order Date</b>: </span>' + task.wo_pm_date + '</p>'
                                         +
-                                        '<p><b>Facility</b>: ' + facility.facility_name + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Facility</b>: </span>' + facility.facility_name + '</p>'
                                         +
-                                        '<p><b>Category</b>: ' + category.category_name + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Category</b>: </span>' + category.category_name + '</p>'
                                         +
-                                        '<p><b>Equipment</b>: ' + equipment.equipment_name + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Equipment</b>: </span>' + equipment.equipment_name + '</p>'
                                         +
-                                        '<p><b>Priority</b>: ' + priority.priority_name + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Priority</b>: </span>' + priority.priority_name + '</p>'
                                         +
-                                        '<p><b>Description</b>: ' + wkOrd.workorder_description + '</p>'
+                                        '<p><span style="display:inline-block; width:160px"><b>Description</b>: </span>' + wkOrd.workorder_description + '</p>'
                                         +
                                         '<p>Please click <a href="http://183.82.107.134:3030">here</a> for Maintenance Work Order Application</p>'
 
@@ -2018,6 +2017,7 @@ function mail(mail_to, req) {
         {
             $match: {
                 "equipments.material_number": req.body.material_number,
+                "equipments.vendor_number": req.body.vendor_number,
             }
         },
         {
@@ -2059,27 +2059,27 @@ function mail(mail_to, req) {
                         //text: 'Hello to sunil',
 
                         // HTML body
-                        html: '<b><p>Parts Request raised for following equipment</p>'
+                        html: '<b><p><u>Parts Request raised for following equipment</u></p>'
                         +
-                        '<p><b>Work Order Number</b>: ' + wo_number + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Work Order Number</b>: </span>' + wo_number + '</p>'
                         +
-                        '<p><b>Qty</b>: ' + req.body.qty + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Qty</b>:</span> ' + req.body.qty + '</p>'
                         +
-                        '<p><b>Date</b>: ' + dateFormat(new Date(), 'shortDate') + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Date</b>: </span>' + dateFormat(new Date(), 'shortDate') + '</p>'
                         +
-                        '<p><b>Equipment Number</b>: ' + gpresult.equipment_number + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Equipment Number</b>: </span>' + gpresult.equipment_number + '</p>'
                         +
-                        '<p><b>Equipment Name</b>: ' + gpresult.equipment_name + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Equipment Name</b>: </span>' + gpresult.equipment_name + '</p>'
                         +
-                        '<p><b>Part Number</b>: ' + gpresult.equipments.material_number + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Part Number</b>: </span>' + gpresult.equipments.material_number + '</p>'
                         +
-                        '<p><b>Part Description</b>: ' + gpresult.equipments.material_description + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Part Description</b>: </span>' + gpresult.equipments.material_description + '</p>'
                         +
-                        '<p><b>Vendor Name</b>: ' + gpresult.equipments.vendor_name + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Vendor Name</b>: </span>' + gpresult.equipments.vendor_name + '</p>'
                         +
-                        '<p><b>Vendor Number</b>: ' + gpresult.equipments.vendor_number + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Vendor Number</b>: </span>' + gpresult.equipments.vendor_number + '</p>'
                         +
-                        '<p><b>Technician Name</b>: ' + username.firstname + " " + username.lastname + '</p>'
+                        '<p><span style="display:inline-block; width:160px"><b>Technician Name</b>: </span>' + username.firstname + " " + username.lastname + '</p>'
                         +
                         '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Part request</p>'
 

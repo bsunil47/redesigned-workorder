@@ -16,7 +16,7 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -45,7 +45,9 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }, function (error) {
             alert(error);
         });
+        $scope.disableSubmit = false;
         function CreateSkill() {
+            $scope.disableSubmit = true;
             if ($scope.CreateSkillForm.skill_name.$valid && $scope.CreateSkillForm.facility_number.$valid) {
                 $scope.skill_id = API.CreateSkill.Skill($scope.skill, function (res) {
                     if (res.Code == 200) {
@@ -63,6 +65,7 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -72,6 +75,7 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

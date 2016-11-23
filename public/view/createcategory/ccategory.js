@@ -22,7 +22,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -46,11 +46,16 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }, function (error) {
             alert(error);
         });
-
+        $scope.disableSubmit = false;
         function CreateCategory() {
+            $scope.disableSubmit = true;
             if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {
+                if (!angular.isUndefined($scope.category.operator_available) && $scope.category.operator_available == false) {
+                    delete ($scope.category.operator_available);
+                }
                 $scope.category_id = API.CreateCategory.Category($scope.category, function (res) {
                     if (res.Code == 200) {
+
                         swal({
                             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
                             text: 'Sucessfully created category',
@@ -58,6 +63,8 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             confirmButtonText: 'Ok'
                         });
                         $location.path("/categories");
+
+
                     } else {
                         swal({
                             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
@@ -65,6 +72,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -74,6 +82,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

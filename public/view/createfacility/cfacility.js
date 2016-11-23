@@ -16,7 +16,7 @@ angular.module('PGapp.createfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -35,7 +35,9 @@ angular.module('PGapp.createfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
             facility_number: "",
             facility_name: ""
         };
+        $scope.disableSubmit = false;
         function CreateFacility() {
+            $scope.disableSubmit = true;
             if ($scope.CreateFacilityForm.facility_name.$valid && $scope.CreateFacilityForm.facility_number.$valid) {
                 $scope.facility_id = API.CreateFacility.Facility($scope.facility, function (res) {
                     if (res.Code == 200) {
@@ -53,6 +55,7 @@ angular.module('PGapp.createfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -62,6 +65,7 @@ angular.module('PGapp.createfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

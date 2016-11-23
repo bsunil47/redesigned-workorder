@@ -17,7 +17,7 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
   userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
           if (userdetail.role == 'manager') {
-            $window.history.back();
+              $location.path(reloc);
           } else {
             $location.path("/");
           }
@@ -33,33 +33,37 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
     $location.path("/");
   };
   function ChangePassword(){
-    $scope.user_id = API.ChangePassword.save($scope.user,function(res){
-      if(res.Code == 200){
+      if ($scope.ChangePasswordForm.p_password.$valid && $scope.ChangePasswordForm.c_password.$valid && $scope.ChangePasswordForm.password.$valid) {
+          $scope.user_id = API.ChangePassword.save($scope.user, function (res) {
+              if (res.Code == 200) {
+                  swal({
+                      title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                      text: 'Successfully Changed password',
+                      width: "450px",
+                      confirmButtonText: 'Ok'
+                  });
+                  userdetail.user.password = $scope.user.password;
+                  $cookies.putObject('userDetails', userdetail);
+                  $location.path("/");
+              } else {
+                  swal({
+                      title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                      text: 'Error with changing Password',
+                      width: "450px",
+                      confirmButtonText: 'Ok'
+                  });
+                  $scope.ChangePasswordForm.password.error = true;
+              }
+          }, function (error) {
         swal({
           title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-          text: 'Successfully Changed password',
+            text: "Oop's.. Something went worng.. Try again later",
           width: "450px",
           confirmButtonText: 'Ok'
         });
-        $location.path("/");
-      }else {
-        swal({
-          title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-          text: 'Error with changing Password',
-          width: "450px",
-          confirmButtonText: 'Ok'
-        });
-        $scope.ChangePasswordForm.password.error = true;
-      }
-    },function (error) {
-      swal({
-        title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-        text: "Oop's.. Something went worng.. Try again later",
-        width: "450px",
-        confirmButtonText: 'Ok'
+              console.log(error)
       });
-      console.log(error)
-    });
+      }
   }
 
   $scope.redirectLoc = function (reloc) {

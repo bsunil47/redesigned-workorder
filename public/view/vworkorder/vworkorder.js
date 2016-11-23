@@ -17,7 +17,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         var currentId = $routeParams.id;
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            $location.path("/");
+            $location.path(reloc);
         };
         $scope.workOrder = {
             workorder_number: currentId,
@@ -232,7 +232,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
                 API.GetUser.Recent($scope.workOrder, function (res) {
                     if (res.Code == 200) {
-                        $scope.requestor_name = res.Info.user.username;
+                        $scope.requestor_name = res.Info.user.firstname + " " + res.Info.user.lastname;
                     }
                 }, function (error) {
                     alert(error);
@@ -489,7 +489,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             if (angular.isUndefined(found) || found === null) {
                 return null;
             }
-            return found.firstname;
+            return found.firstname + " " + found.lastname;
         }
 
         $scope.showSkill = showSkill;
@@ -544,7 +544,7 @@ angular.module('PGapp.vworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             if (angular.isUndefined(found) || found === null) {
                 return null;
             }
-            return found.firstname;
+            return found.firstname + " " + found.lastname;
         }
 
         $scope.showWithzeros = showWithzeros;

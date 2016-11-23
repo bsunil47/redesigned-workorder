@@ -26,7 +26,7 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -63,9 +63,9 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
             $location.path(reloc);
         };
         $scope.CreateParts = CreateParts;
-
+        $scope.disableSubmit = false;
         function CreateParts() {
-
+            $scope.disableSubmit = true;
             console.log($scope.pe.equipment_name);
             console.log("Equipments: " + JSON.stringify($scope.pe));
             if ($scope.CreatePartsForm.equipment_name.$valid && $scope.CreatePartsForm.equipment_number.$valid) {
@@ -85,6 +85,7 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -94,6 +95,7 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

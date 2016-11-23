@@ -16,7 +16,7 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -46,7 +46,9 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }, function (error) {
             alert(error);
         });
+        $scope.disableSubmit = false;
         function CreatePriority() {
+            $scope.disableSubmit = true;
             if ($scope.CreatePriorityForm.priority_name.$valid && $scope.CreatePriorityForm.facility_number.$valid) {
                 $scope.priority_id = API.CreatePriority.Priority($scope.priority, function (res) {
                     if (res.Code == 200) {
@@ -64,6 +66,7 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -73,6 +76,7 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

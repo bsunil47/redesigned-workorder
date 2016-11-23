@@ -63,8 +63,8 @@
                             <div class="text-center clearfix">
                                 <p>
                                     <button type="submit" ng-click="CreatePriority()" class="btn btn-primary"
-                                            ng-disabled="CreatePriorityForm.priority_name.$dirty && CreatePriorityForm.priority_name.$invalid ||
-  CreatePriorityForm.facility_number.$dirty && CreatePriorityForm.facility_number.$invalid">Save
+                                            ng-disabled="(CreatePriorityForm.priority_name.$dirty && CreatePriorityForm.priority_name.$invalid) ||
+  (CreatePriorityForm.facility_number.$dirty && CreatePriorityForm.facility_number.$invalid) ||  disableSubmit">Save
                                     </button>
                                     <button ng-click="clearForm()" class="btn btn-primary">Clear</button>
                                 </p>

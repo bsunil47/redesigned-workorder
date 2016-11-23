@@ -16,7 +16,7 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -48,8 +48,10 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
             equipment_number: ""
             //equipment_vendor_name: ""
         };
+        $scope.disableSubmit = false;
         function CreateEquipment() {
             console.log($scope.equipment);
+            $scope.disableSubmit = true;
             if ($scope.CreateEquipmentForm.equipment_name.$valid && $scope.CreateEquipmentForm.facility_number.$valid) {
                 $scope.equipment_id = API.CreateEquipment.Equipment($scope.equipment, function (res) {
                     if (res.Code == 200) {
@@ -67,6 +69,7 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -76,6 +79,7 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

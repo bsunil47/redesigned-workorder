@@ -17,7 +17,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         var currentId = parseInt($routeParams.id);
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
-            $window.history.back();
+            $location.path(reloc);
 
         };
         var workorder_created_on;

@@ -21,7 +21,7 @@ angular.module('PGapp.createclass', ['ngRoute', 'ngAnimate', 'ngCookies'])
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -45,8 +45,11 @@ angular.module('PGapp.createclass', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }, function (error) {
             alert(error);
         });
+        $scope.disableSubmit = false;
         function CreateClass() {
+            $scope.disableSubmit = true;
             if ($scope.CreateClassForm.class_name.$valid && $scope.CreateClassForm.facility_number.$valid) {
+
                 $scope.class_id = API.CreateClass.Class($scope.class, function (res) {
                     if (res.Code == 200) {
                         swal({
@@ -63,6 +66,7 @@ angular.module('PGapp.createclass', ['ngRoute', 'ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
@@ -72,6 +76,7 @@ angular.module('PGapp.createclass', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
+                    $scope.disableSubmit = false;
                 });
             }
         }

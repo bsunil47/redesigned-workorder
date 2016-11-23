@@ -99,13 +99,14 @@
                             </div>
                             <div class="text-center clearfix">
                                 <p>
-                                    <button type="submit" ng-click="CreateUser()" class="btn btn-primary" ng-disabled="CreateUserForm.firstname.$dirty && CreateUserForm.firstname.$invalid ||
-                                    CreateUserForm.lastname.$dirty && CreateUserForm.lastname.$invalid ||
-                                    CreateUserForm.username.$dirty && CreateUserForm.username.$invalid ||
-                                    CreateUserForm.email.$dirty && CreateUserForm.email.$invalid ||
-                                    CreateUserForm.password.$dirty && CreateUserForm.password.$invalid ||
-                                    CreateUserForm.userrole.$dirty && CreateUserForm.userrole.$invalid ||
-                                    CreateUserForm.facility.$dirty && CreateUserForm.facility.$invalid">Save
+                                    <button type="submit" ng-click="CreateUser()" class="btn btn-primary" ng-disabled="(CreateUserForm.firstname.$dirty && CreateUserForm.firstname.$invalid) ||
+                                    (CreateUserForm.lastname.$dirty && CreateUserForm.lastname.$invalid) ||
+                                    (CreateUserForm.username.$dirty && CreateUserForm.username.$invalid) ||
+                                    (CreateUserForm.email.$dirty && CreateUserForm.email.$invalid) ||
+                                    (CreateUserForm.password.$dirty && CreateUserForm.password.$invalid) ||
+                                    (CreateUserForm.userrole.$dirty && CreateUserForm.userrole.$invalid) ||
+                                    (CreateUserForm.facility.$dirty && CreateUserForm.facility.$invalid) || disableSubmit">
+                                        Save
                                     </button>
                                     <button class="btn btn-primary" ng-click="clearForm()">Clear</button>
                                 </p>

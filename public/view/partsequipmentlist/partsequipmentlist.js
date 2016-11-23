@@ -16,7 +16,7 @@ angular.module('PGapp.partsequipmentlist', ['ngRoute', 'ngAnimate', 'ngCookies']
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -80,8 +80,8 @@ angular.module('PGapp.partsequipmentlist', ['ngRoute', 'ngAnimate', 'ngCookies']
             return found.status_name;
         };
 
-        $scope.editParts = function (part_number) {
-            $location.path('editparts/' + part_number);
+        $scope.editParts = function (part_number, vendor_number) {
+            $location.path('editparts/' + part_number + '/' + vendor_number);
         };
     }]);
 

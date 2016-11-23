@@ -63,14 +63,14 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Material Number:</label>
+                                        <label class="col-sm-6 control-label">Part Number:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="pe.part_number" type="text" class="form-control"
                                                    name="part_number" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-6 control-label">Material Name:</label>
+                                        <label class="col-sm-6 control-label">Part Description:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="pe.part_name" type="text" class="form-control"
                                                    name="part_name" required>
@@ -110,13 +110,15 @@
                             <div class="text-center clearfix">
                                 <p>
                                     <button type="submit" ng-click="CreateParts()" class="btn btn-primary"
-                                            ng-disabled="           CreatePartsForm.equipment_number.$dirty && CreatePartsForm.equipment_number.$invalid || CreatePartsForm.equipment_name.$dirty && CreatePartsForm.equipment_name.$invalid ||
-                                            CreatePartsForm.part_number.$dirty && CreatePartsForm.part_number.$invalid ||
-                                            CreatePartsForm.part_name.$dirty && CreatePartsForm.part_name.$invalid ||
-                                            CreatePartsForm.vendor_number.$dirty && CreatePartsForm.vendor_number.$invalid ||
-                                            CreatePartsForm.vendor_name.$dirty && CreatePartsForm.vendor_name.$invalid ||
-                                            CreatePartsForm.min_qty.$dirty && CreatePartsForm.min_qty.$invalid ||
-                                            CreatePartsForm.max_qty.$dirty && CreatePartsForm.max_qty.$invalid
+                                            ng-disabled="(CreatePartsForm.equipment_number.$dirty && CreatePartsForm.equipment_number.$invalid) ||
+                                            (CreatePartsForm.equipment_name.$dirty && CreatePartsForm.equipment_name.$invalid) ||
+                                            (CreatePartsForm.part_number.$dirty && CreatePartsForm.part_number.$invalid) ||
+                                            (CreatePartsForm.part_name.$dirty && CreatePartsForm.part_name.$invalid) ||
+                                            (CreatePartsForm.vendor_number.$dirty && CreatePartsForm.vendor_number.$invalid) ||
+                                            (CreatePartsForm.vendor_name.$dirty && CreatePartsForm.vendor_name.$invalid) ||
+                                            (CreatePartsForm.min_qty.$dirty && CreatePartsForm.min_qty.$invalid) ||
+                                            (CreatePartsForm.max_qty.$dirty && CreatePartsForm.max_qty.$invalid)
+                                            || disableSubmit
                                             ">
                                         Save
                                     </button>

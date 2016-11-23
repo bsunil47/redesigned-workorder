@@ -16,7 +16,8 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
       var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
-                $window.history.back();
+                //$window.history.back();
+                $location.path(reloc);
             } else {
                 $location.path("/");
             }
@@ -61,20 +62,21 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
         }
       });
       $scope.p = [];
-
+        $scope.disableSubmit = false;
       $scope.createPartRequest = function (part) {
-
+          $scope.disableSubmit = true;
         if (!angular.isUndefined($scope.p.qty)) {
-            if ($scope.p.qty[part.material_number] >= part.min_qty && $scope.p.qty[part.material_number] <= part.max_qty) {
+            if ($scope.p.qty[part.material_number + part.vendor_number] >= part.min_qty && $scope.p.qty[part.material_number + part.vendor_number] <= part.max_qty) {
                 var set = {
                     equipment_number: $scope.equipment_number,
                     material_number: part.material_number,
-                    qty: $scope.p.qty[part.material_number],
+                    vendor_number: part.vendor_number,
+                    qty: $scope.p.qty[part.material_number + part.vendor_number],
                     user_id: userdetail.user._id,
                 };
                 console.log($scope.p.workorder);
                 if (!angular.isUndefined($scope.p.workorder)) {
-                    set.workorder_number = $scope.p.workorder[part.material_number];
+                    set.workorder_number = parseInt($scope.p.workorder[part.material_number + part.vendor_number]);
                 }
                 API.CreatePartsRequest.Recent(set, function (res) {
                     if (res.Code == 200) {
@@ -88,7 +90,13 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
+                        $scope.p.qty[part.material_number + part.vendor_number] = "";
+                        if (!angular.isUndefined($scope.p.workorder)) {
+                            $scope.p.workorder[part.material_number + part.vendor_number] = "";
+                        }
                         $location.path("/parts_list");
+
                     } else {
                         swal({
                             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
@@ -96,11 +104,13 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
+                        $scope.disableSubmit = false;
                         //$scope.CreateUserForm.email.error = true;
                     }
                 }, function (error) {
                     alert(error);
                 });
+
             } else {
                 swal({
                     title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
@@ -109,7 +119,7 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
                     confirmButtonText: 'Ok'
                 });
             }
-
+            $scope.disableSubmit = false;
         } else {
           swal({
             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
@@ -117,6 +127,7 @@ angular.module('PGapp.partslist', ['ngRoute','ngAnimate', 'ngCookies'])
             width: "450px",
             confirmButtonText: 'Ok'
           });
+            $scope.disableSubmit = false;
         }
 
       }

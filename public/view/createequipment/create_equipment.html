@@ -78,8 +78,8 @@
                             <div class="text-center clearfix">
                                 <p>
                                     <button type="submit" ng-click="CreateEquipment()" class="btn btn-primary"
-                                            ng-disabled="CreateEquipmentForm.equipment_number.$dirty && CreateEquipmentForm.equipment_number.$invalid || CreateEquipmentForm.equipment_name.$dirty && CreateEquipmentForm.equipment_name.$invalid ||
-  CreateEquipmentForm.facility_number.$dirty && CreateEquipmentForm.facility_number.$invalid">Save
+                                            ng-disabled="(CreateEquipmentForm.equipment_number.$dirty && CreateEquipmentForm.equipment_number.$invalid) || (CreateEquipmentForm.equipment_name.$dirty && CreateEquipmentForm.equipment_name.$invalid) ||
+  (CreateEquipmentForm.facility_number.$dirty && CreateEquipmentForm.facility_number.$invalid) ||  disableSubmit">Save
                                     </button>
                                     <button ng-click="clearForm()" class="btn btn-primary">Clear</button>
                                 </p>

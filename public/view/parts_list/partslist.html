@@ -70,11 +70,12 @@
                                     <td>{{part.min_qty}}</td>
                                     <td>{{part.max_qty}}</td>
                                     <td><input type="number" class="form-control" min="{{part.min_qty}}" required
-                                               max="{{part.max_qty}}" ng-model="p.qty[part.material_number]"></td>
+                                               max="{{part.max_qty}}"
+                                               ng-model="p.qty[part.material_number+part.vendor_number]"></td>
                                     <td><input type="text" class="form-control"
-                                               ng-model="p.workorder[part.material_number]"></td>
+                                               ng-model="p.workorder[part.material_number+part.vendor_number]"></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary"
+                                        <button type="button" class="btn btn-primary" ng-disabled="disableSubmit"
                                                 ng-click="createPartRequest(part)">Create PR
                                         </button>
                                     </td>
