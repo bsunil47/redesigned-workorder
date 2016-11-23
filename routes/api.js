@@ -1558,7 +1558,9 @@ router.post('/edit_user', function (req, res, next) {
 
 router.post('/get_search_wo', function (req, res, next) {
     var query = req.body;
-    query.workorder_number = parseInt(query.workorder_number);
+    if (typeof req.body.workorder_number !== "undefined") {
+        query.workorder_number = parseInt(query.workorder_number);
+    }
     var user_details = {
         user_id: req.body.user_id,
         userrole: req.body.userrole,
@@ -1597,6 +1599,9 @@ router.post('/get_search_wo', function (req, res, next) {
             '$lte': created_on
         };
         delete query['wo_datecomplete_from'];
+    }
+    if (typeof req.body.status !== "undefined") {
+        query.status = req.body.status;
     }
     if (typeof req.body.wo_pm_date_from !== "undefined") {
         var pMquery = {};
@@ -2081,7 +2086,7 @@ function mail(mail_to, req) {
                         +
                         '<p><span style="display:inline-block; width:160px"><b>Technician Name</b>: </span>' + username.firstname + " " + username.lastname + '</p>'
                         +
-                        '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Part request</p>'
+                        '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Maintenance Work Order Application</p>'
 
                     };
                     transporter.sendMail(mailData, function (err, info) {
