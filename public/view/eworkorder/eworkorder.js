@@ -146,6 +146,9 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.saveDisable = false;
 
                 }
+                if (userdetail.role == 'clerk' && ($scope.workOrder.status == 1 || $scope.workOrder.status == 3)) {
+                    $scope.saveDisable = false;
+                }
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                     var min_date = $scope.workOrder.wo_datecomplete = new Date($filter('changeStringToDate')($scope.workOrder.wo_datecomplete));
                 } else {
