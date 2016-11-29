@@ -77,10 +77,12 @@ angular.module('PGapp.createstatus', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 
         $scope.clearForm = function () {
-            $scope.priority = {};
+            $scope.status = {};
         };
     }]);

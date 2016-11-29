@@ -78,6 +78,8 @@ angular.module('PGapp.createpriority', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 

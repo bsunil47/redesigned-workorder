@@ -67,6 +67,8 @@ angular.module('PGapp.createfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 

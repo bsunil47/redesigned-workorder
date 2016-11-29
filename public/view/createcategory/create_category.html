@@ -42,7 +42,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Category Name:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="category.category_name" type="text" class="form-control"
+                                            <input ng-model="category.category_name" ng-pattern="/^[a-zA-Z0-9 ]*$/"
+                                                   type="text" class="form-control"
                                                    name="category_name" required>
                                         </div>
                                     </div>

@@ -85,6 +85,7 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
   }
 
     $scope.clearForm = function () {
+        $scope.user.email = "sample@sample.com";
         $scope.user = {};
     };
 

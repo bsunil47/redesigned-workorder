@@ -77,6 +77,8 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 

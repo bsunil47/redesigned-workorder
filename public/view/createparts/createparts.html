@@ -59,41 +59,42 @@
                                              </select> -->
                                             <input ng-model="pe.equipment_name" ng-readonly="true" type="text"
                                                    class="form-control"
-                                                   name="equipment_name">
+                                                   name="equipment_name" ng-pattern="/^[a-zA-Z0-9 ]*$/">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Part Number:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="pe.part_number" type="text" class="form-control"
-                                                   name="part_number" required>
+                                                   name="part_number" ng-pattern="/^[a-zA-Z0-9/- ]*$/" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Part Description:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="pe.part_name" type="text" class="form-control"
-                                                   name="part_name" required>
+                                                   name="part_name" ng-pattern="/^[a-zA-Z0-9 ]*$/" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Vendor Number:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="pe.vendor_number" type="text" class="form-control"
-                                                   name="vendor_number" required>
+                                                   name="vendor_number" ng-pattern="/^[a-zA-Z0-9 ]*$/" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Vendor Name:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="pe.vendor_name" type="text" class="form-control"
-                                                   name="vendor_name" required>
+                                                   name="vendor_name" ng-pattern="/^[a-zA-Z0-9 ]*$/" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Min Qty:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="pe.min_qty" type="number" class="form-control" min="0"
+                                                   max="pe.max_qty"
                                                    name="min_qty" required>
                                         </div>
                                     </div>
@@ -101,7 +102,7 @@
                                         <label class="col-sm-6 control-label">Max Qty:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="pe.max_qty" type="number" class="form-control"
-                                                   min="0"
+                                                   min="pe.min_qty"
                                                    name="max_qty" required>
                                         </div>
                                     </div>

@@ -416,7 +416,7 @@ router.post('/create_class', function (req, res, next) {
                             Info: 'Error creating Class',
                         });
                     } else {
-                        res.json({Code: 200, Info: 'Class Created Sucessfully'});
+                        res.json({Code: 200, Info: '"Class Created Sucessfully'});
                     }
                 });
         });
@@ -551,7 +551,7 @@ router.post('/create_facility', function (req, res, next) {
                     Info: 'Error creating Facility',
                 });
             } else {
-                res.json({Code: 200, Info: 'Facility Created sucessfully'});
+                res.json({Code: 200, Info: 'Facility Created successfully'});
             }
         });
     });
@@ -621,7 +621,7 @@ router.post('/create_priority', function (req, res, next) {
                             Info: 'Error creating Priority',
                         });
                     } else {
-                        res.json({Code: 200, Info: 'Priority created sucessfull'});
+                        res.json({Code: 200, Info: 'Priority created successfully'});
                     }
                 });
         });
@@ -681,7 +681,7 @@ router.post('/create_skill', function (req, res, next) {
                             Info: 'Error creating skill',
                         });
                     } else {
-                        res.json({Code: 200, Info: 'Skill Sucessfully created'});
+                        res.json({Code: 200, Info: 'Skill created successfully'});
                     }
                 });
         });
@@ -696,7 +696,7 @@ router.post('/skills', function (req, res, next) {
         if (skills != null) {
             res.json({Code: 200, Info: {skills: skills}});
         } else {
-            res.json({Code: 406, Info: 'no class'});
+            res.json({Code: 406, Info: 'no skills'});
         }
     });
 });
@@ -764,7 +764,7 @@ router.post('/create_status', function (req, res, next) {
                                 Info: 'Error creating Status',
                             });
                         } else {
-                            res.json({Code: 200, Info: 'Status created sucessfull'});
+                            res.json({Code: 200, Info: 'Status created successfully'});
                         }
                     });
             });

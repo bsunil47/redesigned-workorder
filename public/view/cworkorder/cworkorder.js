@@ -186,6 +186,9 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
   }
 
       $scope.clearForm = function () {
-        $scope.workOrder = {};
+          $scope.workOrder.workorder_category = "";
+          $scope.workOrder.workorder_equipment = "";
+          $scope.workOrder.workorder_priority = "";
+          $scope.workOrder.workorder_description = "";
       };
 }]);

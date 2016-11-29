@@ -97,6 +97,8 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 

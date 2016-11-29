@@ -58,7 +58,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
                         swal({
                             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                            text: 'Sucessfully created category',
+                            text: 'Category created Successfully',
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
@@ -84,6 +84,8 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 
