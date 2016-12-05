@@ -13,6 +13,7 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         if (!$cookies.get('userDetails')) {
             $location.path('login');
         }
+        $scope.facility_equipments = [];
         $scope.pe = {
             equipment_name: "",
             equipment_number: "",
@@ -20,6 +21,7 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
             material_name: "",
             vendor_number: "",
             vendor_name: "",
+            facility_number: "",
             min_qty: "",
             max_qty: ""
         };
@@ -127,6 +129,19 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     return null;
                 }
                 $scope.pe.equipment_name = found.equipment_name;
+            }
+        });
+
+        $scope.$watch("pe.facility_number", function (newValue, oldValue) {
+            if (!angular.isUndefined($scope.pe.facility_number)) {
+                var found = $filter('getList')('facility_number', $scope.pe.facility_number, $scope.partsequipments);
+                if (angular.isUndefined(found) || found === null) {
+                    return null;
+                }
+                $scope.facility_equipments = [];
+                $scope.pe.equipment_number = "";
+                $scope.pe.equipment_name = "";
+                $scope.facility_equipments = found;
             }
         });
         $scope.$watch("pe.max_qty", function (newValue, oldValue) {

@@ -3,7 +3,7 @@
 angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
     .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/editparts/:id/:id1', {
+        $routeProvider.when('/editparts/:id/:id1/:id2', {
             templateUrl: 'view/editparts/edit_parts.html',
             controller: 'EditPartsCtrl'
         });
@@ -16,6 +16,7 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
         var edit_part_number = $routeParams.id;
         var edit_vendor_number = $routeParams.id1;
+        var edit_facility_number = $routeParams.id2;
         $scope.ep = {
             equipment_name: "",
             equipment_number: "",
@@ -52,7 +53,11 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
             alert(error);
         });
         $scope.disVendorName = true;
-        API.GetParts.Recent({part_number: edit_part_number, vendor_number: edit_vendor_number}, function (res) {
+        API.GetParts.Recent({
+            part_number: edit_part_number,
+            vendor_number: edit_vendor_number,
+            facility_number: edit_facility_number
+        }, function (res) {
             if (res.Code == 200) {
                 console.log("Get Parts: " + JSON.stringify(res.Info.equipment));
                 $scope.ep = res.Info.equipment;
@@ -117,6 +122,7 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     $scope.ep.material_number = $scope.ep.equipments.material_number;
                     $scope.ep.min_qty = $scope.ep.equipments.min_qty;
                     $scope.ep.max_qty = $scope.ep.equipments.max_qty;
+                    $scope.ep.facility_number = edit_facility_number;
 
                     API.EditParts.Equipment($scope.ep, function (res) {
                         if (res.Code == 200) {
