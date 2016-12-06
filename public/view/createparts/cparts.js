@@ -67,6 +67,9 @@ angular.module('PGapp.createparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.CreateParts = CreateParts;
         $scope.disableSubmit = false;
         function CreateParts() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.disableSubmit = true;
             console.log($scope.pe.equipment_name);
             console.log("Equipments: " + JSON.stringify($scope.pe));

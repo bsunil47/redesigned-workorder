@@ -80,6 +80,9 @@ angular.module('PGapp.editequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
         });
         function EditEquipment() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             console.log($scope.equipment);
             if ($scope.EditEquipmentForm.equipment_name.$valid) {
                 API.EditEquipment.Equipment($scope.equipment, function (res) {

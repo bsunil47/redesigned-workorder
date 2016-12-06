@@ -50,6 +50,9 @@ angular.module('PGapp.createequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
         };
         $scope.disableSubmit = false;
         function CreateEquipment() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             console.log($scope.equipment);
             $scope.disableSubmit = true;
             if ($scope.CreateEquipmentForm.equipment_name.$valid && $scope.CreateEquipmentForm.facility_number.$valid) {

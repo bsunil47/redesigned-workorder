@@ -322,6 +322,9 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         };
 
         function updateWorkOrder() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             console.log($scope.workOrder.workorder_technician);
             console.log($scope.workOrder.workorder_skill);
             console.log($scope.workOrder.workorder_class);

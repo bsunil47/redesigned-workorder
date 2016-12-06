@@ -151,6 +151,9 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
 
   function CreateWorkOrder() {
+      if (!$cookies.get('userDetails')) {
+          $location.path('login');
+      }
     if ($scope.CreateWorkOrderForm.workorder_description.$valid && $scope.CreateWorkOrderForm.workorder_category.$valid && $scope.CreateWorkOrderForm.workorder_equipment.$valid && $scope.CreateWorkOrderForm.workorder_priority.$valid) {
         $scope.disableSubmit = true;
       var data_post = $scope.workOrder;

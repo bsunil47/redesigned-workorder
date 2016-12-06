@@ -63,6 +63,9 @@ angular.module('PGapp.partslist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.p = [];
         $scope.disableSubmit = false;
         $scope.createPartRequest = function (part) {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.disableSubmit = true;
             if (!angular.isUndefined($scope.p.qty)) {
                 if ($scope.p.qty[part.material_number + part.vendor_number] >= part.min_qty && $scope.p.qty[part.material_number + part.vendor_number] <= part.max_qty) {

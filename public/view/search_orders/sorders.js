@@ -35,6 +35,9 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             alert(error);
         });
         $scope.clickToOpen = function (wokorder) {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.selectedWorkOrder = wokorder;
             $scope.selectedWorkOrder.workorder_number = showWithzeros($scope.selectedWorkOrder.workorder_number);
             $scope.selectedWorkOrder.workorder_equipment = showEquipment($scope.selectedWorkOrder.workorder_equipment);
@@ -257,6 +260,9 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         };
 
         function ListWorkOrders() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             if (angular.isUndefined($scope.workOrder.workorder_priority) && angular.isUndefined($scope.workOrder.workorder_number) && angular.isUndefined($scope.workOrder.workorder_category) && angular.isUndefined($scope.workOrder.workorder_skill) && angular.isUndefined($scope.workOrder.workorder_creator) && angular.isUndefined($scope.workOrder.workorder_technician) && angular.isUndefined($scope.workOrder.workorder_equipment) && angular.isUndefined($scope.workOrder.workorder_facility) && angular.isUndefined($scope.workOrder.status) && angular.isUndefined($scope.workOrder.created_on_from) && angular.isUndefined($scope.workOrder.created_on_to) && angular.isUndefined($scope.workOrder.wo_datecomplete_from) && angular.isUndefined($scope.workOrder.wo_datecomplete_to) && angular.isUndefined($scope.workOrder.wo_pm_date_from) && angular.isUndefined($scope.workOrder.wo_pm_date_to) && angular.isUndefined($scope.workOrder.workorder_class) && angular.isUndefined($scope.workOrder.workorder_PM)) {
                 //if(){
                 var qry = userdetail.user;

@@ -104,7 +104,9 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.EditParts = EditParts;
 
         function EditParts() {
-
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             console.log($scope.ep.equipment_name);
             console.log("Equipments in ep: " + JSON.stringify($scope.ep));
             if ($scope.EditPartsForm.min_qty.$valid && $scope.EditPartsForm.max_qty.$valid) {

@@ -47,6 +47,9 @@ angular.module('PGapp.createclass', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
         $scope.disableSubmit = false;
         function CreateClass() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.disableSubmit = true;
             if ($scope.CreateClassForm.class_name.$valid && $scope.CreateClassForm.facility_number.$valid) {
 

@@ -48,6 +48,9 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
         $scope.disableSubmit = false;
         function CreateCategory() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.disableSubmit = true;
             if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {
                 if (!angular.isUndefined($scope.category.operator_available) && $scope.category.operator_available == false) {
