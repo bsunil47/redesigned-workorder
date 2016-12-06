@@ -1110,10 +1110,16 @@ router.post('/search_equipment', function (req, res, next) {
         });
 });
 router.post('/get_equipment', function (req, res, next) {
-    Equipment.findOne(
-        {
+    if (req.body._id) {
+        var query = {
+            _id: req.body._id
+        };
+    } else {
+        var query = {
             equipment_number: req.body.equipment_number
-        }, {equipment_number: 1, equipment_name: 1, facilities: 1}, function (err, equipment) {
+        };
+    }
+    Equipment.findOne(query, {equipment_number: 1, equipment_name: 1, facilities: 1}, function (err, equipment) {
             if (err) {
                 return next(err)
             }
@@ -2044,6 +2050,7 @@ function mail(mail_to, req) {
         },
         {
             $match: {
+                "facility_number": req.body.facility_number,
                 "equipments.material_number": req.body.material_number,
                 "equipments.vendor_number": req.body.vendor_number,
             }
