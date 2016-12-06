@@ -379,7 +379,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                             if (userdetail.role == 'manager') {
                                 var msg = "WorkOrder assigned to " + $scope.showtechnician($scope.workOrder.workorder_technician) + " an email has been sent.";
                             } else {
-                                var msg = "WorkOrder parts recived, an email has been sent to " + $scope.showtechnician($scope.workOrder.workorder_technician) + ".";
+                                var msg = "WorkOrder parts received, an email has been sent to " + $scope.showtechnician($scope.workOrder.workorder_technician) + ".";
                             }
                         }
                         swal({

@@ -416,7 +416,7 @@ router.post('/create_class', function (req, res, next) {
                             Info: 'Error creating Class',
                         });
                     } else {
-                        res.json({Code: 200, Info: '"Class Created Sucessfully'});
+                        res.json({Code: 200, Info: 'Class Created Sucessfully'});
                     }
                 });
         });

@@ -89,14 +89,14 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
         $scope.$watch("ep.equipments.max_qty", function (newValue, oldValue) {
             if (!isInt($scope.ep.equipments.max_qty)) {
-                $scope.ep.equipments.max_qty = "";
+                $scope.ep.equipments.max_qty = oldValue;
             } else {
                 $scope.max_qty = parseInt($scope.ep.equipments.max_qty) - 1;
             }
         });
         $scope.$watch("ep.equipments.min_qty", function (newValue, oldValue) {
             if (!isInt($scope.ep.equipments.min_qty)) {
-                $scope.ep.equipments.min_qty = "";
+                $scope.ep.equipments.min_qty = oldValue;
             } else {
                 $scope.min_qty = parseInt($scope.ep.equipments.min_qty) + 1;
             }
