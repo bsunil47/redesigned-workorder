@@ -4,7 +4,7 @@
 
 var mongoose = require('mongoose');
 var Collection_EquipmentSchema = new mongoose.Schema({
-    equipment_number: {type: String, unique: true, required: true},
+    equipment_number: {type: String, required: true},
     facilities: [],
     equipment_name: {type: String, required: true},
     equipments: [],

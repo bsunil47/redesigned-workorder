@@ -3,7 +3,7 @@
 angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
     .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/editparts/:id/:id2', {
+        $routeProvider.when('/editparts/:id/:id1/:id2', {
             templateUrl: 'view/editparts/edit_parts.html',
             controller: 'EditPartsCtrl'
         });
@@ -15,7 +15,8 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         }
 
         var edit_part_number = $routeParams.id;
-        var edit_vendor_number = $routeParams.id2;
+        var edit_vendor_number = $routeParams.id1;
+        var edit_facility_number = $routeParams.id2;
         $scope.ep = {
             equipment_name: "",
             equipment_number: "",
@@ -23,8 +24,8 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
             material_name: "",
             vendor_number: "",
             vendor_name: "",
-            min_qty: "",
-            max_qty: ""
+            min_qty: 0,
+            max_qty: 0
         };
         var userdetail = $cookies.getObject('userDetails');
         $scope.redirectBack = function (reloc) {
@@ -52,10 +53,18 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
             alert(error);
         });
         $scope.disVendorName = true;
-        API.GetParts.Recent({part_number: edit_part_number, vendor_number: edit_vendor_number}, function (res) {
+        API.GetParts.Recent({
+            part_number: edit_part_number,
+            vendor_number: edit_vendor_number,
+            facility_number: edit_facility_number
+        }, function (res) {
             if (res.Code == 200) {
                 console.log("Get Parts: " + JSON.stringify(res.Info.equipment));
                 $scope.ep = res.Info.equipment;
+                $scope.ep.equipments.max_qty = parseInt($scope.ep.equipments.max_qty);
+                $scope.ep.equipments.min_qty = parseInt($scope.ep.equipments.min_qty);
+                $scope.min_qty = parseInt($scope.ep.equipments.min_qty) + 1;
+                $scope.max_qty = parseInt($scope.ep.equipments.max_qty) - 1;
 
             }
         }, function (error) {
@@ -77,10 +86,27 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.redirectLoc = function (reloc) {
             $location.path(reloc);
         };
+
+        $scope.$watch("ep.equipments.max_qty", function (newValue, oldValue) {
+            if (!isInt($scope.ep.equipments.max_qty)) {
+                $scope.ep.equipments.max_qty = oldValue;
+            } else {
+                $scope.max_qty = parseInt($scope.ep.equipments.max_qty) - 1;
+            }
+        });
+        $scope.$watch("ep.equipments.min_qty", function (newValue, oldValue) {
+            if (!isInt($scope.ep.equipments.min_qty)) {
+                $scope.ep.equipments.min_qty = oldValue;
+            } else {
+                $scope.min_qty = parseInt($scope.ep.equipments.min_qty) + 1;
+            }
+        });
         $scope.EditParts = EditParts;
 
         function EditParts() {
-
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             console.log($scope.ep.equipment_name);
             console.log("Equipments in ep: " + JSON.stringify($scope.ep));
             if ($scope.EditPartsForm.min_qty.$valid && $scope.EditPartsForm.max_qty.$valid) {
@@ -88,72 +114,45 @@ angular.module('PGapp.editparts', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 if (parseInt($scope.EditPartsForm.min_qty, 10) > parseInt($scope.EditPartsForm.max_qty, 10)) {
                     swal({
                         title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                        text: "Invalid Details",
+                        text: "Min Qty cant be greater than Max Qty",
                         width: "450px",
                         confirmButtonText: 'Ok'
                     });
-                    $location.path("/partsequipmentlist");
-                }
-                $scope.ep.vendor_number = $scope.ep.equipments.vendor_number;
-                $scope.ep.material_number = $scope.ep.equipments.material_number;
-                $scope.ep.min_qty = $scope.ep.equipments.min_qty;
-                $scope.ep.max_qty = $scope.ep.equipments.max_qty;
 
-                API.EditParts.Equipment($scope.ep, function (res) {
-                    if (res.Code == 200) {
-                        swal({
-                            title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                            text: "Parts details updated",
-                            width: "450px",
-                            confirmButtonText: 'Ok'
-                        });
-                        $location.path("/partsequipmentlist");
-                    } else {
-                        //$scope.CreateUserForm.email.error = true;
-                        $location.path("/partsequipmentlist");
-                    }
-                }, function (error) {
-                    alert(error);
-                });
+                } else {
+                    $scope.ep.vendor_number = $scope.ep.equipments.vendor_number;
+                    $scope.ep.material_number = $scope.ep.equipments.material_number;
+                    $scope.ep.min_qty = $scope.ep.equipments.min_qty;
+                    $scope.ep.max_qty = $scope.ep.equipments.max_qty;
+                    $scope.ep.facility_number = edit_facility_number;
+
+                    API.EditParts.Equipment($scope.ep, function (res) {
+                        if (res.Code == 200) {
+                            swal({
+                                title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
+                                text: "Parts details updated",
+                                width: "450px",
+                                confirmButtonText: 'Ok'
+                            });
+                            $location.path("/partsequipmentlist");
+                        } else {
+                            //$scope.CreateUserForm.email.error = true;
+                            $location.path("/partsequipmentlist");
+                        }
+                    }, function (error) {
+                        alert(error);
+                    });
+                }
+
             }
             else {
-                console.log("edit parts if condition failed");
-                swal({
+                /* swal({
                     title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                    text: "Invalid Details",
+                 text: "Min Qty cant be greater than Max Qty",
                     width: "450px",
                     confirmButtonText: 'Ok'
-                });
-                $location.path("/partsequipmentlist");
+                 });*/
             }
         }
-
-        // $scope.eqchange = function () {
-        //     if ($scope.CreatePartsForm.equipment_number.$valid) {
-        //         console.log("EQ Numberin eqchange: " + $scope.ep.equipment_number);
-        //         API.Equipmentname.Recent($scope.ep, function (res) {
-        //             //API.Equipmentname.Recent(JSON.stringify($scope.pe.equipment_number), function (res) {
-        //             if (res.Code == 200) {
-        //                 console.log("EName: " + JSON.stringify(res.Info.equipmentname));
-        //                 console.log("EName: " + JSON.stringify(res.Info.equipmentname[0]));
-        //                 $scope.ep.equipment_name = res.Info.equipmentname[0].equipment_name;
-        //             } else {
-
-        //             }
-
-        //         }, function (error) {
-        //             alert(error);
-        //         });
-        //     }
-        // }
-        // $scope.$watch("ep.equipment_number", function (newValue, oldValue) {
-        //     if (!angular.isUndefined($scope.ep.equipment_number)) {
-        //         var found = $filter('getByFacilityNumber')('equipment_number', $scope.ep.equipment_number, $scope.partsequipments);
-        //         if (angular.isUndefined(found) || found === null) {
-        //             return null;
-        //         }
-        //         $scope.ep.equipment_name = found.equipment_name;
-        //     }
-        // });
 
     }]);

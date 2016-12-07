@@ -79,6 +79,9 @@ angular.module('PGapp.edituser', ['ngRoute', 'ngAnimate', 'ngCookies'])
         };
 
         function EditUser() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.user.username = $scope.user.firstname + ' ' + $scope.user.lastname;
             $scope.user._v = 0;
             if ($scope.EditUserForm.firstname.$valid && $scope.EditUserForm.lastname.$valid) {

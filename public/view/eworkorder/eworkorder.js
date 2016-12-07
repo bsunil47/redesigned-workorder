@@ -146,6 +146,9 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.saveDisable = false;
 
                 }
+                if (userdetail.role == 'clerk' && ($scope.workOrder.status == 1 || $scope.workOrder.status == 3)) {
+                    $scope.saveDisable = false;
+                }
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                     var min_date = $scope.workOrder.wo_datecomplete = new Date($filter('changeStringToDate')($scope.workOrder.wo_datecomplete));
                 } else {
@@ -319,6 +322,9 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         };
 
         function updateWorkOrder() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             console.log($scope.workOrder.workorder_technician);
             console.log($scope.workOrder.workorder_skill);
             console.log($scope.workOrder.workorder_class);
@@ -376,7 +382,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                             if (userdetail.role == 'manager') {
                                 var msg = "WorkOrder assigned to " + $scope.showtechnician($scope.workOrder.workorder_technician) + " an email has been sent.";
                             } else {
-                                var msg = "WorkOrder parts recived, an email has been sent to " + $scope.showtechnician($scope.workOrder.workorder_technician) + ".";
+                                var msg = "WorkOrder parts received, an email has been sent to " + $scope.showtechnician($scope.workOrder.workorder_technician) + ".";
                             }
                         }
                         swal({

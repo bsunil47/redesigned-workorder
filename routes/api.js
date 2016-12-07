@@ -470,6 +470,7 @@ router.post('/create_equipment', function (req, res, next) {
             facilities: {facility_number: req.body.facility_number},
             equipment_name: req.body.equipment_name,
             equipment_number: req.body.equipment_number,
+            facility_number: req.body.facility_number,
             //equipment_vendorname: req.body.equipment_vendorname,
             status: 1
         });
@@ -478,16 +479,23 @@ router.post('/create_equipment', function (req, res, next) {
         Equipment.count({
             equipment_number: {$regex: new RegExp('^' + req.body.equipment_number + '$', "i")},
             equipment_name: req.body.equipment_name,
-            facilities: {facility_number: req.body.facility_number}
+            facilities: {facility_number: req.body.facility_number},
+            facility_number: req.body.facility_number
         }, function (err, count) {
             if (count) {
                 res.json({Code: 200, Info: 'Equipment number already exists'});
             }
             else {
-                Equipment.update({equipment_number: req.body.equipment_number}, equipment, {upsert: true}, function (err, resp) {
+                Equipment.update({
+                    equipment_number: req.body.equipment_number,
+                    facility_number: req.body.facility_number
+                }, equipment, {upsert: true}, function (err, resp) {
                     console.log("Session1: " + JSON.stringify(err));
                     if (err) {
-                        Equipment.update({equipment_number: req.body.equipment_number}, {$push: {"facilities": {facility_number: req.body.facility_number}}}, function (err, resp) {
+                        Equipment.update({
+                            equipment_number: req.body.equipment_number,
+                            facility_number: req.body.facility_number
+                        }, {$push: {"facilities": {facility_number: req.body.facility_number}}}, function (err, resp) {
                             if (err) {
                                 console.log(err);
 
@@ -551,7 +559,7 @@ router.post('/create_facility', function (req, res, next) {
                     Info: 'Error creating Facility',
                 });
             } else {
-                res.json({Code: 200, Info: 'Facility Created sucessfully'});
+                res.json({Code: 200, Info: 'Facility Created successfully'});
             }
         });
     });
@@ -621,7 +629,7 @@ router.post('/create_priority', function (req, res, next) {
                             Info: 'Error creating Priority',
                         });
                     } else {
-                        res.json({Code: 200, Info: 'Priority created sucessfull'});
+                        res.json({Code: 200, Info: 'Priority created successfully'});
                     }
                 });
         });
@@ -681,7 +689,7 @@ router.post('/create_skill', function (req, res, next) {
                             Info: 'Error creating skill',
                         });
                     } else {
-                        res.json({Code: 200, Info: 'Skill Sucessfully created'});
+                        res.json({Code: 200, Info: 'Skill created successfully'});
                     }
                 });
         });
@@ -696,7 +704,7 @@ router.post('/skills', function (req, res, next) {
         if (skills != null) {
             res.json({Code: 200, Info: {skills: skills}});
         } else {
-            res.json({Code: 406, Info: 'no class'});
+            res.json({Code: 406, Info: 'no skills'});
         }
     });
 });
@@ -764,7 +772,7 @@ router.post('/create_status', function (req, res, next) {
                                 Info: 'Error creating Status',
                             });
                         } else {
-                            res.json({Code: 200, Info: 'Status created sucessfull'});
+                            res.json({Code: 200, Info: 'Status created successfully'});
                         }
                     });
             });
@@ -774,7 +782,7 @@ router.post('/create_status', function (req, res, next) {
 });
 
 router.post('/createparts', function (req, res, next) {
-    if (!req.body.equipment_name || !req.body.equipment_number || !req.body.part_number || !req.body.part_name || !req.body.vendor_number || !req.body.vendor_name || !req.body.min_qty || !req.body.max_qty) {
+    if (!req.body.facility_number || !req.body.equipment_name || !req.body.equipment_number || !req.body.part_number || !req.body.part_name || !req.body.vendor_number || !req.body.vendor_name || !req.body.min_qty || !req.body.max_qty) {
         return res.json({Code: 496, Info: 'All fields are required'});
     }
     if (parseInt(req.body.min_qty) > parseInt(req.body.max_qty)) {
@@ -782,13 +790,15 @@ router.post('/createparts', function (req, res, next) {
     }
     Equipment.findOne({
         equipment_name: req.body.equipment_name,
-        equipment_number: req.body.equipment_number
+        equipment_number: req.body.equipment_number,
+        facility_number: req.body.facility_number
     }, function (err, facility) {
         if (err) {
             return next(err);
         }
         var Qery = {
             equipment_number: req.body.equipment_number,
+            facility_number: req.body.facility_number,
             'equipments.material_number': {$regex: new RegExp('^' + req.body.part_number + '$', "i")},
             'equipments.vendor_number': req.body.vendor_number
         };
@@ -813,10 +823,16 @@ router.post('/createparts', function (req, res, next) {
                     status: 1
                 });
                 var upsertData = pequipments.toObject();
-                Equipment.update({equipment_number: req.body.equipment_number}, pequipments, {upsert: true}, function (err, resp) {
+                Equipment.update({
+                    equipment_number: req.body.equipment_number,
+                    facility_number: req.body.facility_number
+                }, pequipments, {upsert: true}, function (err, resp) {
                     console.log("Session1: " + JSON.stringify(err));
                     if (err) {
-                        Equipment.update({equipment_number: req.body.equipment_number}, {
+                        Equipment.update({
+                            equipment_number: req.body.equipment_number,
+                            facility_number: req.body.facility_number
+                        }, {
                             $push: {
                                 "equipments": {
                                     material_number: req.body.part_number,
@@ -888,7 +904,12 @@ router.post('/create_part_request', function (req, res, next) {
 });
 
 router.post('/partsequipments', function (req, res, next) {
-    Equipment.find({}, {_id: 0, equipment_number: 1, equipment_name: 1}, function (err, partsequipments) {
+    Equipment.find({}, {
+        _id: 0,
+        equipment_number: 1,
+        equipment_name: 1,
+        facility_number: 1
+    }, function (err, partsequipments) {
         if (err) {
             return next(err)
         }
@@ -918,7 +939,7 @@ router.post('/get_parts', function (req, res, next) {
             $match: {
                 "equipments.material_number": req.body.part_number,
                 "equipments.vendor_number": req.body.vendor_number,
-
+                "facility_number": req.body.facility_number
             }
         },
         {
@@ -954,6 +975,7 @@ router.post('/edit_parts', function (req, res, next) {
     Equipment.count({
         _id: req.body._id,
         equipment_number: req.body.equipment_number,
+        facility_number: req.body.facility_number,
         "equipments.material_number": req.body.material_number,
         "equipments.vendor_number": req.body.vendor_number,
     }, function (err, equipment_count) {
@@ -964,6 +986,7 @@ router.post('/edit_parts', function (req, res, next) {
             Equipment.update({
                     _id: req.body._id,
                     equipment_number: req.body.equipment_number,
+                    facility_number: req.body.facility_number,
                     "equipments.material_number": req.body.material_number,
                     "equipments.vendor_number": req.body.vendor_number
                 }, {$set: {"equipments.$.min_qty": req.body.min_qty, "equipments.$.max_qty": req.body.max_qty}},
@@ -1087,10 +1110,16 @@ router.post('/search_equipment', function (req, res, next) {
         });
 });
 router.post('/get_equipment', function (req, res, next) {
-    Equipment.findOne(
-        {
+    if (req.body._id) {
+        var query = {
+            _id: req.body._id
+        };
+    } else {
+        var query = {
             equipment_number: req.body.equipment_number
-        }, {equipment_number: 1, equipment_name: 1, facilities: 1}, function (err, equipment) {
+        };
+    }
+    Equipment.findOne(query, {equipment_number: 1, equipment_name: 1, facilities: 1}, function (err, equipment) {
             if (err) {
                 return next(err)
             }
@@ -1558,7 +1587,9 @@ router.post('/edit_user', function (req, res, next) {
 
 router.post('/get_search_wo', function (req, res, next) {
     var query = req.body;
-    query.workorder_number = parseInt(query.workorder_number);
+    if (typeof req.body.workorder_number !== "undefined") {
+        query.workorder_number = parseInt(query.workorder_number);
+    }
     var user_details = {
         user_id: req.body.user_id,
         userrole: req.body.userrole,
@@ -1597,6 +1628,9 @@ router.post('/get_search_wo', function (req, res, next) {
             '$lte': created_on
         };
         delete query['wo_datecomplete_from'];
+    }
+    if (typeof req.body.status !== "undefined") {
+        query.status = req.body.status;
     }
     if (typeof req.body.wo_pm_date_from !== "undefined") {
         var pMquery = {};
@@ -2016,6 +2050,7 @@ function mail(mail_to, req) {
         },
         {
             $match: {
+                "facility_number": req.body.facility_number,
                 "equipments.material_number": req.body.material_number,
                 "equipments.vendor_number": req.body.vendor_number,
             }
@@ -2081,7 +2116,7 @@ function mail(mail_to, req) {
                         +
                         '<p><span style="display:inline-block; width:160px"><b>Technician Name</b>: </span>' + username.firstname + " " + username.lastname + '</p>'
                         +
-                        '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Part request</p>'
+                        '<p>Please click <a href="http://' + req.headers.host + '">here</a> for Maintenance Work Order Application</p>'
 
                     };
                     transporter.sendMail(mailData, function (err, info) {

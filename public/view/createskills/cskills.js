@@ -47,6 +47,9 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
         $scope.disableSubmit = false;
         function CreateSkill() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.disableSubmit = true;
             if ($scope.CreateSkillForm.skill_name.$valid && $scope.CreateSkillForm.facility_number.$valid) {
                 $scope.skill_id = API.CreateSkill.Skill($scope.skill, function (res) {
@@ -77,6 +80,8 @@ angular.module('PGapp.createskills', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 

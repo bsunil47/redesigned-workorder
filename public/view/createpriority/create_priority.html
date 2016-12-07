@@ -43,7 +43,7 @@
                                         <label class="col-sm-6 control-label">Priority Name:</label>
                                         <div class="col-sm-6">
                                             <input ng-model="priority.priority_name" type="text" class="form-control"
-                                                   name="priority_name" required>
+                                                   name="priority_name" ng-pattern="/^[a-zA-Z0-9 ]*$/" required>
                                         </div>
                                     </div>
                                     <div class="form-group">

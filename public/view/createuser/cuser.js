@@ -51,6 +51,9 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
   };
         $scope.disableSubmit = false;
   function CreateUser(){
+      if (!$cookies.get('userDetails')) {
+          $location.path('login');
+      }
     $scope.user._v = 0;
       $scope.disableSubmit = true;
     if($scope.CreateUserForm.firstname.$valid && $scope.CreateUserForm.lastname.$valid){
@@ -85,6 +88,7 @@ angular.module('PGapp.createuser', ['ngRoute','ngAnimate', 'ngCookies'])
   }
 
     $scope.clearForm = function () {
+        $scope.user.email = "sample@sample.com";
         $scope.user = {};
     };
 

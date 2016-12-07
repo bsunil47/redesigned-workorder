@@ -21,7 +21,7 @@ angular.module('PGapp.editequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 $location.path("/");
             }
         };
-        var edit_equipment_number = $routeParams.id;
+        var edit_equipment_id = $routeParams.id;
         $scope.Logout = function () {
             $cookies.remove('userDetails');
             $location.path("/");
@@ -44,9 +44,11 @@ angular.module('PGapp.editequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
         };
         $scope.EditEquipment = EditEquipment;
         $scope.equipment = {
+            _id: edit_equipment_id,
             facility_number: "",
             equipment_name: "",
-            equipment_number: ""
+            equipment_number: "",
+
             //equipment_vendor_name: ""
         };
         var facilities = $cookies.getObject('facilities');
@@ -68,7 +70,7 @@ angular.module('PGapp.editequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
         //     }
         //     return facilities_numbers;
         // };
-        API.GetEquipment.Recent({equipment_number: edit_equipment_number}, function (res) {
+        API.GetEquipment.Recent({_id: edit_equipment_id}, function (res) {
             if (res.Code == 200) {
                 console.log("Get Facility: " + JSON.stringify(res.Info.equipment));
                 $scope.equipment = res.Info.equipment;
@@ -78,6 +80,9 @@ angular.module('PGapp.editequipment', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
         });
         function EditEquipment() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             console.log($scope.equipment);
             if ($scope.EditEquipmentForm.equipment_name.$valid) {
                 API.EditEquipment.Equipment($scope.equipment, function (res) {

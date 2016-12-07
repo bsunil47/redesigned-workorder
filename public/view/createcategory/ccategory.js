@@ -48,6 +48,9 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
         $scope.disableSubmit = false;
         function CreateCategory() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.disableSubmit = true;
             if ($scope.CreateCategoryForm.category_name.$valid && $scope.CreateCategoryForm.facility_number.$valid) {
                 if (!angular.isUndefined($scope.category.operator_available) && $scope.category.operator_available == false) {
@@ -58,7 +61,7 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
                         swal({
                             title: '<a href="javascript:void(0)"><img src="/images/logo.png" alt="Prysmian Group"><br>',
-                            text: 'Sucessfully created category',
+                            text: 'Category created Successfully',
                             width: "450px",
                             confirmButtonText: 'Ok'
                         });
@@ -84,6 +87,8 @@ angular.module('PGapp.createcategory', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 

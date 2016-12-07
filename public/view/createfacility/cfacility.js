@@ -37,6 +37,9 @@ angular.module('PGapp.createfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
         };
         $scope.disableSubmit = false;
         function CreateFacility() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.disableSubmit = true;
             if ($scope.CreateFacilityForm.facility_name.$valid && $scope.CreateFacilityForm.facility_number.$valid) {
                 $scope.facility_id = API.CreateFacility.Facility($scope.facility, function (res) {
@@ -67,6 +70,8 @@ angular.module('PGapp.createfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 

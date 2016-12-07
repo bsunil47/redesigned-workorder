@@ -47,6 +47,9 @@ angular.module('PGapp.createstatus', ['ngRoute', 'ngAnimate', 'ngCookies'])
         });
         $scope.disableSubmit = false;
         function CreateStatus() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             $scope.disableSubmit = true;
             if ($scope.CreateStatusForm.status_name.$valid && $scope.CreateStatusForm.facility_number.$valid) {
                 $scope.status_id = API.CreateStatus.Status($scope.status, function (res) {
@@ -77,10 +80,12 @@ angular.module('PGapp.createstatus', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     });
                     $scope.disableSubmit = false;
                 });
+            } else {
+                $scope.disableSubmit = false;
             }
         }
 
         $scope.clearForm = function () {
-            $scope.priority = {};
+            $scope.status = {};
         };
     }]);

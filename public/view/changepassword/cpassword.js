@@ -33,6 +33,9 @@ angular.module('PGapp.changepassword', ['ngRoute','ngAnimate', 'ngCookies'])
     $location.path("/");
   };
   function ChangePassword(){
+      if (!$cookies.get('userDetails')) {
+          $location.path('login');
+      }
       if ($scope.ChangePasswordForm.p_password.$valid && $scope.ChangePasswordForm.c_password.$valid && $scope.ChangePasswordForm.password.$valid) {
           $scope.user_id = API.ChangePassword.save($scope.user, function (res) {
               if (res.Code == 200) {

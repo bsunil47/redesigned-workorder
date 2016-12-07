@@ -87,16 +87,30 @@ angular.module('PGapp.users', ['ngRoute','ngAnimate', 'ngCookies'])
 }]);
 
 PGapp.filter('getById', function() {
-  //console.log(input);
-  return function(propertyName, propertyValue, collection) {
-    var i=0, len=collection.length;
-    for (i; i<len; i++) {
-      if (collection[i][propertyName] == propertyValue) {
-        return collection[i];
-      }
+    //console.log(input);
+    return function (propertyName, propertyValue, collection) {
+        var i = 0, len = collection.length;
+        for (i; i < len; i++) {
+            if (collection[i][propertyName] == propertyValue) {
+                return collection[i];
+            }
+        }
+        return null;
     }
-    return null;
-  }
+});
+
+PGapp.filter('getList', function () {
+    //console.log(input);
+    return function (propertyName, propertyValue, collection) {
+        var i = 0, len = collection.length;
+        var all_items = [];
+        for (i; i < len; i++) {
+            if (collection[i][propertyName] == propertyValue) {
+                all_items.push(collection[i]);
+            }
+        }
+        return all_items;
+    }
 });
 
 PGapp.filter('getByFacilityNumber', function () {

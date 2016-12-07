@@ -42,14 +42,16 @@
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Facility Number:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="facility.facility_number" type="text" class="form-control"
+                                            <input ng-model="facility.facility_number" type="text"
+                                                   ng-pattern="/^[a-zA-Z0-9 ]*$/" class="form-control"
                                                    name="facility_number" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">Facility Name:</label>
                                         <div class="col-sm-6">
-                                            <input ng-model="facility.facility_name" type="text" class="form-control"
+                                            <input ng-model="facility.facility_name" type="text"
+                                                   ng-pattern="/^[a-zA-Z0-9 ]*$/" class="form-control"
                                                    name="facility_name" required>
                                         </div>
                                     </div>

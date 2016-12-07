@@ -50,6 +50,9 @@ angular.module('PGapp.editfacility', ['ngRoute', 'ngAnimate', 'ngCookies'])
         };
 
         function EditFacility() {
+            if (!$cookies.get('userDetails')) {
+                $location.path('login');
+            }
             if ($scope.EditFacilityForm.facility_name.$valid && $scope.EditFacilityForm.facility_number.$valid) {
                 //$scope.facility_id =
                 API.EditFacility.Facility($scope.facility, function (res) {
