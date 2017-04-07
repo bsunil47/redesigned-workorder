@@ -2,7 +2,7 @@
 var express = require('express');
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
-var transporter = nodemailer.createTransport(smtpTransport({
+/*var transporter = nodemailer.createTransport(smtpTransport({
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
@@ -16,7 +16,17 @@ var transporter = nodemailer.createTransport(smtpTransport({
     // default message fields
     // sender info
     from: 'Prysmian WOA <pgworkorder@gmail.com>'
+ }));*/
+var transporter = nodemailer.createTransport(smtpTransport({
+    host: 'relay.prysmian.gph.local',
+    port: 25,
+    secure: false,
+    requireTLS: true,
+    tls: {rejectUnauthorized: false},
+    logger: true,
+    debug: true
 }));
+
 var router = express.Router();
 var mongoose = require('mongoose');
 var Users = mongoose.model('Collection_Users');
@@ -258,6 +268,7 @@ router.post('/create_workorder', function (req, res, next) {
                                     //var mail_to = 'pgmanager7@gmail.com';
 
                                     var mailData = {
+                                        from: 'noreply@prysmiangroup.com',
                                         // Comma separated list of recipients
                                         to: mail_to,
                                         // Subject of the message
@@ -1772,6 +1783,7 @@ var SendMail = function (req, it_pm_workorder) {
 };
 var send = function (mail_to, last_message, req, facility, category, equipment, priority) {
     var mailData = {
+        from: 'noreply@prysmiangroup.com',
         // Comma separated list of recipients
         to: mail_to,
         // Subject of the message
@@ -1941,6 +1953,7 @@ var createWorkOrderPM = function (task) {
                                     //manager_email = "pgmanager7@gmail.com,";
                                     var mail_to = manager_email;
                                     var mailData = {
+                                        from: 'noreply@prysmiangroup.com',
                                         // Comma separated list of recipients
                                         to: mail_to,
                                         // Subject of the message
@@ -2084,6 +2097,7 @@ function mail(mail_to, req) {
                     var tempstr = JSON.stringify(result).slice(1, -1);
                     var gpresult = JSON.parse(tempstr);
                     var mailData = {
+                        from: 'noreply@prysmiangroup.com',
                         // Comma separated list of recipients
                         to: mail_to,
                         // Subject of the message
