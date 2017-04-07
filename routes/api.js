@@ -810,7 +810,7 @@ router.post('/createparts', function (req, res, next) {
             equipment_number: req.body.equipment_number,
             facility_number: req.body.facility_number,
             'equipments.material_number': {$regex: new RegExp('^' + req.body.part_number + '$', "i")},
-            'equipments.vendor_number': req.body.vendor_number
+            'equipments.vendor_number': {$regex: new RegExp('^' + req.body.vendor_number + '$', "i")}
         };
 
         console.log(Qery);
@@ -1599,6 +1599,9 @@ router.post('/get_search_wo', function (req, res, next) {
     var query = req.body;
     if (typeof req.body.workorder_number !== "undefined") {
         query.workorder_number = parseInt(query.workorder_number);
+    }
+    if (typeof req.body.workorder_PM !== "undefined") {
+        query.workorder_PM = {$regex: new RegExp('^' + query.workorder_PM + '$', "i")};
     }
     var user_details = {
         user_id: req.body.user_id,
