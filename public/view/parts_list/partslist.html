@@ -82,9 +82,12 @@
                                         </button>
                                     </td>
                                 </tr>
-
+                                <tr ng-hide="parts.length">
+                                    <td colspan="9">No Parts</td>
+                                </tr>
                                 </tbody>
                             </table>
+                            <!--<li ng-hide="parts.length">No Parts</li>-->
                         </div>
                         <!-- Parts list table end -->
                     </div>
