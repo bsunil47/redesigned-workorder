@@ -330,10 +330,15 @@ router.post('/create_category', function (req, res, next) {
             return next(err);
         }
         if (Boolean(req.body.operator_available)) {
+            /*var query_count = {
+             category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+             "facilities.facility_number": req.body.facility_number,
+             operator_available: "true"
+             };*/
             var query_count = {
                 category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
                 "facilities.facility_number": req.body.facility_number,
-                operator_available: "true"
+                "facilities.operator_available": "true"
             };
         }
         else {
@@ -359,7 +364,12 @@ router.post('/create_category', function (req, res, next) {
             Category.update(query, {
                     operator_available: Boolean(req.body.operator_available),
                     status: 1,
-                    $push: {"facilities": {facility_number: req.body.facility_number}}
+                    $push: {
+                        "facilities": {
+                            facility_number: req.body.facility_number,
+                            operator_available: Boolean(req.body.operator_available)
+                        }
+                    }
                 },
                 {safe: true, upsert: true},
                 function (err, model) {
@@ -1086,7 +1096,15 @@ router.post('/search_category', function (req, res, next) {
     };
     console.log(req.body.operator_available);
     if (typeof req.body.operator_available !== 'undefined') {
-        query.operator_available = Boolean(req.body.operator_available);
+        var query = {
+            facilities: {
+                $elemMatch: {
+                    facility_number: req.body.facility_number,
+                    operator_available: Boolean(req.body.operator_available)
+                }
+            }
+        };
+        /*query.operator_available = Boolean(req.body.operator_available);*/
     }
     console.log(query);
     Category.find(

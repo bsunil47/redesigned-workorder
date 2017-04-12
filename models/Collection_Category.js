@@ -4,7 +4,7 @@
 
 var mongoose = require('mongoose');
 var Collection_CategorySchema = new mongoose.Schema({
-    facilities: [{facility_number: {type: String, unique: true}}],
+    facilities: [{facility_number: {type: String, unique: true}, operator_available: {type: Boolean, default: false}}],
     category_name: {type: String, unique: true, required: true},
     operator_available: {type: Boolean, default: false},
     status: {type: Number, default: 1},
