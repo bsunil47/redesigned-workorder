@@ -329,25 +329,9 @@ router.post('/create_category', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        if (Boolean(req.body.operator_available)) {
-            /*var query_count = {
-             category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
-             "facilities.facility_number": req.body.facility_number,
-             operator_available: "true"
-             };*/
-            var query_count = {
-                category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
-                "facilities.facility_number": req.body.facility_number,
-                "facilities.operator_available": "true"
-            };
-        }
-        else {
-            var query_count = {
-                category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
-                "facilities.facility_number": req.body.facility_number
-            };
-        }
-
+        var query_count = {
+            category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")}
+        };
 
         Category.count(query_count, function (err, categorycount) {
             if (err) {
@@ -355,34 +339,73 @@ router.post('/create_category', function (req, res, next) {
             }
             console.log("query_count" + JSON.stringify(query_count));
             if (categorycount) {
-                return res.json({Code: 498, Info: 'Category for the Facility already exists'});
-                next();
-            }
-            var query = {
-                category_name: req.body.category_name
-            };
-            Category.update(query, {
+                if (Boolean(req.body.operator_available)) {
+                    /*var query_count = {
+                     category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+                     "facilities.facility_number": req.body.facility_number,
+                     operator_available: "true"
+                     };*/
+                    var query_count = {
+                        category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+                        "facilities.facility_number": req.body.facility_number,
+                        "facilities.operator_available": "true"
+                    };
+                }
+                else {
+                    var query_count = {
+                        category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+                        "facilities.facility_number": req.body.facility_number
+                    };
+                }
+                var query = {
+                    category_name: req.body.category_name/*, "facilities.facility_number": req.body.facility_number,*/
+                };
+
+                Category.update(query, {
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+                Category.update(query, {
+                        operator_available: Boolean(req.body.operator_available),
+                        status: 1,
+                        $push: {
+                            "facilities": {
+                                facility_number: req.body.facility_number,
+                                operator_available: Boolean(req.body.operator_available)
+                            }
+                        }
+                    },
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating category',
+                            });
+                        } else {
+                            res.json({Code: 200, Info: 'Category updated sucessfully'});
+                        }
+                    });
+            } else {
+                Category.create({
+                    category_name: req.body.category_name,
                     operator_available: Boolean(req.body.operator_available),
                     status: 1,
                     $push: {
                         "facilities": {
-                            facility_number: req.body.facility_number,
-                            operator_available: Boolean(req.body.operator_available)
+                            facility_number: req.body.facility_number
                         }
                     }
-                },
-                {safe: true, upsert: true},
-                function (err, model) {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            Code: 499,
-                            Info: 'Error creating category',
-                        });
-                    } else {
-                        res.json({Code: 200, Info: 'Category created sucessfully'});
-                    }
                 });
+                res.json({Code: 200, Info: 'Category created sucessfully'});
+            }
+
 
         });
     });
