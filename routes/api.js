@@ -358,7 +358,7 @@ router.post('/create_category', function (req, res, next) {
                     };
                 }
                 var query = {
-                    category_name: req.body.category_name/*, "facilities.facility_number": req.body.facility_number,*/
+                    category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")}/*, "facilities.facility_number": req.body.facility_number,*/
                 };
 
                 Category.update(query, {
