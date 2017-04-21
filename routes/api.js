@@ -1377,7 +1377,11 @@ router.post('/get_users_type', function (req, res, next) {
             for (var user_key in fusers) {
                 user_ids.push(fusers[user_key].user_id);
             }
-            Roles.findOne({role_name: 'technician'}, function (err, role) {
+            var role = 'technician';
+            if (typeof req.body.role_name !== "undefined") {
+                role = req.body.role_name;
+            }
+            Roles.findOne({role_name: role}, function (err, role) {
                 if (err) {
                     return next(err);
                 }

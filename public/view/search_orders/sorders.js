@@ -82,9 +82,10 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 }, function (error) {
                     alert(error);
                 });
-                API.Status.Recent({facility_number: $scope.selected_facility}, function (res) {
+                API.SStatus.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
-                        $scope.statuses = res.Info.status_list;
+                        $scope.statuses = res.Info.statuses;
+                        //$scope.statuses = res.Info.status_list;
                         console.log($scope.statuses)
                     } else {
                     }
@@ -103,7 +104,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                     if (res.Code == 200) {
                         var qry = {userrole: res.Info.user_role._id};
                         console.log(qry);
-                        API.GetUsers.Recent(qry, function (res) {
+                        API.GetUserByType.Recent({facility_number: $scope.selected_facility}, function (res) {
                             if (res.Code == 200) {
                                 $scope.technicians = res.Info.users;
                             } else {
@@ -111,6 +112,14 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                         }, function (error) {
                             alert(error);
                         });
+                        /*API.GetUsers.Recent(qry, function (res) {
+                         if (res.Code == 200) {
+                         $scope.technicians = res.Info.users;
+                         } else {
+                         }
+                         }, function (error) {
+                         alert(error);
+                         });*/
                     } else {
                     }
                 }, function (error) {
@@ -120,7 +129,10 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                     if (res.Code == 200) {
                         var qry = {userrole: res.Info.user_role._id};
                         console.log(qry);
-                        API.GetUsers.Recent(qry, function (res) {
+                        API.GetUserByType.Recent({
+                            facility_number: $scope.selected_facility,
+                            role_name: 'operator'
+                        }, function (res) {
                             if (res.Code == 200) {
                                 $scope.requestors = res.Info.users;
                             } else {
@@ -128,6 +140,14 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                         }, function (error) {
                             alert(error);
                         });
+                        /*API.GetUsers.Recent(qry, function (res) {
+                         if (res.Code == 200) {
+                         $scope.requestors = res.Info.users;
+                         } else {
+                         }
+                         }, function (error) {
+                         alert(error);
+                         });*/
                     } else {
                     }
                 }, function (error) {
