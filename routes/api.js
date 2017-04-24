@@ -473,11 +473,7 @@ router.post('/create_class', function (req, res, next) {
                 Class.create({
                     class_name: req.body.class_name,
                     status: 1,
-                    $push: {
-                        "facilities": {
-                            facility_number: req.body.facility_number
-                        }
-                    }
+                    "facilities": {facility_number: req.body.facility_number}
                 });
                 res.json({Code: 200, Info: 'Category created sucessfully'});
             }
@@ -679,7 +675,7 @@ router.post('/create_priority', function (req, res, next) {
                 var query = {
                     priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")},
                 };
-                Skill.update(query, {
+                Priority.update(query, {
                     $pull: {
                         "facilities": {
                             facility_number: req.body.facility_number
@@ -700,7 +696,7 @@ router.post('/create_priority', function (req, res, next) {
                                 Info: 'Error creating Priority',
                             });
                         } else {
-                            res.json({Code: 200, Info: 'Priority created successfully'});
+                            return res.json({Code: 200, Info: 'Priority created successfully'});
                         }
                     });
                 /* return res.json({Code: 498, Info: 'Priority for the Facility already exists'});
@@ -709,13 +705,9 @@ router.post('/create_priority', function (req, res, next) {
                 Priority.create({
                     priority_name: req.body.priority_name,
                     status: 1,
-                    $push: {
-                        "facilities": {
-                            facility_number: req.body.facility_number
-                        }
-                    }
+                    "facilities": {facility_number: req.body.facility_number}
                 });
-                res.json({Code: 200, Info: 'Priority created sucessfully'});
+                return res.json({Code: 200, Info: 'Priority created sucessfully'});
             }
             // validations ** end
 
@@ -791,11 +783,7 @@ router.post('/create_skill', function (req, res, next) {
                 Skill.create({
                     skill_name: req.body.skill_name,
                     status: 1,
-                    $push: {
-                        "facilities": {
-                            facility_number: req.body.facility_number
-                        }
-                    }
+                    "facilities": {facility_number: req.body.facility_number}
                 });
                 res.json({Code: 200, Info: 'Skill created sucessfully'});
             }
@@ -897,11 +885,7 @@ router.post('/create_status', function (req, res, next) {
                     Status.create({
                         status_name: req.body.status_name,
                         $setOnInsert: {status_number: statuscountinc},
-                        $push: {
-                            "facilities": {
-                                facility_number: req.body.facility_number
-                            }
-                        }
+                        "facilities": {facility_number: req.body.facility_number}
                     });
                     res.json({Code: 200, Info: 'Category created sucessfully'});
                 });
