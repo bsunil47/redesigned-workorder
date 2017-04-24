@@ -15,6 +15,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         }
         $scope.workOrder = {};
         var userdetail = $cookies.getObject('userDetails');
+        var status_list;
         $scope.redirectBack = function (reloc) {
             if (userdetail.role == 'manager' || userdetail.role == 'admin') {
                 $location.path(reloc);
@@ -22,11 +23,150 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 $location.path("/");
             }
         };
-        $scope.facilities = $cookies.getObject('facilities');
-        $scope.selected_facility = $scope.facilities[0].facility_number;
-        API.Equipments.Recent(userdetail.user, function (res) {
+
+        API.SFacilities.Recent(userdetail.user, function (res) {
             if (res.Code == 200) {
-                $scope.equipments = res.Info.equipments;
+
+                $scope.facilities = res.Info.facilities;
+                $scope.selected_facility = res.Info.facilities[0].facility_number;
+                console.log($scope.selected_facility);
+                $scope.workOrder.workorder_facility = res.Info.facilities[0].facility_number;
+                //$scope.facilities[1] = res.Info.facilities;
+                API.SEquipment.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+                        $scope.equipments = res.Info.equipments;
+                    } else {
+
+                    }
+
+                }, function (error) {
+                    alert(error);
+                });
+                API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+
+                        $scope.categories = res.Info.categories;
+
+
+                        //$cookies.put('userDetails',res)
+                    } else {
+
+                    }
+
+                }, function (error) {
+                    alert(error);
+                });
+                API.SPriority.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+                        $scope.priorities = res.Info.priorities;
+                        //$cookies.put('userDetails',res)
+                    } else {
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+                API.SSkill.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+                        $scope.skills = res.Info.skills;
+                        //$cookies.put('userDetails',res)
+                    } else {
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+                API.SClass.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+                        $scope.classes = res.Info.classes;
+                    } else {
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+                API.SStatus.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+                        $scope.statuses = res.Info.statuses;
+                        //$scope.statuses = res.Info.status_list;
+                        console.log($scope.statuses)
+                    } else {
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+                API.GetUserByType.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+                        $scope.technicians = res.Info.users;
+                    } else {
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+                API.UserRole.Recent({role_name: 'technician'}, function (res) {
+                    if (res.Code == 200) {
+                        var qry = {userrole: res.Info.user_role._id};
+                        console.log(qry);
+                        API.GetUserByType.Recent({facility_number: $scope.selected_facility}, function (res) {
+                            if (res.Code == 200) {
+                                $scope.technicians = res.Info.users;
+                            } else {
+                            }
+                        }, function (error) {
+                            alert(error);
+                        });
+                        /*API.GetUsers.Recent(qry, function (res) {
+                         if (res.Code == 200) {
+                         $scope.technicians = res.Info.users;
+                         } else {
+                         }
+                         }, function (error) {
+                         alert(error);
+                         });*/
+                    } else {
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+                API.UserRole.Recent({role_name: 'operator'}, function (res) {
+                    if (res.Code == 200) {
+                        var qry = {userrole: res.Info.user_role._id};
+                        console.log(qry);
+                        API.GetUserByType.Recent({
+                            facility_number: $scope.selected_facility,
+                            role_name: 'operator'
+                        }, function (res) {
+                            if (res.Code == 200) {
+                                $scope.requestors = res.Info.users;
+                            } else {
+                            }
+                        }, function (error) {
+                            alert(error);
+                        });
+                        /*API.GetUsers.Recent(qry, function (res) {
+                         if (res.Code == 200) {
+                         $scope.requestors = res.Info.users;
+                         } else {
+                         }
+                         }, function (error) {
+                         alert(error);
+                         });*/
+                    } else {
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+                API.Status.Recent(userdetail.user, function (res) {
+                    if (res.Code == 200) {
+
+                        status_list = res.Info.status_list;
+                        //$cookies.put('userDetails',res)
+                    } else {
+
+                    }
+
+                }, function (error) {
+                    alert(error);
+                });
+
+                //$cookies.put('userDetails',res)
             } else {
 
             }
@@ -34,6 +174,9 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         }, function (error) {
             alert(error);
         });
+        /* $scope.facilities = $cookies.getObject('facilities');
+         $scope.selected_facility = $scope.facilities.facility_number;*/
+
         $scope.clickToOpen = function (wokorder) {
             if (!$cookies.get('userDetails')) {
                 $location.path('login');
@@ -43,7 +186,6 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             $scope.selectedWorkOrder.workorder_equipment = showEquipment($scope.selectedWorkOrder.workorder_equipment);
             $scope.selectedWorkOrder.status = showStatus($scope.selectedWorkOrder.status);
             $scope.selectedWorkOrder.workorder_technician = showtechnician($scope.selectedWorkOrder.workorder_technician);
-            console.log($scope.selectedWorkOrder.created_on);
             if (isNaN(parseInt($scope.selectedWorkOrder.created_on))) {
                 var currentDt = $scope.selectedWorkOrder.created_on;
             } else {
@@ -57,7 +199,6 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             $scope.selectedWorkOrder.created_on = date_on;
             if (!angular.isUndefined($scope.selectedWorkOrder.wo_datecomplete)) {
                 var currentDt = new Date(parseInt($scope.selectedWorkOrder.wo_datecomplete));
-                console.log(currentDt);
                 var mm = currentDt.getMonth() + 1;
                 mm = (mm < 10) ? '0' + mm : mm;
                 var dd = currentDt.getDate();
@@ -100,103 +241,13 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         $scope.ListWorkOrders = ListWorkOrders;
         ListWorkOrders();
 
-        $scope.facilities = $cookies.getObject('facilities');
+        //$scope.facilities = $cookies.getObject('facilities');
         //$scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
 
         //$scope.workOrder= $scope.facilities[0].facility_number;
         //console.log($scope.facilities);
-        $scope.selected_facility = $scope.facilities[0].facility_number;
-        API.Categories.Recent(userdetail.user, function (res) {
-            if (res.Code == 200) {
+        //$scope.selected_facility = $scope.facilities[0].facility_number;
 
-                $scope.categories = res.Info.categories;
-
-
-                //$cookies.put('userDetails',res)
-            } else {
-
-            }
-
-        }, function (error) {
-            alert(error);
-        });
-        API.Priorities.Recent(userdetail.user, function (res) {
-            if (res.Code == 200) {
-                $scope.priorities = res.Info.priorities;
-                //$cookies.put('userDetails',res)
-            } else {
-            }
-        }, function (error) {
-            alert(error);
-        });
-        API.Skills.Recent(userdetail.user, function (res) {
-            if (res.Code == 200) {
-                $scope.skills = res.Info.skills;
-                //$cookies.put('userDetails',res)
-            } else {
-            }
-        }, function (error) {
-            alert(error);
-        });
-        API.Classes.Recent(userdetail.user, function (res) {
-            if (res.Code == 200) {
-                $scope.classes = res.Info.classes;
-            } else {
-            }
-        }, function (error) {
-            alert(error);
-        });
-        API.Status.Recent({facility_number: $scope.selected_facility}, function (res) {
-            if (res.Code == 200) {
-                $scope.statuses = res.Info.status_list;
-                console.log($scope.statuses)
-            } else {
-            }
-        }, function (error) {
-            alert(error);
-        });
-        API.GetUserByType.Recent({facility_number: $scope.selected_facility}, function (res) {
-            if (res.Code == 200) {
-                $scope.technicians = res.Info.users;
-            } else {
-            }
-        }, function (error) {
-            alert(error);
-        });
-        API.UserRole.Recent({role_name: 'technician'}, function (res) {
-            if (res.Code == 200) {
-                var qry = {userrole: res.Info.user_role._id};
-                console.log(qry);
-                API.GetUsers.Recent(qry, function (res) {
-                    if (res.Code == 200) {
-                        $scope.technicians = res.Info.users;
-                    } else {
-                    }
-                }, function (error) {
-                    alert(error);
-                });
-            } else {
-            }
-        }, function (error) {
-            alert(error);
-        });
-        API.UserRole.Recent({role_name: 'operator'}, function (res) {
-            if (res.Code == 200) {
-                var qry = {userrole: res.Info.user_role._id};
-                console.log(qry);
-                API.GetUsers.Recent(qry, function (res) {
-                    if (res.Code == 200) {
-                        $scope.requestors = res.Info.users;
-                    } else {
-                    }
-                }, function (error) {
-                    alert(error);
-                });
-            } else {
-            }
-        }, function (error) {
-            alert(error);
-        });
         $scope.editWorkOrder = function (workorder_id) {
             $location.path('edit_workorder/' + workorder_id);
         };
@@ -216,19 +267,8 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
         }
 
 
-        var status_list;
-        API.Status.Recent(userdetail.user, function (res) {
-            if (res.Code == 200) {
 
-                status_list = res.Info.status_list;
-                //$cookies.put('userDetails',res)
-            } else {
 
-            }
-
-        }, function (error) {
-            alert(error);
-        });
 
         $scope.showEquipment = showEquipment;
         function showEquipment(equipment) {

@@ -76,7 +76,9 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.showFacility = function (facility_number) {
             var facilities_numbers = "";
             var facility_length = facility_number.length;
-            for (var faci in facility_number) {
+            var found = $filter('getByFacilityNumber')('facility_number', facility_number, facilities);
+            return found.facility_name;
+            /*for (var faci in facility_number) {
                 var found = $filter('getByFacilityNumber')('facility_number', facility_number[faci].facility_number, facilities);
                 if (angular.isUndefined(found) || found === null) {
                     facilities_numbers = facilities_numbers
@@ -88,7 +90,7 @@ angular.module('PGapp.categorylist', ['ngRoute', 'ngAnimate', 'ngCookies'])
                     }
                 }
             }
-            return facilities_numbers;
+             return facilities_numbers;*/
         };
         $scope.showStatus = function (status_number) {
             var found = $filter('getByFacilityNumber')('status_number', status_number, status_list);
