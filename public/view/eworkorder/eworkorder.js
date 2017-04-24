@@ -499,7 +499,6 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.reqActionTaken = true;
                 }
             }
-
         });
         $scope.$watch("workOrder.wo_equipmentcost", function (newValue, oldValue) {
             if ($scope.workOrder.wo_equipmentcost < 0) {
