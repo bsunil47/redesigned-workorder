@@ -774,9 +774,12 @@ router.post('/create_status', function (req, res, next) {
         }
         // validations ** start
 
+        /*var query_count_status = {
+         status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")},
+         "facilities.facility_number": req.body.facility_number
+         };*/
         var query_count_status = {
-            status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")},
-            "facilities.facility_number": req.body.facility_number
+            status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")}
         };
 
         Status.count(query_count_status, function (err, statuscount) {
@@ -785,25 +788,19 @@ router.post('/create_status', function (req, res, next) {
             }
             console.log("query_count_status" + JSON.stringify(query_count_status));
             if (statuscount) {
-                return res.json({Code: 498, Info: 'Status already exists'});
-                next();
-            }
-
-            Status.count({}, function (err, incstatuscount) {
-                if (err) {
-                    return next(err);
-                }
-                console.log("count_status" + JSON.stringify(incstatuscount));
-                if (incstatuscount) {
-                    var statuscountinc = incstatuscount + 1;
-                }
-                // validations ** end
                 var query = {
-                    status_name: req.body.status_name
+                    status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")}
                 };
-
                 Status.update(query, {
-                        $setOnInsert: {status_number: statuscountinc},
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+                Status.update(query, {
                         $push: {"facilities": {facility_number: req.body.facility_number}}
                     },
                     {safe: true, upsert: true},
@@ -818,7 +815,35 @@ router.post('/create_status', function (req, res, next) {
                             res.json({Code: 200, Info: 'Status created successfully'});
                         }
                     });
-            });
+            } else {
+                Status.count({}, function (err, incstatuscount) {
+                    if (err) {
+                        return next(err);
+                    }
+                    console.log("count_status" + JSON.stringify(incstatuscount));
+                    if (incstatuscount) {
+                        var statuscountinc = incstatuscount + 1;
+                    }
+                    // validations ** end
+                    var query = {
+                        status_name: req.body.status_name
+                    };
+
+                    Status.create({
+                        status_name: req.body.status_name,
+                        $setOnInsert: {status_number: statuscountinc},
+                        $push: {
+                            "facilities": {
+                                facility_number: req.body.facility_number
+                            }
+                        }
+                    });
+                    res.json({Code: 200, Info: 'Category created sucessfully'});
+                });
+
+            }
+
+
         })
 
     })
