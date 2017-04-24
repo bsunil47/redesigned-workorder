@@ -432,8 +432,8 @@ router.post('/create_class', function (req, res, next) {
         // validations ** start
 
         var query_count_class = {
-            class_name: {$regex: new RegExp('^' + req.body.class_name + '$', "i")},
-            "facilities.facility_number": req.body.facility_number
+            class_name: {$regex: new RegExp('^' + req.body.class_name + '$', "i")}/*,
+             "facilities.facility_number": req.body.facility_number*/
         };
 
         Class.count(query_count_class, function (err, classcount) {
@@ -442,26 +442,48 @@ router.post('/create_class', function (req, res, next) {
             }
             console.log("query_count_class" + JSON.stringify(query_count_class));
             if (classcount) {
-                return res.json({Code: 498, Info: 'Class for the Facility already exists'});
-                next();
-            }
-            // validations ** end
-            var query = {
-                class_name: req.body.class_name
-            };
-            Class.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-                {safe: true, upsert: true},
-                function (err, model) {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            Code: 499,
-                            Info: 'Error creating Class',
-                        });
-                    } else {
-                        res.json({Code: 200, Info: 'Class Created Sucessfully'});
+                var query = {
+                    class_name: {$regex: new RegExp('^' + req.body.class_name + '$', "i")},
+                };
+                Class.update(query, {
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+                Class.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating Class',
+                            });
+                        } else {
+                            res.json({Code: 200, Info: 'Class Created Sucessfully'});
+                        }
+                    });
+                //return res.json({Code: 498, Info: 'Class for the Facility already exists'});
+                //next();
+            } else {
+                Class.create({
+                    class_name: req.body.class_name,
+                    status: 1,
+                    $push: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
                     }
                 });
+                res.json({Code: 200, Info: 'Category created sucessfully'});
+            }
+            // validations ** end
+
+
         });
 
     });
@@ -645,8 +667,7 @@ router.post('/create_priority', function (req, res, next) {
         // validations ** start
 
         var query_count_priority = {
-            priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")},
-            "facilities.facility_number": req.body.facility_number
+            priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")}
         };
 
         Priority.count(query_count_priority, function (err, prioritycount) {
@@ -655,26 +676,49 @@ router.post('/create_priority', function (req, res, next) {
             }
             console.log("query_count_priority" + JSON.stringify(query_count_priority));
             if (prioritycount) {
-                return res.json({Code: 498, Info: 'Priority for the Facility already exists'});
-                next();
-            }
-            // validations ** end
-            var query = {
-                priority_name: req.body.priority_name
-            };
-            Priority.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-                {safe: true, upsert: true},
-                function (err, model) {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            Code: 499,
-                            Info: 'Error creating Priority',
-                        });
-                    } else {
-                        res.json({Code: 200, Info: 'Priority created successfully'});
+                var query = {
+                    priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")},
+                };
+                Skill.update(query, {
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+
+                Priority.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating Priority',
+                            });
+                        } else {
+                            res.json({Code: 200, Info: 'Priority created successfully'});
+                        }
+                    });
+                /* return res.json({Code: 498, Info: 'Priority for the Facility already exists'});
+                 next();*/
+            } else {
+                Priority.create({
+                    priority_name: req.body.priority_name,
+                    status: 1,
+                    $push: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
                     }
                 });
+                res.json({Code: 200, Info: 'Priority created sucessfully'});
+            }
+            // validations ** end
+
         });
 
     })
@@ -705,8 +749,7 @@ router.post('/create_skill', function (req, res, next) {
         // validations ** start
 
         var query_count_skill = {
-            skill_name: {$regex: new RegExp('^' + req.body.skill_name + '$', "i")},
-            "facilities.facility_number": req.body.facility_number
+            skill_name: {$regex: new RegExp('^' + req.body.skill_name + '$', "i")}
         };
 
         Skill.count(query_count_skill, function (err, skillcount) {
@@ -715,26 +758,48 @@ router.post('/create_skill', function (req, res, next) {
             }
             console.log("query_count_skill" + JSON.stringify(query_count_skill));
             if (skillcount) {
-                return res.json({Code: 498, Info: 'Skill for the Facility already exists'});
-                next();
-            }
-            var query = {
-                skill_name: req.body.skill_name,
-            };
-            // validations ** end
-            Skill.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-                {safe: true, upsert: true},
-                function (err, model) {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            Code: 499,
-                            Info: 'Error creating skill',
-                        });
-                    } else {
-                        res.json({Code: 200, Info: 'Skill created successfully'});
+                var query = {
+                    skill_name: {$regex: new RegExp('^' + req.body.skill_name + '$', "i")}
+                };
+                Skill.update(query, {
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+                // validations ** end
+                Skill.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating skill',
+                            });
+                        } else {
+                            res.json({Code: 200, Info: 'Skill created successfully'});
+                        }
+                    });
+                /* return res.json({Code: 498, Info: 'Skill for the Facility already exists'});
+                 next();*/
+            } else {
+
+                Skill.create({
+                    skill_name: req.body.skill_name,
+                    status: 1,
+                    $push: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
                     }
                 });
+                res.json({Code: 200, Info: 'Skill created sucessfully'});
+            }
+
         });
 
     })
