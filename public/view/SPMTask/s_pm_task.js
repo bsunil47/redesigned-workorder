@@ -32,10 +32,18 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 $location.path("/");
             }
         };
-        API.Facilities.Recent(userdetail.user, function (res) {
-            if (res.Code == 200) {
 
-                $scope.facilities = res.Info.facilities;
+        API.SFacilities.Recent(userdetail.user, function (res) {
+            if (res.Code == 200) {
+                if(userdetail.role != 'admin'){
+                    console.log(res.Info.facilities);
+                    $scope.workOrder.wo_facility = res.Info.facilities[0].facility_number;
+                    $scope.facilities = res.Info.facilities;
+                    console.log("$scope.facilities : " + JSON.stringify($scope.facilities));
+                    $scope.selected_facility = res.Info.facilities[0].facility_number;
+                    console.log("$scope.selected_facility: "+ $scope.selected_facility);
+                }
+                
             } else {
 
             }

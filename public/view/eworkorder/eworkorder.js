@@ -156,9 +156,20 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.saveDisable = false;
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
+                    var min_date_diff = 10;
                     var min_date = $scope.workOrder.wo_datecomplete = new Date($filter('changeStringToDate')($scope.workOrder.wo_datecomplete));
+                    if(wo_pm_date)
+                    {
+                        min_date.setDate(min_date.getDate() - parseInt(min_date_diff));
+                    }
                 } else {
+                    var min_date_diff = 10;
                     var min_date = new Date($scope.workOrder.created_on);
+                    if(wo_pm_date)
+                    {
+                        min_date.setDate(min_date.getDate() - parseInt(min_date_diff));
+                    }
+                    
                 }
                 $scope.minDate = new Date(
                     min_date.getFullYear(),
@@ -367,6 +378,39 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                         $scope.workOrder.workorder_PM = $scope.workOrder.wo_pm_number;
                     }
                 }
+                console.log("wo_pm_date: " + wo_pm_date);
+                console.log("$scope.workOrder.status: " + $scope.workOrder.status);
+                if(wo_pm_date && $scope.workOrder.status == 2)
+                    {
+                        var WODC = new Date($scope.workOrder.wo_datecomplete);
+                        var WOCO = new Date($scope.workOrder.created_on);
+                        console.log("WODC: " + WODC);
+                        console.log("WOCO: " + WOCO);
+                        
+                        var daysdiff = (WOCO - WODC) / 1000 / 60 / 60 / 24;   
+                        console.log("daysdiff: " + daysdiff);
+                        if(daysdiff <=10)
+                        {
+                            var mm = WODC.getMonth() + 1;
+                            mm = (mm < 10) ? '0' + mm : mm;
+                            var dd = WODC.getDate();
+                            var yyyy = WODC.getFullYear();
+                            var date = mm + '/' + dd + '/' + yyyy;
+                            $scope.workOrder.created_on = date;
+                            var wopmdate = new Date($filter('changeStringToDate')(wo_pm_date));
+                            console.log('wopmdate: ' + wopmdate);
+                            wopmdate.setDate(WODC.getDate() + parseInt($scope.workOrder.wo_pm_frequency));
+                            console.log('wopmdate: ' + wopmdate);
+                            var mmwopmd = wopmdate.getMonth() + 1;
+                            mmwopmd = (mmwopmd < 10) ? '0' + mmwopmd : mmwopmd;
+                            var ddwopmd = wopmdate.getDate();
+                            var yyyywopmd = wopmdate.getFullYear();
+                            var datewopmd = mmwopmd + '/' + ddwopmd + '/' + yyyywopmd;
+                            console.log("datewopmd: "+ datewopmd);
+                            $scope.workOrder.wo_pm_date = datewopmd;
+                            console.log('$scope.workOrder.wo_pm_date: '+ $scope.workOrder.wo_pm_date);
+                        }
+                    }
 
                 for (var i in $scope.workOrder) {
                     if (!isNullOrEmptyOrUndefined($scope.workOrder[i])) {
@@ -374,7 +418,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     }
                 }
                 data_post.user_id = userdetail.user._id;
-                console.log(data_post);
+                console.log("data_post: " + data_post);
 
                 API.UpdateWorkOrder.Recent(data_post, function (res) {
                     if (res.Code == 200) {
@@ -528,3 +572,20 @@ var isInt = function (n) {
 function isNullOrEmptyOrUndefined(value) {
     return !value;
 }
+
+var getDateFromDateTime = function(date) {
+
+    date = new Date(date); //Using this we can convert any date format to JS Date
+
+    var mm = date.getMonth() + 1; // getMonth() is zero-based
+
+    var dd = date.getDate();
+
+    if(mm<10){
+      mm="0"+mm;
+    }
+    if(dd<10){
+      dd="0"+dd;
+    }
+    return [date.getFullYear(), mm, dd].join(''); // padding
+  };

@@ -85,6 +85,10 @@ router.post('/', function (req, res, next) {
     if (req.body.category != 0) {
         query.workorder_category = req.body.category;
     }
+    if((req.body.wo_facility != "")){
+        query.workorder_facility =  req.body.wo_facility;
+        qr.workorder_facility =  req.body.wo_facility;
+    }
     Equipment.find(qr, function (err, equi) {
         var equipments = [];
         equi.forEach(function (eq) {
@@ -259,6 +263,9 @@ router.post('/report_category', function (req, res, next) {
     if (req.body.categories != 0) {
         query.workorder_category = req.body.categories;
     }
+    if((req.body.wo_facility != "")){
+        query.workorder_facility =  req.body.wo_facility;
+    }
     console.log(query);
     WorkOrder.find(query, function (err, workorders) {
         if (err) {
@@ -343,7 +350,8 @@ router.post('/report_category', function (req, res, next) {
 });
 
 router.post('/report_pm', function (req, res, next) {
-    console.log('request made....print PM ');
+    console.log('request made....print PM req:' + JSON.stringify(req.body));
+    console.log('request made....print PM res: ' + JSON.stringify(res.body));
     var today = new Date();
     var search_date = {
         'from': "",
@@ -369,6 +377,9 @@ router.post('/report_pm', function (req, res, next) {
             'from': dateFormat(parseInt(req.body.wo_datefrom), 'shortDate'),
             'to': dateFormat(to_date, 'shortDate')
         }
+    }
+    if((req.body.wo_facility != "")){
+        query.workorder_facility =  req.body.wo_facility;
     }
     console.log(query);
     WorkOrder.find(query, {}, {

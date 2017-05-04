@@ -1534,6 +1534,7 @@ router.post('/update_workorder', function (req, res, next) {
             pm_previous_date: new Date(previous_date).valueOf(),
             status: 1
         };
+        console.log("pm_task: " + pm_task);
         var where = {pm_number: pm_task.pm_number};
         requestedArray.workorder_number = parseInt(req.body.workorder_number);
         WorkOrder.count({
@@ -1976,7 +1977,8 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
                     if (wrkordr == 0) {
                         createWorkOrderPM({
                             pm_number: requestedArray.workorder_PM,
-                            wo_pm_date: requestedArray.wo_pm_date,
+                            //wo_pm_date: requestedArray.wo_pm_date,
+                            wo_pm_date: requestedArray.wo_datecomplete,
                             pm_frequency: pm_frequency
                         });
                     }
