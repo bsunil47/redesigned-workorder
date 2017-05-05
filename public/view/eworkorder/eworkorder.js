@@ -127,7 +127,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 if (userdetail.role == 'manager' && $scope.workOrder.status == 2) {
                     $scope.disableEquipmentCost = false;
                     $scope.disableTimeSpent = false;
-                    $scope.disableDateCompleted = false;
+                    //$scope.disableDateCompleted = false;
                 }
                 $scope.workOrder.created_on = $filter('changeStringToDate')($scope.workOrder.created_on);
                 var orderDt = new Date($scope.workOrder.created_on).valueOf();
