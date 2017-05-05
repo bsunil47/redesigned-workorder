@@ -165,7 +165,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 } else {
                     var min_date_diff = 10;
                     var min_date = new Date($scope.workOrder.created_on);
-                    if(wo_pm_date && $scope.workOrder.status==2)
+                    if(wo_pm_date && $scope.workOrder.status!=2)
                     {
                         min_date.setDate(min_date.getDate() - parseInt(min_date_diff));
                     }
