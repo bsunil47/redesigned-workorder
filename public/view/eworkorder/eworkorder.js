@@ -158,14 +158,14 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                     var min_date_diff = 10;
                     var min_date = $scope.workOrder.wo_datecomplete = new Date($filter('changeStringToDate')($scope.workOrder.wo_datecomplete));
-                    if(wo_pm_date)
+                    if(wo_pm_date && $scope.workOrder.status==2)
                     {
                         min_date.setDate(min_date.getDate() - parseInt(min_date_diff));
                     }
                 } else {
                     var min_date_diff = 10;
                     var min_date = new Date($scope.workOrder.created_on);
-                    if(wo_pm_date)
+                    if(wo_pm_date && $scope.workOrder.status==2)
                     {
                         min_date.setDate(min_date.getDate() - parseInt(min_date_diff));
                     }
@@ -389,19 +389,19 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                         
                         var daysdiff = (WOCO - WODC) / 1000 / 60 / 60 / 24;   
                         console.log("daysdiff: " + daysdiff);
-                        if(daysdiff <=10)
+                        if(daysdiff > 0 && daysdiff <= 10)
                         {
-                            var mm = WODC.getMonth() + 1;
-                            mm = (mm < 10) ? '0' + mm : mm;
-                            var dd = WODC.getDate();
-                            var yyyy = WODC.getFullYear();
-                            var date = mm + '/' + dd + '/' + yyyy;
-                            $scope.workOrder.created_on = date;
-                            var wopmdate = new Date($filter('changeStringToDate')(wo_pm_date));
+                            var mmwodc = WODC.getMonth() + 1;
+                            mmwodc = (mmwodc < 10) ? '0' + mmwodc : mmwodc;
+                            var ddwodc = WODC.getDate();
+                            var yyyywodc = WODC.getFullYear();
+                            var datewodc = mmwodc + '/' + ddwodc + '/' + yyyywodc;
+                            $scope.workOrder.created_on = datewodc;
+                            var wopmdate = WODC;//new Date($filter('changeStringToDate')(wo_pm_date));
                             console.log('wopmdate: ' + wopmdate);
                             wopmdate.setDate(WODC.getDate() + parseInt($scope.workOrder.wo_pm_frequency));
                             console.log('wopmdate: ' + wopmdate);
-                            var mmwopmd = wopmdate.getMonth() + 1;
+                            var mmwopmd = wopmdate.getMonth() + 1 ;
                             mmwopmd = (mmwopmd < 10) ? '0' + mmwopmd : mmwopmd;
                             var ddwopmd = wopmdate.getDate();
                             var yyyywopmd = wopmdate.getFullYear();

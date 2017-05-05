@@ -1977,8 +1977,8 @@ var updateWorkOrder = function (query, requestedArray, req, res) {
                     if (wrkordr == 0) {
                         createWorkOrderPM({
                             pm_number: requestedArray.workorder_PM,
-                            //wo_pm_date: requestedArray.wo_pm_date,
-                            wo_pm_date: requestedArray.wo_datecomplete,
+                            wo_pm_date: requestedArray.wo_pm_date,
+                            //wo_pm_date: requestedArray.wo_datecomplete,
                             pm_frequency: pm_frequency
                         });
                     }
