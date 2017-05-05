@@ -41,7 +41,7 @@ var counters = mongoose.model('counter');
 
 /* GET home page. */
 router.post('/', function (req, res, next) {
-    console.log('request made....print hr ');
+    console.log('request made....print hr ' + JSON.stringify(req.body));
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
     var query = {wo_timespent: {$exists: true, $nin: ["", null, 'NaN']}};
@@ -85,17 +85,22 @@ router.post('/', function (req, res, next) {
     if (req.body.category != 0) {
         query.workorder_category = req.body.category;
     }
-    if((req.body.wo_facility != "")){
-        query.workorder_facility =  req.body.wo_facility;
-        qr.workorder_facility =  req.body.wo_facility;
+    if((req.body.facility != "")){
+        query.workorder_facility =  req.body.facility;
+        //qr.workorder_facility =  req.body.facility;
+        qr.facilities = {
+            $elemMatch: {facility_number: req.body.facility}
+        };
+        //qr.facilities.facility_number = req.body.facility;
     }
+    console.log("qr :" + JSON.stringify(qr));
     Equipment.find(qr, function (err, equi) {
         var equipments = [];
         equi.forEach(function (eq) {
             var total_hrs = 0;
             equipments.push(function (callback) {
                 query.workorder_equipment = eq._id;
-                console.log(query);
+                console.log("query: " + query);
                 WorkOrder.find(query, {},
                     {
                         sort: {
@@ -231,6 +236,7 @@ router.post('/', function (req, res, next) {
 });
 router.post('/report_category', function (req, res, next) {
     console.log('request made....print 1 ');
+    console.log("req : " + JSON.stringify(req.body));
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
     var query = {status: 2};

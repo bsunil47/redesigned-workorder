@@ -29,6 +29,7 @@ angular.module('PGapp.searchclosedreport', ['ngRoute', 'ngAnimate', 'ngCookies']
                 if(userdetail.role != 'admin'){
                     console.log(res.Info.facilities);
                     $scope.workOrder.wo_facility = res.Info.facilities[0].facility_number;
+                    console.log($scope.workOrder.wo_facility);
                     $scope.facilities = res.Info.facilities;
                     console.log("$scope.facilities : " + JSON.stringify($scope.facilities));
                     $scope.selected_facility = res.Info.facilities[0].facility_number;
