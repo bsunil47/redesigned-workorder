@@ -53,7 +53,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
         $scope.disablePriority = true;
         $scope.disableEquipmentCost = true;
         $scope.disableTimeSpent = true;
-        $scope.disableDateCompleted = true;
+        $scope.disableDateCompleted = false;
         $scope.showClerk = false;
         $scope.accessManager = true;
         $scope.disableSkill = true;
@@ -111,7 +111,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     wo_pm_date = $scope.workOrder.wo_pm_date;
                 }
                 workorder_created_on = res.Info.workorder.created_on;
-                if ($scope.workOrder.status == 2) {
+                if ($scope.workOrder.status == 2 && $scope.workOrder.wo_pm_date) {
                     $scope.reqPMTask = true;
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_goodsreceipt)) {
@@ -124,10 +124,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.workOrder.wo_equipmentcost = parseInt($scope.workOrder.wo_equipmentcost);
                 }
                 $scope.workOrder.workorder_number = $filter('setPadZeros')($scope.workOrder.workorder_number, 8);
-                if (userdetail.role == 'manager' && $scope.workOrder.status == 2) {
+                if (userdetail.role == 'manager' && $scope.workOrder.status == 2 && $scope.workOrder.wo_pm_date) {
                     $scope.disableEquipmentCost = false;
                     $scope.disableTimeSpent = false;
-                    //$scope.disableDateCompleted = false;
+                    $scope.disableDateCompleted = true;
                 }
                 $scope.workOrder.created_on = $filter('changeStringToDate')($scope.workOrder.created_on);
                 var orderDt = new Date($scope.workOrder.created_on).valueOf();
@@ -476,12 +476,15 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             console.log($scope.workOrder.wo_timespent);
          }*/
         $scope.$watch("workOrder.wo_pm_number", function (newValue, oldValue) {
-            if (angular.isUndefined($scope.workOrder.wo_pm_number)) {
+            console.log("$scope.workOrder.wo_pm_number: " + $scope.workOrder.wo_pm_number);
+            if (angular.isUndefined($scope.workOrder.wo_pm_number) || $scope.workOrder.wo_pm_number == "") {
+                console.log(" in if $scope.workOrder.wo_pm_number: " + $scope.workOrder.wo_pm_number);
                 $scope.workOrder.wo_pm_frequency = "";
                 $scope.workOrder.wo_pm_date = "";
                 $scope.workOrder.wo_pm_number = "";
                 $scope.reqPMFreq = false;
             } else {
+                console.log(" in else $scope.workOrder.wo_pm_number: " + $scope.workOrder.wo_pm_number);
                 $scope.reqPMFreq = true;
             }
 
@@ -494,6 +497,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
             console.log($scope.reqPMFreq);
         });
         $scope.$watch("workOrder.wo_pm_frequency", function (newValue, oldValue) {
+            console.log("$scope.workOrder.wo_pm_frequency : " + $scope.workOrder.wo_pm_frequency);
             if ($scope.workOrder.wo_pm_frequency > 0) {
                 if (!isNullOrEmptyOrUndefined(wo_pm_date)) {
                     console.log('not null:' + wo_pm_date);
