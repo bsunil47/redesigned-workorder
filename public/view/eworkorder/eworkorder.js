@@ -129,6 +129,15 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.disableTimeSpent = false;
                     $scope.disableDateCompleted = true;
                 }
+                else if (userdetail.role == 'manager' && $scope.workOrder.status == 2)
+                {
+                    $scope.disableEquipmentCost = false;
+                    $scope.disableTimeSpent = false;
+
+                }
+                else{
+                        //do nothing
+                }
                 $scope.workOrder.created_on = $filter('changeStringToDate')($scope.workOrder.created_on);
                 var orderDt = new Date($scope.workOrder.created_on).valueOf();
                 var currentDate = new Date($scope.workOrder.created_on);
@@ -157,16 +166,27 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                     var min_date_diff = 10;
+                    console.log("In if condition: ");
                     var min_date = $scope.workOrder.wo_datecomplete = new Date($filter('changeStringToDate')($scope.workOrder.wo_datecomplete));
                     if(wo_pm_date && $scope.workOrder.status==2)
                     {
+                        console.log("In if condition: ");
                         min_date.setDate(min_date.getDate() - parseInt(min_date_diff));
+                    }
+                    else if($scope.workOrder.status==2)
+                    {
+                        var min_date = new Date($scope.workOrder.created_on);
+                    }
+                    else{
+                        // do nothing yet;
                     }
                 } else {
                     var min_date_diff = 10;
+                    console.log("In else condition: ");
                     var min_date = new Date($scope.workOrder.created_on);
                     if(wo_pm_date && $scope.workOrder.status!=2)
                     {
+                        console.log("In if condition: ");
                         min_date.setDate(min_date.getDate() - parseInt(min_date_diff));
                     }
                     

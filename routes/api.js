@@ -329,15 +329,19 @@ router.post('/create_category', function (req, res, next) {
         if (err) {
             return next(err);
         }
+        console.log("req.body.category_name " + req.body.category_name);
+        console.log("req.body.facility_number " + req.body.facility_number);
         var query_count = {
             category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")}
         };
+
+        console.log("query_count 1 : " + JSON.stringify(query_count));
 
         Category.count(query_count, function (err, categorycount) {
             if (err) {
                 return next(err);
             }
-            console.log("query_count" + JSON.stringify(query_count));
+            console.log("query_count 2 : " + JSON.stringify(query_count));
             if (categorycount) {
                 if (Boolean(req.body.operator_available)) {
                     /*var query_count = {
@@ -393,15 +397,24 @@ router.post('/create_category', function (req, res, next) {
                         }
                     });
             } else {
+                console.log("In else categiry creation");
+                console.log("req.body.category_name " + req.body.category_name);
+                console.log("req.body.facility_number " + req.body.facility_number);
+                // Category.create({
+                //     category_name: req.body.category_name,
+                //     operator_available: Boolean(req.body.operator_available),
+                //     status: 1,
+                //     $push: {
+                //         "facilities": {
+                //             facility_number: req.body.facility_number
+                //         }
+                //     }
+                // });
                 Category.create({
                     category_name: req.body.category_name,
                     operator_available: Boolean(req.body.operator_available),
                     status: 1,
-                    $push: {
-                        "facilities": {
-                            facility_number: req.body.facility_number
-                        }
-                    }
+                    "facilities": {facility_number: req.body.facility_number}
                 });
                 res.json({Code: 200, Info: 'Category created sucessfully'});
             }
