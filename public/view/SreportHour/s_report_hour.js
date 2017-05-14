@@ -27,47 +27,65 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 $location.path("/");
             }
         };
-        API.SFacilities.Recent(userdetail.user, function (res) {
-            if (res.Code == 200) {
-                if(userdetail.role != 'admin'){
-                    console.log(res.Info.facilities);
-                    $scope.workOrder.wo_facility = res.Info.facilities[0].facility_number;
-                    $scope.facilities = res.Info.facilities;
-                    console.log("$scope.facilities : " + JSON.stringify($scope.facilities));
-                    $scope.selected_facility = res.Info.facilities[0].facility_number;
-                    console.log("$scope.selected_facility: "+ $scope.selected_facility);
-                    API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
-                        if (res.Code == 200) {
+        if (userdetail.role != 'admin') {
+            API.SFacilities.Recent(userdetail.user, function (res) {
+                if (res.Code == 200) {
+                    if (userdetail.role != 'admin') {
+                        console.log(res.Info.facilities);
+                        $scope.workOrder.wo_facility = res.Info.facilities[0].facility_number;
+                        $scope.facilities = res.Info.facilities;
+                        console.log("$scope.facilities : " + JSON.stringify($scope.facilities));
+                        $scope.selected_facility = res.Info.facilities[0].facility_number;
+                        console.log("$scope.selected_facility: " + $scope.selected_facility);
+                        API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
+                            if (res.Code == 200) {
 
-                            $scope.categories = res.Info.categories;
-                            console.log($scope.categories);
-                            //$scope.workOrder.categories = "0";
-                            //$cookies.put('userDetails',res)
-                        } else {
+                                $scope.categories = res.Info.categories;
+                                console.log($scope.categories);
+                                //$scope.workOrder.categories = "0";
+                                //$cookies.put('userDetails',res)
+                            } else {
 
-                        }
+                            }
 
-                    }, function (error) {
-                        alert(error);
-                    });
-                    API.SEquipment.Recent({facility_number: $scope.selected_facility}, function (res) {
-                    if (res.Code == 200) {
-                        $scope.equipments = res.Info.equipments;
-                    } else {
+                        }, function (error) {
+                            alert(error);
+                        });
+                        API.SEquipment.Recent({facility_number: $scope.selected_facility}, function (res) {
+                            if (res.Code == 200) {
+                                $scope.equipments = res.Info.equipments;
+                            } else {
 
+                            }
+
+                        }, function (error) {
+                            alert(error);
+                        });
                     }
+                } else {
 
-                }, function (error) {
-                    alert(error);
-                });
                 }
-            } else {
 
-            }
+            }, function (error) {
+                alert(error);
+            });
+        } else {
+            API.Facilities.Recent(userdetail.user, function (res) {
+                if (res.Code == 200) {
 
-        }, function (error) {
-            alert(error);
-        });
+                    $scope.facilities = res.Info.facilities;
+                    $scope.workOrder.facilities = 0;
+                } else {
+
+                }
+
+            }, function (error) {
+                alert(error);
+            });
+
+
+        }
+
 
         // API.Equipments.Recent(userdetail.user, function (res) {
         //     if (res.Code == 200) {
@@ -129,4 +147,33 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
                 }
             }
         });
+        $scope.$watch("facility", function (newValue, oldValue) {
+            if (!angular.isUndefined($scope.facility)) {
+                $scope.selected_facility = $scope.facility;
+                API.SCategory.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+
+                        $scope.categories = res.Info.categories;
+                        console.log($scope.categories);
+                        //$scope.workOrder.categories = "0";
+                        //$cookies.put('userDetails',res)
+                    } else {
+
+                    }
+
+                }, function (error) {
+                    alert(error);
+                });
+                API.SEquipment.Recent({facility_number: $scope.selected_facility}, function (res) {
+                    if (res.Code == 200) {
+                        $scope.equipments = res.Info.equipments;
+                    } else {
+
+                    }
+
+                }, function (error) {
+                    alert(error);
+                });
+            }
+        })
     }]);
