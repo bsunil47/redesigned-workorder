@@ -82,8 +82,6 @@ angular.module('PGapp.searchreporthour', ['ngRoute', 'ngAnimate', 'ngCookies'])
             }, function (error) {
                 alert(error);
             });
-
-
         }
 
 
