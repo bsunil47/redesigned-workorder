@@ -49,6 +49,15 @@ router.post('/', function (req, res, next) {
         'from': "",
         'to': ""
     };
+
+    if(req.body.wo_datefrom > req.body.wo_dateto)
+    {
+        //alert("From Date can not be greater than To Date.");
+        return res.end(redirectFlash(fullUrl + "/#!/search_report_hour", 'From Date can not be greater than To Date.'));
+        //res.redirect(fullUrl + "/#!/search_PM_task", {err: "date"});
+        //res.redirect( 306, fullUrl + "/#!/search_PM_task");
+        return next();
+    }
     var search_to = "";
     console.log(req.body.wo_datefrom);
     if ((req.body.wo_datefrom != "" )) {
@@ -245,6 +254,15 @@ router.post('/report_category', function (req, res, next) {
         'to': ""
     };
 
+    if(req.body.wo_datefrom > req.body.wo_dateto)
+    {
+        //alert("From Date can not be greater than To Date.");
+        return res.end(redirectFlash(fullUrl + "/#!/search_closed_report", 'From Date can not be greater than To Date.'));
+        //res.redirect(fullUrl + "/#!/search_PM_task", {err: "date"});
+        //res.redirect( 306, fullUrl + "/#!/search_PM_task");
+        return next();
+    }
+
     if ((req.body.wo_datefrom != "")) {
         if (req.body.wo_dateto != "") {
             var to_date = parseInt(req.body.wo_dateto);
@@ -358,12 +376,21 @@ router.post('/report_category', function (req, res, next) {
 router.post('/report_pm', function (req, res, next) {
     console.log('request made....print PM req:' + JSON.stringify(req.body));
     console.log('request made....print PM res: ' + JSON.stringify(res.body));
+    var fullUrl = req.protocol + '://' + req.get('host');
+    if(req.body.wo_datefrom > req.body.wo_dateto)
+    {
+        //alert("From Date can not be greater than To Date.");
+        return res.end(redirectFlash(fullUrl + "/#!/search_PM_task", 'From Date can not be greater than To Date.'));
+        //res.redirect(fullUrl + "/#!/search_PM_task", {err: "date"});
+        //res.redirect( 306, fullUrl + "/#!/search_PM_task");
+        return next();
+    }
     var today = new Date();
     var search_date = {
         'from': "",
         'to': ""
     };
-    var fullUrl = req.protocol + '://' + req.get('host');
+    
     var query = {
         workorder_PM: {$exists: true}
     };
@@ -614,5 +641,25 @@ var dateStringToDateISO = function (str) {
     }
     return month + "/" + day + "/" + year;
 };
+
+function redirectFlash(url, timeout, msg) {
+  var defaultTimeout = 5;
+  if (typeof timeout === 'string') {
+    msg = timeout;
+    timeout = defaultTimeout;
+  } else if (timeout === undefined) {
+    msg = '';
+    timeout = defaultTimeout;
+  }
+  return '<html><head><title>Redirecting ...</title><meta http-equiv="refresh" content="'
+         + timeout
+         + ';url='
+         + url
+         + '"></head><body><h2>'
+         + msg
+         + '</h2><br /><a href="'
+         + url
+         + '">Click here to return manually</a></body></html>';
+}
 
 module.exports = router;

@@ -13,6 +13,7 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
         $scope.workOrder = {
             wo_datefrom: ""
         };
+        
         $scope.submitDisable = true;
         var currentDt = new Date();
         /*$scope.maxDate = new Date(
@@ -95,27 +96,27 @@ angular.module('PGapp.searchpmtask', ['ngRoute', 'ngAnimate', 'ngCookies'])
 
         $scope.$watch("datefrom", function (newValue, oldValue) {
             $scope.submitDisable = true;
-            if (!angular.isUndefined($scope.datefrom)) {
-                if (isDate($scope.datefrom) && new Date($scope.datefrom).valueOf() > 0) {
-                    console.log($scope.datefrom);
-                    $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
-                    $scope.minDate = new Date($scope.datefrom);
+             if (!angular.isUndefined($scope.datefrom)) {
+            //     if (isDate($scope.datefrom) && new Date($scope.datefrom).valueOf() > 0) {
+            //         console.log($scope.datefrom);
+                     $scope.workOrder.wo_datefrom = new Date($scope.datefrom).valueOf();
+            //         $scope.minDate = new Date($scope.datefrom);
                     $scope.submitDisable = false;
-                } else {
-                    $scope.datefrom = "";
-                }
+            //     } else {
+            //         $scope.datefrom = "";
+            //     }
             }
         });
         $scope.$watch("dateto", function (newValue, oldValue) {
-            if (!angular.isUndefined($scope.dateto)) {
-                if (isDate($scope.dateto) && new Date($scope.dateto).valueOf() > 0) {
-                    $scope.workOrder.wo_dateto = new Date($scope.dateto).valueOf();
-                    $scope.maxDate = new Date($scope.dateto);
-                } else {
-                    $scope.dateto = "";
-                    $scope.workOrder.wo_dateto = "";
-                }
-            }
+             if (!angular.isUndefined($scope.dateto)) {
+            //     if (isDate($scope.dateto) && new Date($scope.dateto).valueOf() > 0) {
+                     $scope.workOrder.wo_dateto = new Date($scope.dateto).valueOf();
+            //         $scope.maxDate = new Date($scope.dateto);
+            //     } else {
+            //         $scope.dateto = "";
+            //         $scope.workOrder.wo_dateto = "";
+            //     }
+             }
         })
         $scope.$watch("facility", function (newValue, oldValue) {
             if (!angular.isUndefined($scope.facility)) {

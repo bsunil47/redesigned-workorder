@@ -177,6 +177,10 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     {
                         var min_date = new Date($scope.workOrder.created_on);
                     }
+                    else if($scope.workOrder.wo_datecomplete) 
+                    {
+                        var min_date = new Date($scope.workOrder.created_on);   
+                    }
                     else{
                         // do nothing yet;
                     }
