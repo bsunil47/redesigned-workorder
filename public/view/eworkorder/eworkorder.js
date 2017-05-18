@@ -166,21 +166,29 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 }
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
                     var min_date_diff = 10;
-                    console.log("In if condition: ");
+                    console.log("In if condition 1: ");
                     var min_date = $scope.workOrder.wo_datecomplete = new Date($filter('changeStringToDate')($scope.workOrder.wo_datecomplete));
                     if(wo_pm_date && $scope.workOrder.status==2)
                     {
-                        console.log("In if condition: ");
+                        console.log("In if condition 2: ");
                         min_date.setDate(min_date.getDate() - parseInt(min_date_diff));
+                    }
+                    else if(wo_pm_date && $scope.workOrder.status!=2)
+                    {
+                        console.log("In else if condition 5: ");
+                        var min_date = new Date($scope.workOrder.created_on);
                     }
                     else if($scope.workOrder.status==2)
                     {
+                        console.log("In else if condition 3: ");
                         var min_date = new Date($scope.workOrder.created_on);
                     }
                     else if($scope.workOrder.wo_datecomplete) 
                     {
+                        console.log("In else if condition 4: ");
                         var min_date = new Date($scope.workOrder.created_on);   
                     }
+                    
                     else{
                         // do nothing yet;
                     }
@@ -385,12 +393,12 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
 
             if ($scope.EditWorkOrderForm.$valid && $scope.EditWorkOrderForm.workorder_description.$valid && $scope.EditWorkOrderForm.workorder_skill.$valid && $scope.EditWorkOrderForm.workorder_class.$valid && $scope.EditWorkOrderForm.workorder_technician.$valid) {
                 if (!angular.isUndefined($scope.workOrder.wo_datecomplete)) {
-                    var mm = $scope.workOrder.wo_datecomplete.getMonth() + 1;
-                    mm = (mm < 10) ? '0' + mm : mm;
-                    var dd = $scope.workOrder.wo_datecomplete.getDate();
-                    var yyyy = $scope.workOrder.wo_datecomplete.getFullYear();
-                    var date = mm + '/' + dd + '/' + yyyy;
-                    $scope.workOrder.wo_datecomplete = date;
+                    var mmuwo = $scope.workOrder.wo_datecomplete.getMonth() + 1;
+                    mmuwo = (mmuwo < 10) ? '0' + mmuwo : mmuwo;
+                    var dduwo = $scope.workOrder.wo_datecomplete.getDate();
+                    var yyyyuwo = $scope.workOrder.wo_datecomplete.getFullYear();
+                    var dateuwo = mmuwo + '/' + dduwo + '/' + yyyyuwo;
+                    $scope.workOrder.wo_datecomplete = dateuwo;
                 }
                 var data_post = {};
                 if (angular.isUndefined($scope.workOrder.wo_pm_number)) {
@@ -433,6 +441,26 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                             console.log("datewopmd: "+ datewopmd);
                             $scope.workOrder.wo_pm_date = datewopmd;
                             console.log('$scope.workOrder.wo_pm_date: '+ $scope.workOrder.wo_pm_date);
+                        }
+                        else if(daysdiff<=0)
+                        {
+                            var wopmdate = WODC;//new Date($filter('changeStringToDate')(wo_pm_date));
+                            console.log('wopmdate: ' + wopmdate);
+                            wopmdate.setDate(WODC.getDate() + parseInt($scope.workOrder.wo_pm_frequency));
+                            console.log('wopmdate: ' + wopmdate);
+                            var mmwopmd = wopmdate.getMonth() + 1 ;
+                            mmwopmd = (mmwopmd < 10) ? '0' + mmwopmd : mmwopmd;
+                            var ddwopmd = wopmdate.getDate();
+                            var yyyywopmd = wopmdate.getFullYear();
+                            var datewopmd = mmwopmd + '/' + ddwopmd + '/' + yyyywopmd;
+                            console.log("datewopmd: "+ datewopmd);
+                            $scope.workOrder.wo_pm_date = datewopmd;
+                            console.log('$scope.workOrder.wo_pm_date: '+ $scope.workOrder.wo_pm_date);
+
+                        }
+                        else
+                        {
+                            // we do nothing here
                         }
                     }
 
