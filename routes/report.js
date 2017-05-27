@@ -233,6 +233,8 @@ router.post('/', function (req, res, next) {
                 data: result
             };
             var renderedHtml = nunjucks.render('./view/ReportHourBase/report_hour.html', obj);
+            res.setHeader('Content-disposition', 'inline; filename=hour_by_equipment.pdf');
+            res.setHeader('Content-type', 'application/pdf');
             pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
                 stream.pipe(res);
             });
@@ -346,6 +348,8 @@ router.post('/report_category', function (req, res, next) {
                     data: result
                 };
                 var renderedHtml = nunjucks.render('./view/ReportClosedWorkOrder/report_closed.html', obj);
+                res.setHeader('Content-disposition', 'inline; filename=closed_workorder_by_category.pdf');
+                res.setHeader('Content-type', 'application/pdf');
                 pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
                     stream.pipe(res);
                 });
@@ -472,6 +476,8 @@ router.post('/report_pm', function (req, res, next) {
                     search: search_date,
                 };
                 var renderedHtml = nunjucks.render('./view/ReportPMTask/report_hour.html', obj);
+                res.setHeader('Content-disposition', 'inline; filename=pm_task_workorders.pdf');
+                res.setHeader('Content-type', 'application/pdf');
                 pdf.create(renderedHtml, {
                     ticketnum: 'hello',
                     "orientation": "landscape"
