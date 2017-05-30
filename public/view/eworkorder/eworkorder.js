@@ -135,7 +135,7 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.disableTimeSpent = false;
 
                 }
-                else if($scope.workOrder.status == 1)
+                else if(userdetail.role == 'manager' && $scope.workOrder.status == 1)
                 {
                         $scope.disableDateCompleted = true;
                 }
