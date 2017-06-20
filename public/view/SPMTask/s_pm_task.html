@@ -55,6 +55,9 @@
                                                         <input type="hidden" name="wo_datefrom"
                                                                ng-model="workOrder.wo_datefrom"
                                                                value="{{workOrder.wo_datefrom}}" required>
+                                                               <input type="hidden" name="wo_facility"
+                                                               ng-model="workOrder.wo_facility"
+                                                               value="{{workOrder.wo_facility}}" required>
                                                     </div>
 
                                                 </div>
@@ -78,6 +81,19 @@
 
                                                 </div>
                                             </md-content>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Facility:</label>
+                                        <div class="col-sm-6">
+                                            <select required class="form-control" ng-model="workOrder.wo_facility"
+                                                    name="wo_facility" required>
+                                                <!--<option value="0">All</option>-->
+                                                <option ng-repeat="facilit in facilities"
+                                                        value="{{facilit.facility_number}}">{{facilit.facility_name}}
+                                                </option>
+                                            </select>
                                         </div>
                                     </div>
 

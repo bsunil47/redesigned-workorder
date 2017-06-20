@@ -52,8 +52,14 @@
                                 <tbody>
                                 <tr ng-repeat="category in categories">
                                     <td>{{category.category_name}}</td>
-                                    <td>{{showFacility(category.facilities)}}</td>
-                                    <td>{{showOperator(category.operator_available)}}</td>
+                                    <td>
+                                        <div ng-repeat="facility in category.facilities">
+                                            {{showFacility(facility.facility_number)}}
+                                        </div><!--{{showFacility(category.facilities)}}--></td>
+                                    <td>
+                                        <div ng-repeat="facility in category.facilities">
+                                            {{showOperator(facility.operator_available)}}
+                                        </div><!--{{showOperator(category.operator_available)}}--></td>
                                     <!--<td>{{showStatus(category.status)}}</td>-->
                                 </tr>
                                 </tbody>

@@ -41,7 +41,7 @@ var counters = mongoose.model('counter');
 
 /* GET home page. */
 router.post('/', function (req, res, next) {
-    console.log('request made....print hr ');
+    console.log('request made....print hr ' + JSON.stringify(req.body));
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
     var query = {wo_timespent: {$exists: true, $nin: ["", null, 'NaN']}};
@@ -49,6 +49,15 @@ router.post('/', function (req, res, next) {
         'from': "",
         'to': ""
     };
+
+    if(req.body.wo_datefrom > req.body.wo_dateto)
+    {
+        //alert("From Date can not be greater than To Date.");
+        return res.end(redirectFlash(fullUrl + "/#!/search_report_hour", 'From Date can not be greater than To Date.'));
+        //res.redirect(fullUrl + "/#!/search_PM_task", {err: "date"});
+        //res.redirect( 306, fullUrl + "/#!/search_PM_task");
+        return next();
+    }
     var search_to = "";
     console.log(req.body.wo_datefrom);
     if ((req.body.wo_datefrom != "" )) {
@@ -85,13 +94,22 @@ router.post('/', function (req, res, next) {
     if (req.body.category != 0) {
         query.workorder_category = req.body.category;
     }
+    if((req.body.facility != "")){
+        query.workorder_facility =  req.body.facility;
+        //qr.workorder_facility =  req.body.facility;
+        qr.facilities = {
+            $elemMatch: {facility_number: req.body.facility}
+        };
+        //qr.facilities.facility_number = req.body.facility;
+    }
+    console.log("qr :" + JSON.stringify(qr));
     Equipment.find(qr, function (err, equi) {
         var equipments = [];
         equi.forEach(function (eq) {
             var total_hrs = 0;
             equipments.push(function (callback) {
                 query.workorder_equipment = eq._id;
-                console.log(query);
+                console.log("query: " + query);
                 WorkOrder.find(query, {},
                     {
                         sort: {
@@ -215,6 +233,8 @@ router.post('/', function (req, res, next) {
                 data: result
             };
             var renderedHtml = nunjucks.render('./view/ReportHourBase/report_hour.html', obj);
+            res.setHeader('Content-disposition', 'inline; filename=hour_by_equipment.pdf');
+            res.setHeader('Content-type', 'application/pdf');
             pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
                 stream.pipe(res);
             });
@@ -227,6 +247,7 @@ router.post('/', function (req, res, next) {
 });
 router.post('/report_category', function (req, res, next) {
     console.log('request made....print 1 ');
+    console.log("req : " + JSON.stringify(req.body));
     var today = new Date();
     var fullUrl = req.protocol + '://' + req.get('host');
     var query = {status: 2};
@@ -234,6 +255,15 @@ router.post('/report_category', function (req, res, next) {
         'from': "",
         'to': ""
     };
+
+    if(req.body.wo_datefrom > req.body.wo_dateto)
+    {
+        //alert("From Date can not be greater than To Date.");
+        return res.end(redirectFlash(fullUrl + "/#!/search_closed_report", 'From Date can not be greater than To Date.'));
+        //res.redirect(fullUrl + "/#!/search_PM_task", {err: "date"});
+        //res.redirect( 306, fullUrl + "/#!/search_PM_task");
+        return next();
+    }
 
     if ((req.body.wo_datefrom != "")) {
         if (req.body.wo_dateto != "") {
@@ -258,6 +288,9 @@ router.post('/report_category', function (req, res, next) {
     var cat = 'All';
     if (req.body.categories != 0) {
         query.workorder_category = req.body.categories;
+    }
+    if((req.body.wo_facility != "")){
+        query.workorder_facility =  req.body.wo_facility;
     }
     console.log(query);
     WorkOrder.find(query, function (err, workorders) {
@@ -315,6 +348,8 @@ router.post('/report_category', function (req, res, next) {
                     data: result
                 };
                 var renderedHtml = nunjucks.render('./view/ReportClosedWorkOrder/report_closed.html', obj);
+                res.setHeader('Content-disposition', 'inline; filename=closed_workorder_by_category.pdf');
+                res.setHeader('Content-type', 'application/pdf');
                 pdf.create(renderedHtml, {ticketnum: 'hello'}).toStream(function (err, stream) {
                     stream.pipe(res);
                 });
@@ -343,13 +378,23 @@ router.post('/report_category', function (req, res, next) {
 });
 
 router.post('/report_pm', function (req, res, next) {
-    console.log('request made....print PM ');
+    console.log('request made....print PM req:' + JSON.stringify(req.body));
+    console.log('request made....print PM res: ' + JSON.stringify(res.body));
+    var fullUrl = req.protocol + '://' + req.get('host');
+    if(req.body.wo_datefrom > req.body.wo_dateto)
+    {
+        //alert("From Date can not be greater than To Date.");
+        return res.end(redirectFlash(fullUrl + "/#!/search_PM_task", 'From Date can not be greater than To Date.'));
+        //res.redirect(fullUrl + "/#!/search_PM_task", {err: "date"});
+        //res.redirect( 306, fullUrl + "/#!/search_PM_task");
+        return next();
+    }
     var today = new Date();
     var search_date = {
         'from': "",
         'to': ""
     };
-    var fullUrl = req.protocol + '://' + req.get('host');
+    
     var query = {
         workorder_PM: {$exists: true}
     };
@@ -369,6 +414,9 @@ router.post('/report_pm', function (req, res, next) {
             'from': dateFormat(parseInt(req.body.wo_datefrom), 'shortDate'),
             'to': dateFormat(to_date, 'shortDate')
         }
+    }
+    if((req.body.wo_facility != "")){
+        query.workorder_facility =  req.body.wo_facility;
     }
     console.log(query);
     WorkOrder.find(query, {}, {
@@ -428,6 +476,8 @@ router.post('/report_pm', function (req, res, next) {
                     search: search_date,
                 };
                 var renderedHtml = nunjucks.render('./view/ReportPMTask/report_hour.html', obj);
+                res.setHeader('Content-disposition', 'inline; filename=pm_task_workorders.pdf');
+                res.setHeader('Content-type', 'application/pdf');
                 pdf.create(renderedHtml, {
                     ticketnum: 'hello',
                     "orientation": "landscape"
@@ -597,5 +647,25 @@ var dateStringToDateISO = function (str) {
     }
     return month + "/" + day + "/" + year;
 };
+
+function redirectFlash(url, timeout, msg) {
+  var defaultTimeout = 5;
+  if (typeof timeout === 'string') {
+    msg = timeout;
+    timeout = defaultTimeout;
+  } else if (timeout === undefined) {
+    msg = '';
+    timeout = defaultTimeout;
+  }
+  return '<html><head><title>Redirecting ...</title><meta http-equiv="refresh" content="'
+         + timeout
+         + ';url='
+         + url
+         + '"></head><body><h2>'
+         + msg
+         + '</h2><br /><a href="'
+         + url
+         + '">Click here to return manually</a></body></html>';
+}
 
 module.exports = router;
