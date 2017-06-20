@@ -29,12 +29,13 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
 
                 $scope.facilities = res.Info.facilities;
                 $scope.selected_facility = res.Info.facilities[0].facility_number;
-                console.log($scope.selected_facility);
+                console.log("facility: " + $scope.selected_facility);
                 $scope.workOrder.workorder_facility = res.Info.facilities[0].facility_number;
                 //$scope.facilities[1] = res.Info.facilities;
                 API.SEquipment.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
                         $scope.equipments = res.Info.equipments;
+                        console.log("$scope.equipments: " + $scope.equipments);
                     } else {
 
                     }
@@ -46,7 +47,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                     if (res.Code == 200) {
 
                         $scope.categories = res.Info.categories;
-
+                        console.log("$scope.categories: " + $scope.categories);
 
                         //$cookies.put('userDetails',res)
                     } else {
@@ -59,6 +60,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 API.SPriority.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
                         $scope.priorities = res.Info.priorities;
+                        console.log("$scope.priorities: " + $scope.priorities);
                         //$cookies.put('userDetails',res)
                     } else {
                     }
@@ -68,6 +70,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 API.SSkill.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
                         $scope.skills = res.Info.skills;
+                        console.log("$scope.skills: " + $scope.skills);
                         //$cookies.put('userDetails',res)
                     } else {
                     }
@@ -77,6 +80,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 API.SClass.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
                         $scope.classes = res.Info.classes;
+                        console.log("$scope.classes: " + $scope.classes);
                     } else {
                     }
                 }, function (error) {
@@ -85,6 +89,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 API.SStatus.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
                         $scope.statuses = res.Info.statuses;
+                        console.log("$scope.statuses: " + $scope.statuses);
                         //$scope.statuses = res.Info.status_list;
                         console.log($scope.statuses)
                     } else {
@@ -95,6 +100,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 API.GetUserByType.Recent({facility_number: $scope.selected_facility}, function (res) {
                     if (res.Code == 200) {
                         $scope.technicians = res.Info.users;
+                        console.log("$scope.technicians: " + $scope.technicians);
                     } else {
                     }
                 }, function (error) {
@@ -103,10 +109,11 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 API.UserRole.Recent({role_name: 'technician'}, function (res) {
                     if (res.Code == 200) {
                         var qry = {userrole: res.Info.user_role._id};
-                        console.log(qry);
+                        console.log("qry: " + qry);
                         API.GetUserByType.Recent({facility_number: $scope.selected_facility}, function (res) {
                             if (res.Code == 200) {
                                 $scope.technicians = res.Info.users;
+                                console.log("$scope.technicians: " + $scope.technicians);
                             } else {
                             }
                         }, function (error) {
@@ -128,10 +135,38 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 API.UserRole.Recent({role_name: 'operator'}, function (res) {
                     if (res.Code == 200) {
                         var qry = {userrole: res.Info.user_role._id};
-                        console.log(qry);
+                        console.log("qry: " + qry);
                         API.GetUserByType.Recent({
                             facility_number: $scope.selected_facility,
                             role_name: 'operator'
+                        }, function (res) {
+                            if (res.Code == 200) {
+                                $scope.requestors = res.Info.users;
+                            } else {
+                            }
+                        }, function (error) {
+                            alert(error);
+                        });
+                        /*API.GetUsers.Recent(qry, function (res) {
+                         if (res.Code == 200) {
+                         $scope.requestors = res.Info.users;
+                         } else {
+                         }
+                         }, function (error) {
+                         alert(error);
+                         });*/
+                    } else {
+                    }
+                }, function (error) {
+                    alert(error);
+                });
+                 API.UserRole.Recent({role_name: 'clerk'}, function (res) {
+                    if (res.Code == 200) {
+                        var qry = {userrole: res.Info.user_role._id};
+                        console.log("qry: " + qry);
+                        API.GetUserByType.Recent({
+                            facility_number: $scope.selected_facility,
+                            role_name: 'clerk'
                         }, function (res) {
                             if (res.Code == 200) {
                                 $scope.requestors = res.Info.users;
@@ -157,6 +192,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                     if (res.Code == 200) {
 
                         status_list = res.Info.status_list;
+                        console.log("status_list:" +status_list);
                         //$cookies.put('userDetails',res)
                     } else {
 
@@ -303,12 +339,16 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
             if (!$cookies.get('userDetails')) {
                 $location.path('login');
             }
+            console.log("In List function");
             if (angular.isUndefined($scope.workOrder.workorder_priority) && angular.isUndefined($scope.workOrder.workorder_number) && angular.isUndefined($scope.workOrder.workorder_category) && angular.isUndefined($scope.workOrder.workorder_skill) && angular.isUndefined($scope.workOrder.workorder_creator) && angular.isUndefined($scope.workOrder.workorder_technician) && angular.isUndefined($scope.workOrder.workorder_equipment) && angular.isUndefined($scope.workOrder.workorder_facility) && angular.isUndefined($scope.workOrder.status) && angular.isUndefined($scope.workOrder.created_on_from) && angular.isUndefined($scope.workOrder.created_on_to) && angular.isUndefined($scope.workOrder.wo_datecomplete_from) && angular.isUndefined($scope.workOrder.wo_datecomplete_to) && angular.isUndefined($scope.workOrder.wo_pm_date_from) && angular.isUndefined($scope.workOrder.wo_pm_date_to) && angular.isUndefined($scope.workOrder.workorder_class) && angular.isUndefined($scope.workOrder.workorder_PM)) {
                 //if(){
+                    console.log("in if condition");
                 var qry = userdetail.user;
+                console.log("in if qry : " + JSON.stringify(qry));
                 API.ManageWorkorders.Recent(qry, function (res) {
                     if (res.Code == 200) {
                         $scope.workOrders = res.Info.workorders;
+                        console.log("in if $scope.workOrders: " + $scope.workOrders);
                     } else {
 
                     }
@@ -319,6 +359,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
 
             } else {
                 var qry = {};
+                console.log("in else");
                 for (var i in $scope.workOrder) {
                     if (!isNullOrEmptyOrUndefined($scope.workOrder[i])) {
                         qry[i] = $scope.workOrder[i];
@@ -331,6 +372,7 @@ angular.module('PGapp.sorders', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngDialog'
                 API.GetSearchedWorkOrders.Recent(qry, function (res) {
                     if (res.Code == 200) {
                         $scope.workOrders = res.Info.workorders;
+                         console.log("in else $scope.workOrders: " + $scope.workOrders);
                     } else {
 
                     }

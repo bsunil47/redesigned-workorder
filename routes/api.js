@@ -414,7 +414,10 @@ router.post('/create_category', function (req, res, next) {
                     category_name: req.body.category_name,
                     operator_available: Boolean(req.body.operator_available),
                     status: 1,
-                    "facilities": {facility_number: req.body.facility_number}
+                    "facilities": {
+                        facility_number: req.body.facility_number, 
+                        operator_available: Boolean(req.body.operator_available)
+                    }
                 });
                 res.json({Code: 200, Info: 'Category created sucessfully'});
             }
