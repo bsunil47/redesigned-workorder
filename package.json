@@ -40,7 +40,7 @@
     "mongodb-autoincrement": "^1.0.1",
     "mongoose": "^5.13.20",
     "mongoose-migrate": "^0.2.4",
-    "morgan": "~1.7.0",
+    "morgan": "~1.9.1",
     "node-compass": "^0.2.4",
     "node-cron": "^1.1.2",
     "nodemailer": "^6.6.1",
