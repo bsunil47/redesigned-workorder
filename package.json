@@ -36,7 +36,7 @@
     "jsreport-phantom-pdf": "^1.0.3",
     "migrate": "^0.2.3",
     "moment": "^2.15.0",
-    "mongodb": "^2.2.5",
+    "mongodb": "^3.1.13",
     "mongodb-autoincrement": "^1.0.1",
     "mongoose": "^5.13.20",
     "mongoose-migrate": "^0.2.4",
