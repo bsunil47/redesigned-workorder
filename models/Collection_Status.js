@@ -4,7 +4,8 @@
 
 var mongoose = require('mongoose');
 var Collection_StatusSchema = new mongoose.Schema({
-    facilities: [],
+    //facilities: [],
+    facilities: {type: Array},
     status_number: {type: Number, required: true},
     status_name: {type: String, unique: true, required: true},
     created_on: Date,

@@ -77,9 +77,11 @@ angular.module('PGapp.partslist', ['ngRoute', 'ngAnimate', 'ngCookies'])
                         qty: $scope.p.qty[part.material_number + part.vendor_number],
                         user_id: userdetail.user._id,
                     };
-                    console.log($scope.p.workorder);
-                    if (!angular.isUndefined($scope.p.workorder)) {
+                    console.log($scope.p);
+                    if (!angular.isUndefined($scope.p.workorder) && $scope.p.workorder[part.material_number + part.vendor_number] != "") {
                         set.workorder_number = parseInt($scope.p.workorder[part.material_number + part.vendor_number]);
+                    } else {
+                        set.workorder_number = "";
                     }
                     API.CreatePartsRequest.Recent(set, function (res) {
                         if (res.Code == 200) {

@@ -91,7 +91,7 @@ angular.module('PGapp.cworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
   $scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
 
   //$scope.workOrder= $scope.facilities[0].facility_number;
-  console.log($scope.facilities);
+        //console.log($scope.facilities);
       $scope.selected_facility = $scope.workOrder.workorder_facility = $scope.facilities[0].facility_number;
       API.SFacilities.Recent(userdetail.user, function (res) {
         if (res.Code == 200) {

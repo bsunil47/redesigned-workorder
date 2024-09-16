@@ -250,6 +250,7 @@
                                         <div class="col-sm-6">
                                             <select class="form-control" ng-model="workOrder.workorder_facility">
                                                 <option ng-repeat="facility in facilities"
+                                                        ng-selected="{{selected_facility == facility.facility_number}}"
                                                         value="{{facility.facility_number}}">{{facility.facility_name}}
                                                 </option>
                                             </select>

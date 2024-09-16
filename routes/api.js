@@ -329,20 +329,9 @@ router.post('/create_category', function (req, res, next) {
         if (err) {
             return next(err);
         }
-        if (Boolean(req.body.operator_available)) {
-            var query_count = {
-                category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
-                "facilities.facility_number": req.body.facility_number,
-                operator_available: "true"
-            };
-        }
-        else {
-            var query_count = {
-                category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
-                "facilities.facility_number": req.body.facility_number
-            };
-        }
-
+        var query_count = {
+            category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")}
+        };
 
         Category.count(query_count, function (err, categorycount) {
             if (err) {
@@ -350,29 +339,73 @@ router.post('/create_category', function (req, res, next) {
             }
             console.log("query_count" + JSON.stringify(query_count));
             if (categorycount) {
-                return res.json({Code: 498, Info: 'Category for the Facility already exists'});
-                next();
-            }
-            var query = {
-                category_name: req.body.category_name
-            };
-            Category.update(query, {
+                if (Boolean(req.body.operator_available)) {
+                    /*var query_count = {
+                     category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+                     "facilities.facility_number": req.body.facility_number,
+                     operator_available: "true"
+                     };*/
+                    var query_count = {
+                        category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+                        "facilities.facility_number": req.body.facility_number,
+                        "facilities.operator_available": "true"
+                    };
+                }
+                else {
+                    var query_count = {
+                        category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")},
+                        "facilities.facility_number": req.body.facility_number
+                    };
+                }
+                var query = {
+                    category_name: {$regex: new RegExp('^' + req.body.category_name + '$', "i")}/*, "facilities.facility_number": req.body.facility_number,*/
+                };
+
+                Category.update(query, {
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+                Category.update(query, {
+                        operator_available: Boolean(req.body.operator_available),
+                        status: 1,
+                        $push: {
+                            "facilities": {
+                                facility_number: req.body.facility_number,
+                                operator_available: Boolean(req.body.operator_available)
+                            }
+                        }
+                    },
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating category',
+                            });
+                        } else {
+                            res.json({Code: 200, Info: 'Category updated sucessfully'});
+                        }
+                    });
+            } else {
+                Category.create({
+                    category_name: req.body.category_name,
                     operator_available: Boolean(req.body.operator_available),
                     status: 1,
-                    $push: {"facilities": {facility_number: req.body.facility_number}}
-                },
-                {safe: true, upsert: true},
-                function (err, model) {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            Code: 499,
-                            Info: 'Error creating category',
-                        });
-                    } else {
-                        res.json({Code: 200, Info: 'Category created sucessfully'});
+                    $push: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
                     }
                 });
+                res.json({Code: 200, Info: 'Category created sucessfully'});
+            }
+
 
         });
     });
@@ -399,8 +432,8 @@ router.post('/create_class', function (req, res, next) {
         // validations ** start
 
         var query_count_class = {
-            class_name: {$regex: new RegExp('^' + req.body.class_name + '$', "i")},
-            "facilities.facility_number": req.body.facility_number
+            class_name: {$regex: new RegExp('^' + req.body.class_name + '$', "i")}/*,
+             "facilities.facility_number": req.body.facility_number*/
         };
 
         Class.count(query_count_class, function (err, classcount) {
@@ -409,26 +442,44 @@ router.post('/create_class', function (req, res, next) {
             }
             console.log("query_count_class" + JSON.stringify(query_count_class));
             if (classcount) {
-                return res.json({Code: 498, Info: 'Class for the Facility already exists'});
-                next();
+                var query = {
+                    class_name: {$regex: new RegExp('^' + req.body.class_name + '$', "i")},
+                };
+                Class.update(query, {
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+                Class.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating Class',
+                            });
+                        } else {
+                            res.json({Code: 200, Info: 'Class Created Sucessfully'});
+                        }
+                    });
+                //return res.json({Code: 498, Info: 'Class for the Facility already exists'});
+                //next();
+            } else {
+                Class.create({
+                    class_name: req.body.class_name,
+                    status: 1,
+                    "facilities": {facility_number: req.body.facility_number}
+                });
+                res.json({Code: 200, Info: 'Category created sucessfully'});
             }
             // validations ** end
-            var query = {
-                class_name: req.body.class_name
-            };
-            Class.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-                {safe: true, upsert: true},
-                function (err, model) {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            Code: 499,
-                            Info: 'Error creating Class',
-                        });
-                    } else {
-                        res.json({Code: 200, Info: 'Class Created Sucessfully'});
-                    }
-                });
+
+
         });
 
     });
@@ -612,8 +663,7 @@ router.post('/create_priority', function (req, res, next) {
         // validations ** start
 
         var query_count_priority = {
-            priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")},
-            "facilities.facility_number": req.body.facility_number
+            priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")}
         };
 
         Priority.count(query_count_priority, function (err, prioritycount) {
@@ -622,26 +672,45 @@ router.post('/create_priority', function (req, res, next) {
             }
             console.log("query_count_priority" + JSON.stringify(query_count_priority));
             if (prioritycount) {
-                return res.json({Code: 498, Info: 'Priority for the Facility already exists'});
-                next();
+                var query = {
+                    priority_name: {$regex: new RegExp('^' + req.body.priority_name + '$', "i")},
+                };
+                Priority.update(query, {
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+
+                Priority.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating Priority',
+                            });
+                        } else {
+                            return res.json({Code: 200, Info: 'Priority created successfully'});
+                        }
+                    });
+                /* return res.json({Code: 498, Info: 'Priority for the Facility already exists'});
+                 next();*/
+            } else {
+                Priority.create({
+                    priority_name: req.body.priority_name,
+                    status: 1,
+                    "facilities": {facility_number: req.body.facility_number}
+                });
+                return res.json({Code: 200, Info: 'Priority created sucessfully'});
             }
             // validations ** end
-            var query = {
-                priority_name: req.body.priority_name
-            };
-            Priority.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-                {safe: true, upsert: true},
-                function (err, model) {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            Code: 499,
-                            Info: 'Error creating Priority',
-                        });
-                    } else {
-                        res.json({Code: 200, Info: 'Priority created successfully'});
-                    }
-                });
+
         });
 
     })
@@ -672,8 +741,7 @@ router.post('/create_skill', function (req, res, next) {
         // validations ** start
 
         var query_count_skill = {
-            skill_name: {$regex: new RegExp('^' + req.body.skill_name + '$', "i")},
-            "facilities.facility_number": req.body.facility_number
+            skill_name: {$regex: new RegExp('^' + req.body.skill_name + '$', "i")}
         };
 
         Skill.count(query_count_skill, function (err, skillcount) {
@@ -682,26 +750,44 @@ router.post('/create_skill', function (req, res, next) {
             }
             console.log("query_count_skill" + JSON.stringify(query_count_skill));
             if (skillcount) {
-                return res.json({Code: 498, Info: 'Skill for the Facility already exists'});
-                next();
-            }
-            var query = {
-                skill_name: req.body.skill_name,
-            };
-            // validations ** end
-            Skill.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
-                {safe: true, upsert: true},
-                function (err, model) {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            Code: 499,
-                            Info: 'Error creating skill',
-                        });
-                    } else {
-                        res.json({Code: 200, Info: 'Skill created successfully'});
+                var query = {
+                    skill_name: {$regex: new RegExp('^' + req.body.skill_name + '$', "i")}
+                };
+                Skill.update(query, {
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
                     }
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
                 });
+                // validations ** end
+                Skill.update(query, {status: 1, $push: {"facilities": {facility_number: req.body.facility_number}}},
+                    {safe: true, upsert: true},
+                    function (err, model) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                Code: 499,
+                                Info: 'Error creating skill',
+                            });
+                        } else {
+                            res.json({Code: 200, Info: 'Skill created successfully'});
+                        }
+                    });
+                /* return res.json({Code: 498, Info: 'Skill for the Facility already exists'});
+                 next();*/
+            } else {
+
+                Skill.create({
+                    skill_name: req.body.skill_name,
+                    status: 1,
+                    "facilities": {facility_number: req.body.facility_number}
+                });
+                res.json({Code: 200, Info: 'Skill created sucessfully'});
+            }
+
         });
 
     })
@@ -741,9 +827,12 @@ router.post('/create_status', function (req, res, next) {
         }
         // validations ** start
 
+        /*var query_count_status = {
+         status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")},
+         "facilities.facility_number": req.body.facility_number
+         };*/
         var query_count_status = {
-            status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")},
-            "facilities.facility_number": req.body.facility_number
+            status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")}
         };
 
         Status.count(query_count_status, function (err, statuscount) {
@@ -752,25 +841,19 @@ router.post('/create_status', function (req, res, next) {
             }
             console.log("query_count_status" + JSON.stringify(query_count_status));
             if (statuscount) {
-                return res.json({Code: 498, Info: 'Status already exists'});
-                next();
-            }
-
-            Status.count({}, function (err, incstatuscount) {
-                if (err) {
-                    return next(err);
-                }
-                console.log("count_status" + JSON.stringify(incstatuscount));
-                if (incstatuscount) {
-                    var statuscountinc = incstatuscount + 1;
-                }
-                // validations ** end
                 var query = {
-                    status_name: req.body.status_name
+                    status_name: {$regex: new RegExp('^' + req.body.status_name + '$', "i")}
                 };
-
                 Status.update(query, {
-                        $setOnInsert: {status_number: statuscountinc},
+                    $pull: {
+                        "facilities": {
+                            facility_number: req.body.facility_number
+                        }
+                    }
+                }, function (err, numAffected) {
+                    console.log("data:", numAffected)
+                });
+                Status.update(query, {
                         $push: {"facilities": {facility_number: req.body.facility_number}}
                     },
                     {safe: true, upsert: true},
@@ -785,7 +868,31 @@ router.post('/create_status', function (req, res, next) {
                             res.json({Code: 200, Info: 'Status created successfully'});
                         }
                     });
-            });
+            } else {
+                Status.count({}, function (err, incstatuscount) {
+                    if (err) {
+                        return next(err);
+                    }
+                    console.log("count_status" + JSON.stringify(incstatuscount));
+                    if (incstatuscount) {
+                        var statuscountinc = incstatuscount + 1;
+                    }
+                    // validations ** end
+                    var query = {
+                        status_name: req.body.status_name
+                    };
+
+                    Status.create({
+                        status_name: req.body.status_name,
+                        $setOnInsert: {status_number: statuscountinc},
+                        "facilities": {facility_number: req.body.facility_number}
+                    });
+                    res.json({Code: 200, Info: 'Category created sucessfully'});
+                });
+
+            }
+
+
         })
 
     })
@@ -1086,7 +1193,15 @@ router.post('/search_category', function (req, res, next) {
     };
     console.log(req.body.operator_available);
     if (typeof req.body.operator_available !== 'undefined') {
-        query.operator_available = Boolean(req.body.operator_available);
+        var query = {
+            facilities: {
+                $elemMatch: {
+                    facility_number: req.body.facility_number,
+                    operator_available: Boolean(req.body.operator_available)
+                }
+            }
+        };
+        /*query.operator_available = Boolean(req.body.operator_available);*/
     }
     console.log(query);
     Category.find(
@@ -1336,7 +1451,11 @@ router.post('/get_users_type', function (req, res, next) {
             for (var user_key in fusers) {
                 user_ids.push(fusers[user_key].user_id);
             }
-            Roles.findOne({role_name: 'technician'}, function (err, role) {
+            var role = 'technician';
+            if (typeof req.body.role_name !== "undefined") {
+                role = req.body.role_name;
+            }
+            Roles.findOne({role_name: role}, function (err, role) {
                 if (err) {
                     return next(err);
                 }

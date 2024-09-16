@@ -140,11 +140,14 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                 var orderDt = new Date($scope.workOrder.created_on).valueOf();
                 var currentDate = new Date().valueOf();
                 $scope.saveDisable = true;
-                if (parseInt(currentDate) > parseInt(lessDate) && parseInt(currentDate) < parseInt(grtDate)) {
-                    console.log('compare');
-
+                //if (parseInt(currentDate) > parseInt(lessDate) && parseInt(currentDate) < parseInt(grtDate) && !angular.isUndefined($scope.workOrder.workorder_PM)) {
+                if (parseInt(currentDate) > parseInt(lessDate) && !angular.isUndefined($scope.workOrder.workorder_PM)) {
+                    //console.log('compare');
                     $scope.saveDisable = false;
-
+                } else {
+                    if (angular.isUndefined($scope.workOrder.workorder_PM)) {
+                        $scope.saveDisable = false;
+                    }
                 }
                 if (userdetail.role == 'clerk' && ($scope.workOrder.status == 1 || $scope.workOrder.status == 3)) {
                     $scope.saveDisable = false;
@@ -496,7 +499,6 @@ angular.module('PGapp.eworkorder', ['ngRoute', 'ngAnimate', 'ngCookies', 'ngMate
                     $scope.reqActionTaken = true;
                 }
             }
-
         });
         $scope.$watch("workOrder.wo_equipmentcost", function (newValue, oldValue) {
             if ($scope.workOrder.wo_equipmentcost < 0) {
